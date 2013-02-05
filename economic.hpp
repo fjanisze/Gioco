@@ -1,6 +1,9 @@
 #define LOGGING_LEVEL_1
 #define LOGGING_LEVEL_2
 
+#ifndef ECONOMIC_HPP
+#define ECONOMIC_HPP
+
 #include "logging/logger.hpp"
 #include <vector>
 #include <map>
@@ -10,6 +13,8 @@
 #include <stdlib.h>
 #include <ctime>
 using namespace std;
+
+typedef long long mlong;
 
 #define TAX_EQUITY_PERCEPTION_SENSIBILITY 1000 //Not 0!! >=1, higher value then lower sensibility
 #define POOR_SUBSIDIES_ACCESS_COST 0.15 //15% of the provided sum
@@ -195,3 +200,4 @@ namespace economics
 	};
 }
 
+#endif

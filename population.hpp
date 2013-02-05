@@ -42,7 +42,7 @@ namespace population
 		long population,
 		     max_population;
 		population_class pop_class; 
-		economics::economic_unit* entity_eu; //Economic_unit for this population entity, 
+		economics::economic_unit* entity_eu; //Economic_unit for this population entity
 	public:
 		long get_population();
 		long get_max_population();
@@ -65,7 +65,7 @@ namespace population
 	struct collection
 	{
 		std::mutex access_mutex;
-		pop_entity_list population;
+		pop_entity_list population; 
 		mlong total_population, //Total population sum
 		      max_population;
 		mlong calculate_population();

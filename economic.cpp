@@ -25,6 +25,48 @@ namespace finance
 
 }
 
+namespace job_market
+{
+	const job_descriptor civil_scullion_job_level0 = { 1 , "Scullion", 19000 };
+	const job_descriptor civil_office_job_level1 = { 2 , "Office employee" , 35000 };
+
+	job_entity::job_entity( const job_descriptor* job ) : descriptor( job )
+	{	}
+
+	job_market_manager::job_market_manager( game_manager::player_game_objects* obj )
+	{
+		LOG("job_market_manager::job_market_manager(): Creating a new instance ");
+		player_obj = obj;
+	}
+
+	job_market_manager::~job_market_manager( )
+	{
+	}
+
+	//Create a new basic job entity
+	job_entity* job_market_manager::create_new_job_entity( const job_descriptor* job )
+	try{
+		job_entity* entity = new job_entity( job );
+		entity->gross_salary = job->base_gross_salary;
+
+		//Randomize a little the salary
+		srand( clock() );
+		long num = rand();
+		if( num % 2 ) 
+		{
+			num *= -1;
+		}
+		entity->gross_salary *= ( 1 + ( num % SALARY_CLASS_MIN_DELTA ) /  ( double ) 100 );
+
+		return entity;
+	}catch( std::exception& xa )
+	{
+		LOG_ERR("job_market_manager::create_new_job_entity(): Exception catched, what: ",xa.what() );
+		return nullptr;
+	}
+	
+}
+
 namespace economics
 {
 
@@ -162,6 +204,7 @@ namespace economics
 		net_salary_impact_on_equity = 0;
 		savings_impact_on_equity = 0;
 		unit_net_revenue = 0;
+		job = nullptr;
 	}
 
 	void economic_unit::set_costs( const expense_and_cost& costs )

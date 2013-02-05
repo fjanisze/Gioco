@@ -1018,7 +1018,9 @@ namespace console_ui
 				}
 				else
 				{
-					cout<<" - Population: "<<elem->population->get_population()<<" , value:  "<<format_cur_type( elem->building_value )<<"$, Revenue: "<<format_cur_type( elem->population->get_unit_net_revenue() )<<"$";
+					auto eu = elem->population->get_economic_entity();
+					cout<<" - Population: "<<elem->population->get_population()<<" , value:  "<<format_cur_type( elem->building_value )<<", ";
+					cout<<"Revenue: "<<format_cur_type( elem->population->get_unit_net_revenue() );
 				}
 				cout<<endl;
 			}
@@ -1132,6 +1134,7 @@ namespace game_manager
 			player_obj->cities = new city_manager::city_manager( player );
 			player_obj->population = new population::population_manager( player );
 			player_obj->economics = new economics::economy_manager( player );
+			player_obj->job_market = new job_market::job_market_manager( player_obj );
 
 			player_obj->population->set_player_game_obj( player_obj );
 			player_objects[ player ] = player_obj;

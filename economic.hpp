@@ -5,6 +5,7 @@
 #define ECONOMIC_HPP
 
 #include "logging/logger.hpp"
+#include "common_structures.hpp"
 #include <vector>
 #include <map>
 #include <exception>
@@ -45,6 +46,43 @@ namespace finance
 		{	return money_cash;	}
 	};
 }
+
+namespace job_market
+{
+	using namespace finance;
+
+	//Basic information about a job
+	struct job_descriptor
+	{
+		const long job_id;
+
+		string name;
+
+		currency_type base_gross_salary;
+	};
+
+	//A serie of standard descriptor
+	extern const job_descriptor civil_scullion_job_level0;
+	extern const job_descriptor civil_office_job_level1;
+
+	//Each EU which have a job should have a job_entity
+	struct job_entity
+	{
+		const job_descriptor* descriptor;
+		string employee_name;//Who is your employer?
+		currency_type gross_salary; //This may differ from the base_gross_salary, since the salary change during the time
+		job_entity( const job_descriptor* job );
+	};
+
+	class job_market_manager
+	{
+		game_manager::player_game_objects* player_obj;
+	public:
+		job_market_manager( game_manager::player_game_objects* obj );
+		~job_market_manager();
+		job_entity* create_new_job_entity( const job_descriptor* job );
+	};
+};
 
 namespace economics
 {
@@ -131,6 +169,7 @@ namespace economics
 		long eu_id;
 		long* family_size; //Well, this may be a very large number, depending on the size of the population_entity which encapsulate this eu
 		currency_type gross_salary; //family revenue ( salary ), year value
+		job_market::job_entity* job; //Have this economic unit a job? here are the job information
 		game_wallet wallet; //The amount of cash holded by this eu
 		salary_class salary_cl;//Class for this salary
 		expense_and_cost applicable_costs; //Costs which belongs to this unit.
@@ -158,6 +197,8 @@ namespace economics
 		{	return *family_size; }
 		bool is_starving()
 		{	return starving_unit;	}
+		currency_type get_gross_salary()
+		{	return gross_salary;	}
 		economic_unit();
 		friend class economy_manager;
 	};

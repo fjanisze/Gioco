@@ -11,7 +11,7 @@ namespace city_manager
 	const building_descriptor civil_small_house = { 1 , "Small house", "Small mono family house", true, false, 350000, 650, 3000,  20, 7 , nullptr , population::population_class::class_0 };
 	const building_descriptor civil_medium_house = { 2 , "Medium house", "This is a little bigger house, for up to three families", true,false, 1350000, 700, 7500, 35, 20 , nullptr , population::population_class::class_0 };
 	const building_descriptor civil_small_appartment = { 3 , "Appartment", "Building with a set of small appartment", true,false, 14000000, 720, 200000 , 110 , 300 , nullptr , population::population_class::class_0 };
-	const building_descriptor civil_medium_appartment = { 4 , "Medium Appartment", "Building with a set of medium size apparment", true,false, 32000000, 550, 500000, 250 , 800 , nullptr , population::population_class::class_0 };
+	const building_descriptor civil_medium_appartment = { 4 , "Medium Appartment", "Building with a set of medium size apparment", true, false, 32000000, 550, 500000, 250 , 800 , nullptr , population::population_class::class_0 };
 
 	//Special buildings and offices
 	const building_descriptor civil_welfare_administration_office = { 5 , "Welfare administration" , "This construction is needed to make the social poor welfare work", false, true, 25000000, 0, 3500000, 220 , 600, new civil_welfare_office_actions, population::population_class::class_1  };

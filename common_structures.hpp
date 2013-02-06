@@ -35,7 +35,6 @@ namespace game_manager
 		city_manager::city_manager*     cities;
 		population::population_manager* population;
 		economics::economy_manager*     economics;
-		job_market::job_market_manager* job_market;
 	};
 }
 

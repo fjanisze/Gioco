@@ -62,6 +62,7 @@ namespace job_market
 	};
 
 	//A serie of standard descriptor
+	extern const job_descriptor civil_unemployed_jon_level0 ;
 	extern const job_descriptor civil_scullion_job_level0;
 	extern const job_descriptor civil_office_job_level1;
 
@@ -71,14 +72,15 @@ namespace job_market
 		const job_descriptor* descriptor;
 		string employee_name;//Who is your employer?
 		currency_type gross_salary; //This may differ from the base_gross_salary, since the salary change during the time
+		mlong employed_since; //How many round this unit is doing this job?
+
 		job_entity( const job_descriptor* job );
 	};
 
 	class job_market_manager
 	{
-		game_manager::player_game_objects* player_obj;
 	public:
-		job_market_manager( game_manager::player_game_objects* obj );
+		job_market_manager();
 		~job_market_manager();
 		job_entity* create_new_job_entity( const job_descriptor* job );
 	};
@@ -87,6 +89,7 @@ namespace job_market
 namespace economics
 {
 	using namespace finance;
+	using namespace job_market;
 
 	typedef enum salary_class
 	{
@@ -119,7 +122,6 @@ namespace economics
 		bool is_welfare_available();
 	};
 
-	using namespace finance;
 	/*
 	 * This structure contain definitions for variable which allow to put every eu in a
 	 * certain class, with specific taxes ecc. Also other variables which impact globally
@@ -153,8 +155,7 @@ namespace economics
 	struct revenues_and_profits
 	{
 		currency_type revenue_from_rental; 
-		currency_type revenue_from_selling_food;
-		revenues_and_profits() : revenue_from_rental( 0 ) , revenue_from_selling_food( 500 )
+		revenues_and_profits() : revenue_from_rental( 0 ) 
 		{	}
 	};
 
@@ -168,7 +169,6 @@ namespace economics
 		static long eu_next_unique_id;
 		long eu_id;
 		long* family_size; //Well, this may be a very large number, depending on the size of the population_entity which encapsulate this eu
-		currency_type gross_salary; //family revenue ( salary ), year value
 		job_market::job_entity* job; //Have this economic unit a job? here are the job information
 		game_wallet wallet; //The amount of cash holded by this eu
 		salary_class salary_cl;//Class for this salary
@@ -184,7 +184,8 @@ namespace economics
 		 * By default 'false', set to true when the unit is not able to effort all the cost.
 		 * When an unit enter this state, may be evicted from his home.
 		 */
-		bool starving_unit; 
+		bool starving_unit;
+		bool have_payed_rental_price;
 		double equity_perception_threshold;
 		currency_type unit_net_revenue;
 	public:
@@ -197,13 +198,14 @@ namespace economics
 		{	return *family_size; }
 		bool is_starving()
 		{	return starving_unit;	}
-		currency_type get_gross_salary()
-		{	return gross_salary;	}
+		currency_type get_gross_salary();
+		bool is_paying_the_rent_price()
+		{	return have_payed_rental_price;	}
 		economic_unit();
 		friend class economy_manager;
 	};
 
-	class economy_manager
+	class economy_manager : public job_market_manager
 	{
 		std::mutex eu_container_mutex;
 		std::string		player_name;
@@ -214,7 +216,6 @@ namespace economics
 		public_welfare* public_welfare_funds;
 	private:
 		salary_class calculate_salary_class( currency_type salary );
-		currency_type apply_salaries_and_collect_taxes( economic_unit* eu );
 		currency_type apply_expense_and_cost( economic_unit* eu );
 		void calculate_tax_equity_perception( currency_type gross_salary, currency_type net_salary, currency_type savings , economic_unit* eu );
 		currency_type get_revenue_from_eu( economic_unit* eu );
@@ -222,11 +223,11 @@ namespace economics
 		currency_type calculate_taxes_on_salary( economic_unit* eu );
 		currency_type handle_starving_unit( economic_unit* eu , currency_type needed_money );
 		void correct_savings_and_salary_impact_on_equity( economic_unit* eu, currency_type net_salary, currency_type savings );
+		void calculate_impact_on_equity_factors( economic_unit* eu );
 	public:
 		economy_manager( const std::string& player );
 		~economy_manager();
-		economic_unit* create_economic_unit( salary_class sclass );
-		economic_unit* create_economic_unit( currency_type salary, game_wallet cash );
+		economic_unit* create_economic_unit( job_entity* job );
 		bool add_economic_unit( economic_unit* eu );
 		currency_type get_basic_class_salary( salary_class sclass );
 		void review_economy();

@@ -24,12 +24,6 @@ namespace game_manager
 
 namespace city_manager
 {
-	//The next enum define the type of building buildable
-	typedef enum building_type 
-	{
-		civil_appartment = 1,
-		civil_office
-	} building_type;
 
 	//Some buildings when constructed or destroyed impact the game, this class
 	//Contaings the function invoked when some action are triggered
@@ -46,6 +40,19 @@ namespace city_manager
 		void construction_completed();
 	};
 
+	//Implementation for the small commercial building
+	class civil_small_poor_commercial_actions : public building_event_action
+	{
+	public:
+		void construction_completed();
+	};
+
+	typedef enum building_type
+	{
+		habitable,
+		workplace
+	} building_type; 
+
 	//City building descriptors.
 	//Those descriptors are used to provide basic information about the buildings
 	struct building_descriptor
@@ -53,6 +60,8 @@ namespace city_manager
 		int building_id;
 		string name;
 		string description;
+
+		building_type type;
 
 		bool allowed_multiple_builds; //Are multiple of those building allowed in the same city?
 		bool one_build_per_player; //Can the player have more than one of those buildings?
@@ -73,7 +82,11 @@ namespace city_manager
 	//the amount of workplaces is taken from the population_capacity field in the building descriptor
 	struct workplace_descriptor
 	{
-		finance::currency_type employee_salary; //Payed yearly, this is a gross value
+		string employer_name;
+		job_market::job_descriptor* job; //Who is working here?
+		long employed_people;
+		workplace_descriptor() : job( nullptr ), employed_people( 0 )
+		{	}
 	};
 
 	//Some basic building definitions
@@ -82,8 +95,10 @@ namespace city_manager
 	extern const building_descriptor civil_small_appartment;
 	extern const building_descriptor civil_medium_appartment;
 
+
 	//Special buildings and offices
-	extern const building_descriptor civil_welfare_administration_office;;
+	extern const building_descriptor civil_small_poor_commercial_building;
+	extern const building_descriptor civil_welfare_administration_office;
 
 	extern const building_descriptor* buildings_table [];
 
@@ -106,10 +121,17 @@ namespace city_manager
 		}
 	};
 
+	//Responsible for managing the workplaces
+	class workplace_manager
+	{
+	public:
+		workplace_descriptor* create_new_workplace( building_info* building );
+	};
+
 	class city;
 
 	//This class is responsible for the city construction management
-	class construction_management : public events::event_entity
+	class construction_management : public events::event_entity , public workplace_manager
 	{
 		game_manager::player_game_objects* player_objects;
 		vector< building_info* > constructions; //Those are the buildings available on the city area 

@@ -1134,7 +1134,6 @@ namespace game_manager
 			player_obj->cities = new city_manager::city_manager( player );
 			player_obj->population = new population::population_manager( player );
 			player_obj->economics = new economics::economy_manager( player );
-			player_obj->job_market = new job_market::job_market_manager( player_obj );
 
 			player_obj->population->set_player_game_obj( player_obj );
 			player_objects[ player ] = player_obj;

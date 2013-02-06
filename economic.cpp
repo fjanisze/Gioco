@@ -27,16 +27,19 @@ namespace finance
 
 namespace job_market
 {
+
+	const job_descriptor civil_unemployed_jon_level0 = { 0 , "Unemployed", 0 };
 	const job_descriptor civil_scullion_job_level0 = { 1 , "Scullion", 19000 };
 	const job_descriptor civil_office_job_level1 = { 2 , "Office employee" , 35000 };
 
 	job_entity::job_entity( const job_descriptor* job ) : descriptor( job )
-	{	}
+	{
+		employed_since = 0;
+	}
 
-	job_market_manager::job_market_manager( game_manager::player_game_objects* obj )
+	job_market_manager::job_market_manager()
 	{
 		LOG("job_market_manager::job_market_manager(): Creating a new instance ");
-		player_obj = obj;
 	}
 
 	job_market_manager::~job_market_manager( )
@@ -46,7 +49,9 @@ namespace job_market
 	//Create a new basic job entity
 	job_entity* job_market_manager::create_new_job_entity( const job_descriptor* job )
 	try{
+		LOG("job_market_manager::create_new_job_entity(): Job: ",job->name );
 		job_entity* entity = new job_entity( job );
+		entity->descriptor = job;
 		entity->gross_salary = job->base_gross_salary;
 
 		//Randomize a little the salary
@@ -185,7 +190,7 @@ namespace economics
 		default_class_salary[5] = 1500000;
 
 		//Set other variables
-		amount_of_starving_unit = 0;
+		amount_of_starving_unit = 0;	
 		total_eu_population = 0;
 		salary_taxes_equity_perception = 0.5; //This value is changed at every review_economy loop, when the net salary is distributed
 	}
@@ -196,7 +201,6 @@ namespace economics
 	{
 		eu_id = eu_next_unique_id++;
 		//At the very beginning the eu has nothing.
-		gross_salary = 0;
 		wallet = 0;
 		family_size = nullptr;
 		starving_unit = false;
@@ -204,6 +208,7 @@ namespace economics
 		net_salary_impact_on_equity = 0;
 		savings_impact_on_equity = 0;
 		unit_net_revenue = 0;
+		have_payed_rental_price = true;
 		job = nullptr;
 	}
 
@@ -220,6 +225,15 @@ namespace economics
 	currency_type economic_unit::get_unit_net_revenue()
 	{
 		return unit_net_revenue;
+	}
+	
+	currency_type economic_unit::get_gross_salary()
+	{	
+		if( job )
+		{
+			return job->gross_salary;
+		}
+		return 0;	
 	}
 
 	//Constructor for economy_manager
@@ -253,14 +267,36 @@ namespace economics
 	}
 
 	//Create a basic economic unit
-	economic_unit* economy_manager::create_economic_unit( currency_type salary, game_wallet cash )
+	economic_unit* economy_manager::create_economic_unit( job_entity* job )
 	try{
-		ELOG("economy_manager::create_economic_unit(): New EU requested");
+		LOG("economy_manager::create_economic_unit(): New EU requested, job: ", job != nullptr );
 		economic_unit* eu = new economic_unit;
-		eu->gross_salary = salary;
-		eu->wallet = cash;
-		eu->salary_cl = calculate_salary_class( salary );
+		game_wallet wallet( 0 );
+		eu->wallet = wallet;
+		if( job == nullptr )
+		{
+			//Create a default job: unemployed!!
+			eu->job = create_new_job_entity( &civil_unemployed_jon_level0 );
+		}
+		else
+		{
+			eu->job = job;
+		}
 
+		calculate_impact_on_equity_factors( eu );
+	
+		ELOG("economy_manager::create_economic_unit(): New EU: Job: ",  ( eu->job != nullptr ? eu->job->descriptor->name : "NULLPTR" ) ,", Equity: ",eu->equity_perception_threshold,", SalIE: ",eu->net_salary_impact_on_equity,", SavIE: ",eu->savings_impact_on_equity );
+		return eu;
+	}catch( std::exception& xa )
+	{
+		LOG_ERR("economy_manager::create_economic_unit() Exception catched, what: ",xa.what() );
+		return nullptr;
+	}
+
+
+	void economy_manager::calculate_impact_on_equity_factors( economic_unit* eu )
+	{
+		LOG("economy_manager::calculate_impact_on_equity_factors(): EU:",eu->eu_id );
 		srand( time( nullptr ) + clock() );
 		short tentative_nbr = 3; //Try three times to get a non-zero threshold value.
 		do{
@@ -283,25 +319,6 @@ namespace economics
 		{
 			eu->savings_impact_on_equity = 0.5;
 		}
-		ELOG("economy_manager::create_economic_unit(): New EU: Salary: ",salary,", Cash: ",cash.available_free_cash(),", Equity: ",eu->equity_perception_threshold,", SalIE: ",eu->net_salary_impact_on_equity,", SavIE: ",eu->savings_impact_on_equity );
-		return eu;
-	}catch( std::exception& xa )
-	{
-		LOG_ERR("economy_manager::create_economic_unit() Exception catched, what: ",xa.what() );
-		return nullptr;
-	}
-
-	//Create a default economic unit
-	economic_unit* economy_manager::create_economic_unit( salary_class sclass )
-	{
-		economic_unit* eu = nullptr;
-		currency_type salary = get_basic_class_salary( sclass );
-		if( salary > 0 )
-		{
-			game_wallet wallet( 0 );
-			eu = create_economic_unit( salary, wallet );
-		}
-		return eu;
 	}
 
 	//Add the economic unit to the current pool
@@ -311,7 +328,12 @@ namespace economics
 		if( eu )
 		{
 			std::lock_guard< std::mutex > lock( eu_container_mutex );
-			ELOG("economy_manager::add_economic_unit(): Adding a new EU, family size: ",*eu->family_size,", gross_salary: ",eu->gross_salary,", wallet: ",eu->wallet.available_free_cash());
+			currency_type gross_salary = 0;
+			if( eu->job )
+			{
+				gross_salary = eu->job->gross_salary;
+			}
+			ELOG("economy_manager::add_economic_unit(): Adding a new EU, family size: ",*eu->family_size,", gross_salary: ",gross_salary,", wallet: ",eu->wallet.available_free_cash());
 			eu_container.push_back( eu );
 		}
 		return verdict;
@@ -382,7 +404,7 @@ namespace economics
 	inline
 	currency_type economy_manager::calculate_gross_salary( economic_unit* eu )
 	{
-		return ( eu->gross_salary / 12 ) * *eu->family_size;
+		return ( eu->job->gross_salary / 12 ) * *eu->family_size;
 	}
 
 	inline
@@ -403,7 +425,6 @@ namespace economics
 			if( public_welfare_funds->is_welfare_available() &&
 				( public_welfare_funds->can_access_poor_welfare_program( needed_money ) ) )
 			{
-				//The procedure have a cost, can the player pay for it?
 				financed = public_welfare_funds->access_poor_subsidies_fund( needed_money );
 				if( eu->starving_unit )
 				{
@@ -427,29 +448,41 @@ namespace economics
 			ELOG("economy_manager::handle_starving_unit(): Paying with the savings, cash: ",eu->wallet.available_free_cash(),", expenses: ",needed_money);
 			eu->wallet.get_money_cash() -= needed_money;
 		}
-		return financed * POOR_SUBSIDIES_ACCESS_COST;
+		return financed * POOR_SUBSIDIES_ACCESS_COST; //The procedure have a cost, can the player pay for it?
 	}
 
-	//distribute the salary, return the amount of taxes collected.
-	currency_type economy_manager::apply_salaries_and_collect_taxes( economic_unit* eu )
+	//distribute the salary, return the amount of taxes and rental revenue collected.
+	currency_type economy_manager::get_revenue_from_eu( economic_unit* eu )
 	{
 		currency_type gross_salary = calculate_gross_salary( eu ); //Shall be a monthly value
-		currency_type net_salary = 0, savings = 0;
 		ELOG("economy_manager::apply_salaries_and_collect_taxes(): Unit gross salary: ", gross_salary,", family size: ", *eu->family_size );
+		//Increase the counter about the job duration
+		++eu->job->employed_since;
+		
 		//Apply the taxe
 		currency_type taxes = 0;
+		currency_type revenue_from_rental = 0;
+		bool this_unit_is_starving = false;
+		currency_type needed_money = 0;
 		if( gross_salary > 0 )
 		{
+			currency_type net_salary = 0, savings = 0;
 			net_salary = gross_salary;
 			taxes = calculate_taxes_on_salary( eu );
 			net_salary -= taxes;
 			//Apply the costs ( Like for the appartment rental ) , this will reduce the amount of net salary
 			savings = net_salary - apply_expense_and_cost( eu );
+			//Calculate the revenue from the rental
+			revenue_from_rental = eu->applicable_revenues.revenue_from_rental * *eu->family_size;
 			calculate_tax_equity_perception( gross_salary, net_salary, savings, eu );
 			//If the saving is negative, then this economic_unit is too poor to effort is life style
 			if( savings < 0 )
 			{
-				taxes -= handle_starving_unit( eu, std::abs( savings ) );
+				//Since is very poor refund the taxes 
+				eu->wallet.get_money_cash() += taxes;
+				taxes = 0;//No taxes since were refunded
+				this_unit_is_starving = true;
+				needed_money = std::abs( savings );
 			}
 			else
 			{
@@ -458,7 +491,19 @@ namespace economics
 			}
 			ELOG("economy_manager::apply_salaries_and_collect_taxes(): New salary_taxes_equity_perception: ",eco_variables->salary_taxes_equity_perception, ", Total savings for this unit: ",eu->wallet.available_free_cash() );
 		}
-		return taxes;
+		else
+		{
+			//This unit does not have a salary, most probably is unemployed
+			this_unit_is_starving = true;
+			needed_money = apply_expense_and_cost( eu ); 
+		}
+		if( this_unit_is_starving )
+		{
+			taxes -= handle_starving_unit( eu, needed_money ); //The function return the financing cost, which impact negatively on the revenue 
+		}
+
+		eu->have_payed_rental_price = ( revenue_from_rental > 0 );
+		return taxes + revenue_from_rental;
 	}
 
 	void economy_manager::remove_starving_state( economic_unit* eu )
@@ -485,7 +530,7 @@ namespace economics
 	//savings the unit have. More money means less negative impact on temporary low saving ratio
 	void economy_manager::correct_savings_and_salary_impact_on_equity( economic_unit* eu, currency_type net_salary, currency_type savings )
 	{
-		currency_type total_savings = eu->wallet.available_free_cash();
+		currency_type total_savings = eu->wallet.available_free_cash(), gross_salary = eu->job->gross_salary;
 		if( total_savings == 0 )
 		{
 			total_savings = 100;
@@ -505,8 +550,10 @@ namespace economics
 		};
 		eu->savings_impact_on_equity += calculate_impact( savings , total_savings );
 		eu->savings_impact_on_equity = check_boundaries( eu->savings_impact_on_equity );
-		eu->net_salary_impact_on_equity += calculate_impact( net_salary , eu->gross_salary );
+
+		eu->net_salary_impact_on_equity += calculate_impact( net_salary , gross_salary );
 		eu->net_salary_impact_on_equity = check_boundaries( eu->net_salary_impact_on_equity );
+
 		LOG("economy_manager::correct_savings_and_salary_impact_on_equit(): EU:",eu->eu_id,", netS:",net_salary,",Savings:",savings,",TotalSav:",total_savings,", SavImpOnEq:",eu->savings_impact_on_equity,", SalImpOnEq:",eu->net_salary_impact_on_equity);
 	}
 
@@ -541,14 +588,6 @@ namespace economics
 		}
 	}
 
-	currency_type economy_manager::get_revenue_from_eu( economic_unit* eu )
-	{
-		currency_type total = 0;
-		total += eu->applicable_revenues.revenue_from_rental * *eu->family_size;
-		total += eu->applicable_revenues.revenue_from_selling_food * *eu->family_size;
-		return total;
-	}
-
 	//The function review_economy check and update the economy status
 	//calculate and distribute the salaries, apply the taxing rules ecc
 	void economy_manager::review_economy()
@@ -569,11 +608,7 @@ namespace economics
 			eu->unit_net_revenue = 0;
 			if( eu->get_family_size() > 0 )
 			{
-				//Apply the eu revenues
 				eu->unit_net_revenue = get_revenue_from_eu( eu );
-				//Distribute the salary and collect the taxes
-				eu->unit_net_revenue += apply_salaries_and_collect_taxes( eu ); 
-				//If for this EU maintanance costs are present, apply those costs
 			}
 			if( eu->applicable_costs.player_maintanance_cost > 0 )
 			{

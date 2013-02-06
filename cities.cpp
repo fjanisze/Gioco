@@ -8,13 +8,14 @@ namespace city_manager
 	const long default_city_size = 5;
 
 	//Some basic building definitions
-	const building_descriptor civil_small_house = { 1 , "Small house", "Small mono family house", true, false, 350000, 650, 3000,  20, 7 , nullptr , population::population_class::class_0 };
-	const building_descriptor civil_medium_house = { 2 , "Medium house", "This is a little bigger house, for up to three families", true,false, 1350000, 700, 7500, 35, 20 , nullptr , population::population_class::class_0 };
-	const building_descriptor civil_small_appartment = { 3 , "Appartment", "Building with a set of small appartment", true,false, 14000000, 720, 200000 , 110 , 300 , nullptr , population::population_class::class_0 };
-	const building_descriptor civil_medium_appartment = { 4 , "Medium Appartment", "Building with a set of medium size apparment", true, false, 32000000, 550, 500000, 250 , 800 , nullptr , population::population_class::class_0 };
+	const building_descriptor civil_small_house = { 1 , "Small house", "Small mono family house", building_type::habitable, true, false, 350000, 650, 3000,  20, 7 , nullptr , population::population_class::class_0 };
+	const building_descriptor civil_medium_house = { 2 , "Medium house", "This is a little bigger house, for up to three families", building_type::habitable, true,false, 1350000, 700, 7500, 35, 20 , nullptr , population::population_class::class_0 };
+	const building_descriptor civil_small_appartment = { 3 , "Appartment", "Building with a set of small appartment", building_type::habitable, true,false, 14000000, 720, 200000 , 110 , 300 , nullptr , population::population_class::class_0 };
+	const building_descriptor civil_medium_appartment = { 4 , "Medium Appartment", "Building with a set of medium size apparment",building_type::habitable, true, false, 32000000, 550, 500000, 250 , 800 , nullptr , population::population_class::class_0 };
 
 	//Special buildings and offices
-	const building_descriptor civil_welfare_administration_office = { 5 , "Welfare administration" , "This construction is needed to make the social poor welfare work", false, true, 25000000, 0, 3500000, 220 , 600, new civil_welfare_office_actions, population::population_class::class_1  };
+	const building_descriptor civil_welfare_administration_office = { 5 , "Welfare administration" , "This construction is needed to make the social poor welfare work",building_type::workplace, false, true, 25000000, 0, 3500000, 220 , 600, new civil_welfare_office_actions, population::population_class::class_1  };
+	const building_descriptor civil_small_poor_commercial_building ={ 6 , "Commercial wretch shop" , "Small and poor multistore" , building_type::workplace , true, false , 400000, 0, 35000, 90, 60, new civil_small_poor_commercial_actions, population::population_class::class_0 };
 
 	const building_descriptor* buildings_table [] =
 	{
@@ -192,6 +193,31 @@ namespace city_manager
 		LOG("civil_welfare_office_actions::construction_completed(): Enabling the welfare for ", human_player );
 		mng->get_player_objects( human_player )->economics->get_public_walfare_funds()->set_welfare_availability( true );
 	}
+	
+	void civil_small_poor_commercial_actions::construction_completed()
+	{
+		//TODO Register a new job in the job market
+		
+	}
+
+	////////////////////////////////////////////////////////////////////
+	//
+	//
+	//	Implementation for workplace_manager
+	//
+	//
+	////////////////////////////////////////////////////////////////////
+
+	workplace_descriptor* workplace_manager::create_new_workplace( building_info* building )
+	try{
+		workplace_descriptor* workplace_desc = new workplace_descriptor;
+		workplace_desc->employer_name = building->get_name();
+		return workplace_desc;
+	}catch( std::bad_alloc& xa )
+	{
+		LOG_ERR("* workplace_manager::create_new_workplace(): Allocation failure");
+		return nullptr;
+	}
 
 	////////////////////////////////////////////////////////////////////
 	//
@@ -346,15 +372,23 @@ namespace city_manager
 		revenues.revenue_from_rental = building->descriptor->rental_price;
 
 		//Create the population_entity for this construction
-		building->population = player_objects->population->create_new_population_entity( building->descriptor->population_capacity,
-			       	building->descriptor->pop_class, costs, revenues );
-		if( building->population != nullptr )
+		if( building->descriptor->type == building_type::habitable )
 		{
-			player_objects->population->add_population_entity( building->population, this_city->get_city_name() );
+			//This is an habitable building, like an appartment 
+			building->population = player_objects->population->create_new_population_entity( building->descriptor->population_capacity,
+				       	building->descriptor->pop_class, costs, revenues );
+			if( building->population != nullptr )
+			{
+				player_objects->population->add_population_entity( building->population, this_city->get_city_name() );
+			}
+			else
+			{
+				LOG_ERR("construction_management::construction_completed(): Failed when creating the population entity.. That's not good ");
+			}
 		}
-		else
+		else if ( building->descriptor->type == building_type::workplace )
 		{
-			LOG_ERR("construction_management::construction_completed(): Failed when creating the population entity.. That's not good ");
+			building->workplace_desc = create_new_workplace( building );
 		}
 		finance::currency_type tmp = building->descriptor->price;
 		building->building_value = tmp * 0.8; //The value decrease after the construction.. :|

@@ -104,6 +104,7 @@ namespace player_info
 	public:
 		player_manager( const string& name , type_of_player player_type );
 		player_info* get_player_info( );
+		std::string get_player_name();
 	};
 }
 

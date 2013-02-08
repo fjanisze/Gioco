@@ -32,6 +32,11 @@ namespace player_info
 	{
 		return player;
 	}
+	
+	std::string player_manager::get_player_name()
+	{
+		return player->name;
+	}
 }
 
 namespace game_map

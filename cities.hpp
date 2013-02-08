@@ -29,11 +29,8 @@ namespace city_manager
 	//Contaings the function invoked when some action are triggered
 	class building_event_action
 	{
-	protected:
-		game_manager::player_game_objects* player_objects;
-		std::string human_player;
 	public:
-		virtual void construction_completed() = 0; //Is invoked when the construction is completed
+		virtual void construction_completed( game_manager::player_game_objects* player_objects ) = 0; //Is invoked when the construction is completed
 		building_event_action();
 	};
 
@@ -41,14 +38,14 @@ namespace city_manager
 	class civil_welfare_office_actions : public building_event_action
 	{
 	public:
-		void construction_completed();
+		void construction_completed( game_manager::player_game_objects* player_objects );
 	};
 
 	//Implementation for the small commercial building
 	class civil_small_poor_commercial_actions : public building_event_action
 	{
 	public:
-		void construction_completed();
+		void construction_completed( game_manager::player_game_objects* player_objects );
 	};
 
 	typedef enum building_type

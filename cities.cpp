@@ -188,15 +188,11 @@ namespace city_manager
 
 	building_event_action::building_event_action()
 	{
-		LOG("building_event_action::building_event_action(): Creating");
-		game_manager::game_manager* mng = game_manager::game_manager::get_instance();
-		human_player = mng->get_human_player_name();
-		player_objects = mng->get_player_objects( human_player );
 	}
 
-	void civil_welfare_office_actions::construction_completed()
+	void civil_welfare_office_actions::construction_completed( game_manager::player_game_objects* player_objects )
 	{
-		LOG("civil_welfare_office_actions::construction_completed(): Enabling the welfare for ", human_player );
+		LOG("civil_welfare_office_actions::construction_completed(): Enabling the welfare for ", player_objects->player->get_player_name() );
 		player_objects->economics->get_public_walfare_funds()->set_welfare_availability( true );
 		job_market::job_entity* job = player_objects->economics->create_new_job_entity( &job_market::civil_office_job_level1 );
 		if( job )
@@ -205,7 +201,7 @@ namespace city_manager
 		}
 	}
 	
-	void civil_small_poor_commercial_actions::construction_completed()
+	void civil_small_poor_commercial_actions::construction_completed( game_manager::player_game_objects* player_objects )
 	{
 		//Register a new job in the job market
 		job_market::job_entity* job = player_objects->economics->create_new_job_entity( &job_market::civil_scullion_job_level0 );
@@ -411,7 +407,7 @@ namespace city_manager
 		//Call the construction complete action, if present
 		if( building->descriptor->actions != nullptr )
 		{
-			building->descriptor->actions->construction_completed();
+			building->descriptor->actions->construction_completed( player_objects );
 		}
 	}
 

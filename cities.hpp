@@ -29,8 +29,12 @@ namespace city_manager
 	//Contaings the function invoked when some action are triggered
 	class building_event_action
 	{
+	protected:
+		game_manager::player_game_objects* player_objects;
+		std::string human_player;
 	public:
 		virtual void construction_completed() = 0; //Is invoked when the construction is completed
+		building_event_action();
 	};
 
 	//Implementation for the welfare administration building

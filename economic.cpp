@@ -35,6 +35,9 @@ namespace job_market
 	job_entity::job_entity( const job_descriptor* job ) : descriptor( job )
 	{
 		employed_since = 0;
+		amount_of_workplaces = 0;
+		gross_salary = 0;
+		free_workplaces = 0;
 	}
 
 	job_market_manager::job_market_manager()
@@ -68,6 +71,18 @@ namespace job_market
 	{
 		LOG_ERR("job_market_manager::create_new_job_entity(): Exception catched, what: ",xa.what() );
 		return nullptr;
+	}
+	
+	long job_market_manager::register_job_entity( job_entity* job , long workplaces )
+	{
+		if( job )
+		{
+			job->amount_of_workplaces = workplaces;
+			std::lock_guard< std::mutex > lock( access_mutex );
+			available_jobs.push_back( job );
+			ELOG("job_market_manager::register_job_entity(): Amount of jobs: ", available_jobs.size() );
+		}
+		return available_jobs.size();
 	}
 	
 }

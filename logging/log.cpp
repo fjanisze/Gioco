@@ -1,18 +1,13 @@
 #include "log.hpp"
+#include <cassert>
 
 namespace logging
 {
 	void file_log_policy::open_ostream(const std::string& name)
 	{
 		out_stream->open( name.c_str(), std::ios_base::binary|std::ios_base::out );
-		if( !out_stream->is_open() ) 
-		{
-			throw(std::runtime_error("LOGGER: Unable to open an output stream"));
-		}
-		else
-		{
-			out_stream->precision( 20 );
-		}
+		assert( out_stream->is_open() == true ); 
+		out_stream->precision( 20 );
 	}
 
 	void file_log_policy::close_ostream()

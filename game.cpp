@@ -1200,7 +1200,7 @@ namespace game_manager
 
 		city_milano->start_building_construction( &city_manager::civil_medium_house );
 		city_milano->start_building_construction( &city_manager::civil_small_house );
-		city_milano->start_building_construction( &city_manager::civil_small_appartment );
+	/*	city_milano->start_building_construction( &city_manager::civil_small_appartment );
 		city_milano->start_building_construction( &city_manager::civil_medium_appartment );
 		city_milano->start_building_construction( &city_manager::civil_medium_appartment );
 		city_milano->start_building_construction( &city_manager::civil_medium_appartment );
@@ -1212,7 +1212,16 @@ namespace game_manager
 		city_milano->start_building_construction( &city_manager::civil_medium_appartment );
 		city_milano->start_building_construction( &city_manager::civil_medium_appartment );
 
-		city_milano->start_building_construction( &city_manager::civil_welfare_administration_office );
+		city_milano->start_building_construction( &city_manager::civil_welfare_administration_office );*/
+
+		city_roma->start_building_construction( &city_manager::civil_medium_house );
+	//	city_roma->start_building_construction( &city_manager::civil_medium_house );
+		city_roma->start_building_construction( &city_manager::civil_small_house );
+	/*	city_roma->start_building_construction( &city_manager::civil_small_house );
+		city_roma->start_building_construction( &city_manager::civil_medium_appartment );
+		city_roma->start_building_construction( &city_manager::civil_medium_appartment );
+		city_roma->start_building_construction( &city_manager::civil_medium_appartment );
+		city_roma->start_building_construction( &city_manager::civil_medium_appartment );
 
 		city_roma->start_building_construction( &city_manager::civil_medium_house );
 		city_roma->start_building_construction( &city_manager::civil_medium_house );
@@ -1221,16 +1230,7 @@ namespace game_manager
 		city_roma->start_building_construction( &city_manager::civil_medium_appartment );
 		city_roma->start_building_construction( &city_manager::civil_medium_appartment );
 		city_roma->start_building_construction( &city_manager::civil_medium_appartment );
-		city_roma->start_building_construction( &city_manager::civil_medium_appartment );
-
-		city_roma->start_building_construction( &city_manager::civil_medium_house );
-		city_roma->start_building_construction( &city_manager::civil_medium_house );
-		city_roma->start_building_construction( &city_manager::civil_small_house );
-		city_roma->start_building_construction( &city_manager::civil_small_house );
-		city_roma->start_building_construction( &city_manager::civil_medium_appartment );
-		city_roma->start_building_construction( &city_manager::civil_medium_appartment );
-		city_roma->start_building_construction( &city_manager::civil_medium_appartment );
-		city_roma->start_building_construction( &city_manager::civil_medium_appartment );
+		city_roma->start_building_construction( &city_manager::civil_medium_appartment );*/
 	}
 
 	game_map::gameplay_map* game_manager::get_the_game_map()

@@ -72,17 +72,22 @@ namespace job_market
 		const job_descriptor* descriptor;
 		string employee_name;//Who is your employer?
 		currency_type gross_salary; //This may differ from the base_gross_salary, since the salary change during the time
-		mlong employed_since; //How many round this unit is doing this job?
+		long employed_since; //How many round this unit is doing this job?
+		long amount_of_workplaces,
+		     free_workplaces;
 
 		job_entity( const job_descriptor* job );
 	};
 
 	class job_market_manager
 	{
+		std::mutex access_mutex;
+		std::vector< job_entity* > available_jobs;
 	public:
 		job_market_manager();
 		~job_market_manager();
 		job_entity* create_new_job_entity( const job_descriptor* job );
+		long register_job_entity( job_entity* job , long workplaces );
 	};
 };
 

@@ -28,16 +28,15 @@ namespace finance
 namespace job_market
 {
 
-	const job_descriptor civil_unemployed_jon_level0 = { 0 , "Unemployed", 0 };
+	const job_descriptor civil_unemployed_jon_level0 = { 0 , "Unemployed", 0 }; //The 0 ID shall be always for the unemployed
 	const job_descriptor civil_scullion_job_level0 = { 1 , "Scullion", 19000 };
 	const job_descriptor civil_office_job_level1 = { 2 , "Office employee" , 35000 };
 
 	job_entity::job_entity( const job_descriptor* job ) : descriptor( job )
 	{
-		employed_since = 0;
 		amount_of_workplaces = 0;
 		gross_salary = 0;
-		free_workplaces = 0;
+		amount_of_free_workplaces = 0;
 	}
 
 	job_market_manager::job_market_manager()
@@ -73,18 +72,155 @@ namespace job_market
 		return nullptr;
 	}
 	
+	//Add a new job to the job market
 	long job_market_manager::register_job_entity( job_entity* job , long workplaces )
 	{
 		if( job )
 		{
 			job->amount_of_workplaces = workplaces;
+			job->amount_of_free_workplaces = workplaces;
 			std::lock_guard< std::mutex > lock( access_mutex );
 			available_jobs.push_back( job );
 			ELOG("job_market_manager::register_job_entity(): Amount of jobs: ", available_jobs.size() );
 		}
 		return available_jobs.size();
 	}
-	
+
+	//Return the job id for the provided unit
+	long job_market_manager::get_job_id( economic_unit* eu )
+	{
+		return eu->get_job()->descriptor->job_id;
+	}
+
+	//Look for a job which fit the amount of workplaces needed
+	//The job is immediatly assigned
+	job_entity* job_market_manager::find_job_entity( long workplaces_needed )
+	{
+		job_entity* job = nullptr;
+		for( auto elem : available_jobs )
+		{
+			if( elem->amount_of_free_workplaces >= workplaces_needed )
+			{
+				job = elem;
+				break;
+			}
+		}
+		return job;
+	}
+
+	bool job_market_manager::is_unemployed( economic_unit* eu )
+	{
+		return eu->get_job()->descriptor->job_id == civil_unemployed_jon_level0.job_id;
+	}
+
+	//This unit is not doing that job anymore
+	void job_market_manager::leave_the_job( economic_unit* eu )
+	{
+		ELOG("job_market_manager::leave_the_job(): EU ",eu->get_id()," is leaving ",get_job_id( eu ) );
+		if( eu->get_job() && !is_unemployed( eu ) ) //A unemployes cannot leave is job.. since have no job..
+		{
+			eu->get_job()->amount_of_free_workplaces += eu->get_family_size(); //New workplaces
+		}
+		else
+		{
+			delete eu->get_job();
+		}
+		eu->set_job( nullptr );
+	}
+
+	bool job_market_manager::update_workplace_distribution( job_entity* job, long eu_id, long amount )
+	{
+		if( job->workplaces_distribution.find( eu_id ) != job->workplaces_distribution.end() )
+		{
+			long new_amount = amount;
+			new_amount += job->workplaces_distribution[ eu_id ];
+			if( new_amount >= 0 && new_amount <= job->amount_of_free_workplaces ) 
+			{
+				job->workplaces_distribution[ eu_id ] = new_amount;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	//Return the amount of eu employed
+	long job_market_manager::amount_of_employed_people( job_entity* job, long eu_id )
+	{
+		if( job->workplaces_distribution.find( eu_id ) != job->workplaces_distribution.end() )
+		{
+			return job->workplaces_distribution[ eu_id ];
+		}
+		return 0;
+	}
+
+	//This eu is applying for this job
+	long job_market_manager::apply_for_the_job( job_entity* job , long amount_of_workplaces, economic_unit* eu )
+	{
+		ELOG("job_market_manager::apply_for_the_job(): The unit:",eu->get_id()," is applying for:",job->descriptor->job_id,", needed workplaces:",amount_of_workplaces,", free workplaces:",job->amount_of_free_workplaces);
+		long uneployed = amount_of_workplaces;
+		if( job->amount_of_free_workplaces >= amount_of_workplaces ) //Are the workspaces enough?
+		{
+			if( eu->get_job() != nullptr )
+			{
+				if( is_unemployed( eu ) )
+				{
+					delete eu->get_job(); 
+				}
+				else //Have to leave is old job
+				{
+					leave_the_job( eu );
+				}
+			}
+			job->amount_of_free_workplaces -= amount_of_workplaces;
+			uneployed = 0;
+			eu->set_job( job );
+			//Check if the workforce count have to be updated
+			if( !update_workplace_distribution( job, eu->get_id() , amount_of_workplaces ) )
+			{
+				//Nothing to update, is a fresh employer
+				job->workplaces_distribution[ eu->get_id() ] = amount_of_workplaces;
+			}
+		}
+		return uneployed;
+	}
+
+	//Look and apply for a job
+	job_entity* job_market_manager::look_for_a_job( economic_unit* eu )
+	{
+		job_entity* job = nullptr;
+		long eu_id = eu->get_id();
+		long required_workspaces = eu->get_family_size() - amount_of_employed_people( eu->get_job(), eu_id );
+		LOG("job_market_manager::look_for_a_job(): ID:",eu_id,", Workplaces needed:",required_workspaces );
+		//Should be positive
+		if( required_workspaces > 0 )
+		{
+			//Try to increase the amount of employers in the current job
+			if( !is_unemployed( eu ) )
+			{
+				if( update_workplace_distribution( eu->get_job(), eu_id, required_workspaces ) )
+				{
+					//Ok, still working at the same place, just update the amount of worker
+					return eu->get_job();
+				}
+				else
+				{
+					//Shall look for a new job
+					leave_the_job( eu );
+				}
+			}
+			//Look for a job with fit the family size
+			for( auto elem : available_jobs )
+			{
+				if( apply_for_the_job( elem, required_workspaces, eu ) == 0 )
+				{
+					job = eu->get_job(); //Ok
+					break;
+				}
+			}
+		}
+		ELOG("job_market_manager::look_for_a_job(): New job found:",get_job_id( eu ) )
+		return job;
+	}
 }
 
 namespace economics
@@ -210,6 +346,14 @@ namespace economics
 		salary_taxes_equity_perception = 0.5; //This value is changed at every review_economy loop, when the net salary is distributed
 	}
 
+	////////////////////////////////////////////////////////////////////
+	//
+	//
+	//	Implementation for economic_unit
+	//
+	//
+	//////////////////////////////////////////////////////////////////
+
 	long economic_unit::eu_next_unique_id = 1;
 
 	economic_unit::economic_unit()
@@ -250,6 +394,34 @@ namespace economics
 		}
 		return 0;	
 	}
+
+	long economic_unit::get_id()
+	{
+		return eu_id;
+	}
+
+	//Return true if this unit is unemployed
+	bool economic_unit::is_unemployed()
+	{
+		return ( job == nullptr ) || ( job->descriptor->job_id == 0 );
+	}
+
+	bool economic_unit::look_for_a_job()
+	{
+		if( is_unemployed() )
+		{
+			job_entity* job;
+		}
+	}
+
+
+	////////////////////////////////////////////////////////////////////
+	//
+	//
+	//	Implementation for economy_manager
+	//
+	//
+	//////////////////////////////////////////////////////////////////
 
 	//Constructor for economy_manager
 	economy_manager::economy_manager( const std::string& player )
@@ -300,7 +472,7 @@ namespace economics
 
 		calculate_impact_on_equity_factors( eu );
 	
-		ELOG("economy_manager::create_economic_unit(): New EU: Job: ",  ( eu->job != nullptr ? eu->job->descriptor->name : "NULLPTR" ) ,", Equity: ",eu->equity_perception_threshold,", SalIE: ",eu->net_salary_impact_on_equity,", SavIE: ",eu->savings_impact_on_equity );
+		ELOG("economy_manager::create_economic_unit(): New EU: Job: ", eu->job->descriptor->name ,", Equity: ",eu->equity_perception_threshold,", SalIE: ",eu->net_salary_impact_on_equity,", SavIE: ",eu->savings_impact_on_equity );
 		return eu;
 	}catch( std::exception& xa )
 	{
@@ -344,10 +516,9 @@ namespace economics
 		{
 			std::lock_guard< std::mutex > lock( eu_container_mutex );
 			currency_type gross_salary = 0;
-			if( eu->job )
-			{
-				gross_salary = eu->job->gross_salary;
-			}
+			assert( eu->job != nullptr );
+			gross_salary = eu->job->gross_salary;
+
 			ELOG("economy_manager::add_economic_unit(): Adding a new EU, family size: ",*eu->family_size,", gross_salary: ",gross_salary,", wallet: ",eu->wallet.available_free_cash());
 			eu_container.push_back( eu );
 		}
@@ -472,7 +643,6 @@ namespace economics
 		currency_type gross_salary = calculate_gross_salary( eu ); //Shall be a monthly value
 		ELOG("economy_manager::apply_salaries_and_collect_taxes(): Unit gross salary: ", gross_salary,", family size: ", *eu->family_size );
 		//Increase the counter about the job duration
-		++eu->job->employed_since;
 		
 		//Apply the taxe
 		currency_type taxes = 0;
@@ -603,14 +773,26 @@ namespace economics
 		}
 	}
 
-	//The function review_economy check and update the economy status
-	//calculate and distribute the salaries, apply the taxing rules ecc
-	void economy_manager::review_economy()
+	/*
+	 * This function loop throught all the eu, check if they have a job, if not, 
+	 * enable the job searching algorithm
+	 */
+	long economy_manager::update_uneployment_level()
 	{
-		LOG("economy_manager::review_economy(): EU count: ",eu_container.size());
+		long unemployment = 0;
+
+		return unemployment;
+	}
+
+	/*
+	 * This function collects the money from the taxes and other fees
+	 */
+	currency_type economy_manager::collect_money()
+	{
+		LOG("economy_manager::collect_money(): EU count: ",eu_container.size());
 		if( eu_container.empty() ) 
 		{
-			return; 
+			return 0; 
 		}
 		currency_type collected_money = 0;
 		public_welfare_funds->zeroes_poor_subsidies_counter(); //Each review has it own statistics.
@@ -627,17 +809,28 @@ namespace economics
 			}
 			if( eu->applicable_costs.player_maintanance_cost > 0 )
 			{
-				ELOG("economy_manager::review_economy(): Applying costs to ", player_name,", for: ",eu->applicable_costs.player_maintanance_cost);
+				ELOG("economy_manager::collect_money(): Applying costs to ", player_name,", for: ",eu->applicable_costs.player_maintanance_cost);
 				eu->unit_net_revenue -= eu->applicable_costs.player_maintanance_cost;
 			}
-			ELOG("economy_manager::review_economy(): EU Net Rev.: ", eu->unit_net_revenue );
+			ELOG("economy_manager::collect_money(): EU Net Rev.: ", eu->unit_net_revenue );
 			collected_money += eu->unit_net_revenue;
 		}
 		recalculate_amount_of_starving_unit();
 		//Add the collected taxes to the player wallet after the various funds detraction
 		collected_money = public_welfare_funds->walfare_distribute_revenue( collected_money );
 		player_wallet.get_money_cash() += collected_money;
-		ELOG("economy_manager::review_economy(): Amount of money collected for ",player_name,": ",collected_money,", Saldo: ",player_wallet.get_money_cash() );
+		ELOG("economy_manager::collect_money(): Amount of money collected for ",player_name,": ",collected_money,", Saldo: ",player_wallet.get_money_cash() );
+		return collected_money;
+	}	
+
+	//The function review_economy check and update the economy status
+	//calculate and distribute the salaries, apply the taxing rules ecc
+	void economy_manager::review_economy()
+	{
+		//first step is to updae the job market status
+		
+		//Then collect the money
+		collect_money();
 	}
 
 	const economic_variables* economy_manager::get_the_economic_variables( )

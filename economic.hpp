@@ -13,6 +13,7 @@
 #include <cmath>
 #include <stdlib.h>
 #include <ctime>
+#include <cassert>
 using namespace std;
 
 typedef long long mlong;
@@ -47,9 +48,15 @@ namespace finance
 	};
 }
 
+namespace economics
+{
+	class economic_unit;
+}
+
 namespace job_market
 {
 	using namespace finance;
+	using namespace economics;
 
 	//Basic information about a job
 	struct job_descriptor
@@ -57,6 +64,8 @@ namespace job_market
 		const long job_id;
 
 		string name;
+
+
 
 		currency_type base_gross_salary;
 	};
@@ -72,9 +81,11 @@ namespace job_market
 		const job_descriptor* descriptor;
 		string employee_name;//Who is your employer?
 		currency_type gross_salary; //This may differ from the base_gross_salary, since the salary change during the time
-		long employed_since; //How many round this unit is doing this job?
+	
 		long amount_of_workplaces,
-		     free_workplaces;
+		     amount_of_free_workplaces;
+
+		map< long , long > workplaces_distribution;//Which eu works here? How much of people?
 
 		job_entity( const job_descriptor* job );
 	};
@@ -83,11 +94,19 @@ namespace job_market
 	{
 		std::mutex access_mutex;
 		std::vector< job_entity* > available_jobs;
+		job_entity* find_job_entity( long workplaces_needed ); 
+		long apply_for_the_job( job_entity* job, long amount_of_workplaces,  economic_unit* eu );
+		void leave_the_job( economic_unit* eu );
+		bool update_workplace_distribution( job_entity* job, long eu_id, long amount );
+		long amount_of_employed_people( job_entity* job, long eu_id );
 	public:
 		job_market_manager();
 		~job_market_manager();
 		job_entity* create_new_job_entity( const job_descriptor* job );
 		long register_job_entity( job_entity* job , long workplaces );
+		job_entity* look_for_a_job( economic_unit* eu );
+		long get_job_id( economic_unit* eu );
+		bool is_unemployed( economic_unit* eu );
 	};
 };
 
@@ -207,8 +226,17 @@ namespace economics
 		bool is_paying_the_rent_price()
 		{	return have_payed_rental_price;	}
 		economic_unit();
+		long get_id();
+		job_entity* get_job()
+		{	return job;	}
+		void set_job( job_entity* n_job )
+		{	job = n_job;	}
+	public:
+		bool look_for_a_job(); // Search and apply for a job
+		bool is_unemployed();
 		friend class economy_manager;
 	};
+
 
 	class economy_manager : public job_market_manager
 	{
@@ -229,6 +257,8 @@ namespace economics
 		currency_type handle_starving_unit( economic_unit* eu , currency_type needed_money );
 		void correct_savings_and_salary_impact_on_equity( economic_unit* eu, currency_type net_salary, currency_type savings );
 		void calculate_impact_on_equity_factors( economic_unit* eu );
+		currency_type collect_money();
+		long update_uneployment_level();
 	public:
 		economy_manager( const std::string& player );
 		~economy_manager();

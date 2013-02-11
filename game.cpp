@@ -1059,10 +1059,15 @@ namespace console_ui
 			}
 			cout<<color_fore_white<<endl; 
 		}
+		cout<<" #"<<i + 1<<" - Quit\n";
 		cout<<"Make your choice [ 1 - "<< i <<" ]:";
-		choice_range choice( 1 , i );
+		choice_range choice( 1 , i + 1 );
 		cin>>choice;
 		--choice.choice;
+		if( choice.choice == i + 1 )
+		{
+			return 1;
+		}
 		//Start to build
 		if(! building_possibilities[ choice.choice ] )
 		{

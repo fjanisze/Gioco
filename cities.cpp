@@ -23,6 +23,7 @@ namespace city_manager
 		&civil_medium_house,
 		&civil_small_appartment,
 		&civil_medium_appartment,
+		&civil_small_poor_commercial_building,
 		&civil_welfare_administration_office,
 		nullptr
 	};
@@ -190,7 +191,7 @@ namespace city_manager
 	{
 	}
 
-	void civil_welfare_office_actions::construction_completed( game_manager::player_game_objects* player_objects )
+	void civil_welfare_office_actions::construction_completed( building_info* building, game_manager::player_game_objects* player_objects )
 	{
 		LOG("civil_welfare_office_actions::construction_completed(): Enabling the welfare for ", player_objects->player->get_player_name() );
 		player_objects->economics->get_public_walfare_funds()->set_welfare_availability( true );
@@ -198,16 +199,19 @@ namespace city_manager
 		if( job )
 		{
 			player_objects->economics->register_job_entity( job , civil_welfare_administration_office.population_capacity );
+			building->workplace_desc->job = job;
 		}
 	}
 	
-	void civil_small_poor_commercial_actions::construction_completed( game_manager::player_game_objects* player_objects )
+	void civil_small_poor_commercial_actions::construction_completed( building_info* building, game_manager::player_game_objects* player_objects )
 	{
+		ELOG("civil_welfare_office_actions::construction_completed(): Completed, new workplaces available ");
 		//Register a new job in the job market
 		job_market::job_entity* job = player_objects->economics->create_new_job_entity( &job_market::civil_scullion_job_level0 );
 		if( job )
 		{
 			player_objects->economics->register_job_entity( job , civil_small_poor_commercial_building.population_capacity );
+			building->workplace_desc->job = job;
 		}
 	}
 
@@ -407,7 +411,7 @@ namespace city_manager
 		//Call the construction complete action, if present
 		if( building->descriptor->actions != nullptr )
 		{
-			building->descriptor->actions->construction_completed( player_objects );
+			building->descriptor->actions->construction_completed( building, player_objects );
 		}
 	}
 

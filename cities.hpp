@@ -25,12 +25,14 @@ namespace game_manager
 namespace city_manager
 {
 
+	struct building_info;
+
 	//Some buildings when constructed or destroyed impact the game, this class
 	//Contaings the function invoked when some action are triggered
 	class building_event_action
 	{
 	public:
-		virtual void construction_completed( game_manager::player_game_objects* player_objects ) = 0; //Is invoked when the construction is completed
+		virtual void construction_completed( building_info* building, game_manager::player_game_objects* player_objects ) = 0; //Is invoked when the construction is completed
 		building_event_action();
 	};
 
@@ -38,14 +40,14 @@ namespace city_manager
 	class civil_welfare_office_actions : public building_event_action
 	{
 	public:
-		void construction_completed( game_manager::player_game_objects* player_objects );
+		void construction_completed( building_info* building, game_manager::player_game_objects* player_objects );
 	};
 
 	//Implementation for the small commercial building
 	class civil_small_poor_commercial_actions : public building_event_action
 	{
 	public:
-		void construction_completed( game_manager::player_game_objects* player_objects );
+		void construction_completed( building_info* building, game_manager::player_game_objects* player_objects );
 	};
 
 	typedef enum building_type
@@ -84,7 +86,7 @@ namespace city_manager
 	struct workplace_descriptor
 	{
 		string employer_name;
-		job_market::job_descriptor* job; //Who is working here?
+		job_market::job_entity* job; //Who is working here?
 		long employed_people;
 		workplace_descriptor() : job( nullptr ), employed_people( 0 )
 		{	}

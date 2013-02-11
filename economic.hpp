@@ -50,6 +50,16 @@ namespace finance
 
 namespace economics
 {
+	typedef enum salary_class
+	{
+		class_0 = 0, //Very poor
+		class_1,
+		class_2,
+		class_3,
+		class_4,
+		class_5 //Very rich
+	} salary_class;
+
 	class economic_unit;
 }
 
@@ -99,6 +109,7 @@ namespace job_market
 		void leave_the_job( economic_unit* eu );
 		bool update_workplace_distribution( job_entity* job, long eu_id, long amount );
 		long amount_of_employed_people( job_entity* job, long eu_id );
+		salary_class calculate_salary_class( currency_type salary );
 	public:
 		job_market_manager();
 		~job_market_manager();
@@ -107,6 +118,7 @@ namespace job_market
 		job_entity* look_for_a_job( economic_unit* eu );
 		long get_job_id( economic_unit* eu );
 		bool is_unemployed( economic_unit* eu );
+		long update_uneployment_level( vector< economic_unit* >& eu );
 	};
 };
 
@@ -114,16 +126,6 @@ namespace economics
 {
 	using namespace finance;
 	using namespace job_market;
-
-	typedef enum salary_class
-	{
-		class_0 = 0, //Very poor
-		class_1,
-		class_2,
-		class_3,
-		class_4,
-		class_5 //Very rich
-	} salary_class;
 
 	class public_welfare
 	{
@@ -231,6 +233,8 @@ namespace economics
 		{	return job;	}
 		void set_job( job_entity* n_job )
 		{	job = n_job;	}
+		void set_salary_cl( salary_class cl )
+		{	salary_cl = cl; }
 	public:
 		bool look_for_a_job(); // Search and apply for a job
 		bool is_unemployed();
@@ -248,7 +252,6 @@ namespace economics
 		void modify_tax_equity_perception( long double value );
 		public_welfare* public_welfare_funds;
 	private:
-		salary_class calculate_salary_class( currency_type salary );
 		currency_type apply_expense_and_cost( economic_unit* eu );
 		void calculate_tax_equity_perception( currency_type gross_salary, currency_type net_salary, currency_type savings , economic_unit* eu );
 		currency_type get_revenue_from_eu( economic_unit* eu );
@@ -258,7 +261,6 @@ namespace economics
 		void correct_savings_and_salary_impact_on_equity( economic_unit* eu, currency_type net_salary, currency_type savings );
 		void calculate_impact_on_equity_factors( economic_unit* eu );
 		currency_type collect_money();
-		long update_uneployment_level();
 	public:
 		economy_manager( const std::string& player );
 		~economy_manager();

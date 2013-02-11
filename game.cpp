@@ -1023,9 +1023,15 @@ namespace console_ui
 				}
 				else
 				{
-					auto eu = elem->population->get_economic_entity();
-					cout<<" - Population: "<<elem->population->get_population()<<" , value:  "<<format_cur_type( elem->building_value )<<", ";
-					cout<<"Revenue: "<<format_cur_type( elem->population->get_unit_net_revenue() );
+					if( elem->descriptor->type == city_manager::building_type::habitable )
+					{
+						cout<<" - Population: "<<elem->population->get_population()<<" , value:  "<<format_cur_type( elem->building_value )<<", ";
+						cout<<"Revenue: "<<format_cur_type( elem->population->get_unit_net_revenue() );
+					}
+					else
+					{
+						cout<<" - Workplaces: "<<elem->workplace_desc->job->amount_of_free_workplaces;
+					}
 				}
 				cout<<endl;
 			}
@@ -1061,10 +1067,10 @@ namespace console_ui
 		}
 		cout<<" #"<<i + 1<<" - Quit\n";
 		cout<<"Make your choice [ 1 - "<< i <<" ]:";
-		choice_range choice( 1 , i + 1 );
+		choice_range choice( 1 , i );
 		cin>>choice;
 		--choice.choice;
-		if( choice.choice == i + 1 )
+		if( choice.choice == i )
 		{
 			return 1;
 		}

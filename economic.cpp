@@ -121,6 +121,7 @@ namespace job_market
 	//And return the amount of free workplaces
 	long job_market_manager::remove_from_workplace_distr( job_entity* job, long eu_id )
 	{
+		ELOG("job_market_manager::remove_from_workplace_dist(): EU:",eu_id,",JobID:",job->descriptor->job_id);
 		if( job->workplaces_distribution.find( eu_id ) != job->workplaces_distribution.end() )
 		{
 			job->amount_of_free_workplaces += job->workplaces_distribution[ eu_id ];
@@ -136,12 +137,9 @@ namespace job_market
 		if( !is_unemployed( eu ) ) //A unemployes cannot leave is job.. since have no job..
 		{
 			remove_from_workplace_distr( eu->get_job(), eu->get_id() );
+			//The unit now should be unemployed
+			eu->set_job( create_new_job_entity( &civil_unemployed_jon_level0 ) );
 		}
-		else if( eu->get_job() != nullptr )
-		{
-			delete eu->get_job();
-		}
-		eu->set_job( nullptr );
 	}
 
 	bool job_market_manager::update_workplace_distribution( job_entity* job, long eu_id, long amount )
@@ -177,6 +175,10 @@ namespace job_market
 	//Return the amount of eu employed
 	long job_market_manager::amount_of_employed_people( job_entity* job, long eu_id )
 	{
+		if( job == nullptr )
+		{
+			return 0;
+		}
 		if( job->workplaces_distribution.find( eu_id ) != job->workplaces_distribution.end() )
 		{
 			return job->workplaces_distribution[ eu_id ];
@@ -193,14 +195,12 @@ namespace job_market
 		{
 			if( eu->get_job() != nullptr )
 			{
-				if( is_unemployed( eu ) )
-				{
-					delete eu->get_job(); 
-				}
-				else //Have to leave is old job
+				if( !is_unemployed( eu ) )
 				{
 					leave_the_job( eu );
 				}
+				//Now for sure is an unemployed unit
+				delete eu->get_job();
 			}
 			job->amount_of_free_workplaces -= amount_of_workplaces;
 			uneployed = 0;

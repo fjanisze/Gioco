@@ -110,6 +110,7 @@ namespace job_market
 		bool update_workplace_distribution( job_entity* job, long eu_id, long amount );
 		long amount_of_employed_people( job_entity* job, long eu_id );
 		salary_class calculate_salary_class( currency_type salary );
+		long remove_from_workplace_distr( job_entity* job, long eu_id );
 	public:
 		job_market_manager();
 		~job_market_manager();

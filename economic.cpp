@@ -118,15 +118,26 @@ namespace job_market
 		return eu->get_job()->descriptor->job_id == civil_unemployed_jon_level0.job_id;
 	}
 
+	//And return the amount of free workplaces
+	long job_market_manager::remove_from_workplace_distr( job_entity* job, long eu_id )
+	{
+		if( job->workplaces_distribution.find( eu_id ) != job->workplaces_distribution.end() )
+		{
+			job->amount_of_free_workplaces += job->workplaces_distribution[ eu_id ];
+			job->workplaces_distribution.erase( eu_id );
+		}
+		return job->amount_of_free_workplaces;
+	}
+
 	//This unit is not doing that job anymore
 	void job_market_manager::leave_the_job( economic_unit* eu )
 	{
 		ELOG("job_market_manager::leave_the_job(): EU:",eu->get_id()," is leaving the job:",get_job_id( eu ) );
 		if( !is_unemployed( eu ) ) //A unemployes cannot leave is job.. since have no job..
 		{
-			eu->get_job()->amount_of_free_workplaces += eu->get_family_size(); //New workplaces
+			remove_from_workplace_distr( eu->get_job(), eu->get_id() );
 		}
-		else
+		else if( eu->get_job() != nullptr )
 		{
 			delete eu->get_job();
 		}
@@ -138,20 +149,27 @@ namespace job_market
 		ELOG("job_market_manager::update_workplace_distribution(): Job:",job->descriptor->job_id,",EU:",eu_id,",Amount:",amount);
 		if( job->workplaces_distribution.find( eu_id ) != job->workplaces_distribution.end() )
 		{
-			//TODO not work!!
-			if( job->amount_of_free_workplaces + amount < 0 )
+			//Check if this change is applicable for this specific eu
+			long eu_workforce = job->amount_of_workplaces - job->amount_of_free_workplaces;
+			eu_workforce += amount;
+			if( eu_workforce < 0 || eu_workforce > job->amount_of_workplaces )
 			{
+				ELOG("job_market_manager::update_workplace_distribution(): Required change is out of range:",eu_workforce,",max value:",job->amount_of_workplaces);
 				return false;
 			}
-			long new_amount = amount;
-			new_amount += job->workplaces_distribution[ eu_id ];
-			ELOG("job_market_manager::update_workplace_distribution(): New amount:",new_amount);
-			if( new_amount >= 0 && new_amount <= job->amount_of_free_workplaces ) 
+			//Changing the values
+			job->amount_of_free_workplaces -= amount;
+			job->workplaces_distribution[ eu_id ] += amount;
+			if( job->workplaces_distribution[ eu_id ] == 0 )
 			{
-				job->workplaces_distribution[ eu_id ] = new_amount;
-				job->amount_of_free_workplaces -= amount;
-				return true;
+				job->workplaces_distribution.erase( eu_id );
 			}
+			return true;
+		}
+		else if( amount > 0 )
+		{
+			job->workplaces_distribution[ eu_id ] = amount;
+			return true;
 		}
 		return false;
 	}
@@ -240,7 +258,7 @@ namespace job_market
 			eu->set_job( job );
 			eu->set_salary_cl( salary_class( 0 ) );
 		}
-		ELOG("job_market_manager::look_for_a_job(): EU:",eu_id,", new job found:",get_job_id( eu ) );
+		ELOG("job_market_manager::look_for_a_job(): EU:",eu_id,", Job found:",get_job_id( eu ) );
 		return job;
 	}
 
@@ -541,7 +559,7 @@ namespace economics
 
 		calculate_impact_on_equity_factors( eu );
 	
-		ELOG("economy_manager::create_economic_unit(): New EU: Job: ", eu->job->descriptor->name ,", Equity: ",eu->equity_perception_threshold,", SalIE: ",eu->net_salary_impact_on_equity,", SavIE: ",eu->savings_impact_on_equity );
+		ELOG("economy_manager::create_economic_unit(): New EU:",eu->eu_id,",Job: ", eu->job->descriptor->name ,", Equity: ",eu->equity_perception_threshold,", SalIE: ",eu->net_salary_impact_on_equity,", SavIE: ",eu->savings_impact_on_equity );
 		return eu;
 	}catch( std::exception& xa )
 	{

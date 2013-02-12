@@ -1216,6 +1216,7 @@ namespace game_manager
 
 		city_milano->start_building_construction( &city_manager::civil_medium_house );
 		city_milano->start_building_construction( &city_manager::civil_small_house );
+		city_milano->start_building_construction( &city_manager::civil_small_poor_commercial_building );
 	/*	city_milano->start_building_construction( &city_manager::civil_small_appartment );
 		city_milano->start_building_construction( &city_manager::civil_medium_appartment );
 		city_milano->start_building_construction( &city_manager::civil_medium_appartment );

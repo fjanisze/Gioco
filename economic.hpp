@@ -20,7 +20,7 @@ typedef long long mlong;
 
 #define TAX_EQUITY_PERCEPTION_SENSIBILITY 1000 //Not 0!! >=1, higher value then lower sensibility
 #define POOR_SUBSIDIES_ACCESS_COST 0.15 //15% of the provided sum
-#define SALARY_CLASS_MIN_DELTA 20 //Used in get_basic_salary_class
+#define SALARY_CLASS_MIN_DELTA 10 //Used in get_basic_salary_class
 
 namespace finance
 {

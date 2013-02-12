@@ -29,7 +29,7 @@ namespace job_market
 {
 
 	const job_descriptor civil_unemployed_jon_level0 = { 0 , "Unemployed", 0 }; //The 0 ID shall be always for the unemployed
-	const job_descriptor civil_scullion_job_level0 = { 1 , "Scullion", 19000 };
+	const job_descriptor civil_scullion_job_level0 = { 1 , "Scullion", 19500 };
 	const job_descriptor civil_office_job_level1 = { 2 , "Office employee" , 35000 };
 
 	job_entity::job_entity( const job_descriptor* job ) : descriptor( job )
@@ -121,7 +121,7 @@ namespace job_market
 	//This unit is not doing that job anymore
 	void job_market_manager::leave_the_job( economic_unit* eu )
 	{
-		ELOG("job_market_manager::leave_the_job(): EU ",eu->get_id()," is leaving ",get_job_id( eu ) );
+		ELOG("job_market_manager::leave_the_job(): EU:",eu->get_id()," is leaving the job:",get_job_id( eu ) );
 		if( !is_unemployed( eu ) ) //A unemployes cannot leave is job.. since have no job..
 		{
 			eu->get_job()->amount_of_free_workplaces += eu->get_family_size(); //New workplaces
@@ -138,11 +138,18 @@ namespace job_market
 		ELOG("job_market_manager::update_workplace_distribution(): Job:",job->descriptor->job_id,",EU:",eu_id,",Amount:",amount);
 		if( job->workplaces_distribution.find( eu_id ) != job->workplaces_distribution.end() )
 		{
+			//TODO not work!!
+			if( job->amount_of_free_workplaces + amount < 0 )
+			{
+				return false;
+			}
 			long new_amount = amount;
 			new_amount += job->workplaces_distribution[ eu_id ];
+			ELOG("job_market_manager::update_workplace_distribution(): New amount:",new_amount);
 			if( new_amount >= 0 && new_amount <= job->amount_of_free_workplaces ) 
 			{
 				job->workplaces_distribution[ eu_id ] = new_amount;
+				job->amount_of_free_workplaces -= amount;
 				return true;
 			}
 		}
@@ -215,20 +222,6 @@ namespace job_market
 		//Should be positive
 		if( required_workspaces > 0 )
 		{
-			//Try to increase the amount of employers in the current job
-			if( !is_unemployed( eu ) )
-			{
-				if( update_workplace_distribution( eu->get_job(), eu_id, required_workspaces ) )
-				{
-					//Ok, still working at the same place, just update the amount of worker
-					return eu->get_job();
-				}
-				else
-				{
-					//Shall look for a new job
-					leave_the_job( eu );
-				}
-			}
 			//Look for a job with fit the family size
 			for( auto elem : available_jobs )
 			{
@@ -238,20 +231,14 @@ namespace job_market
 					break;
 				}
 			}
-			//Any job?
-			if( job == nullptr )
-			{
-				//No.. set as unemployed
-				job = create_new_job_entity( &civil_unemployed_jon_level0  ); 
-				eu->set_job( job );
-				eu->set_salary_cl( salary_class( 0 ) );
-			}
-			
 		}
-		else
+		//Any job?
+		if( job == nullptr )
 		{
-			//Is is negative, then probably the familiy size has decreased
-			update_workplace_distribution( eu->get_job(), eu_id, required_workspaces );
+			//No.. set as unemployed
+			job = create_new_job_entity( &civil_unemployed_jon_level0  ); 
+			eu->set_job( job );
+			eu->set_salary_cl( salary_class( 0 ) );
 		}
 		ELOG("job_market_manager::look_for_a_job(): EU:",eu_id,", new job found:",get_job_id( eu ) );
 		return job;
@@ -271,16 +258,36 @@ namespace job_market
 			{
 				//Look for a job
 				job_entity* job = look_for_a_job( elem );
-				if( is_unemployed( elem ) )
+				if( is_unemployed( elem ) ) //Still unemployed?
 				{
 					unemployment += elem->get_family_size();
 				}
 			}
 			else
 			{
-				//The family size increased?
+				//The family size has changed?
+				long workplaces_difference = elem->get_family_size();
+				workplaces_difference -= amount_of_employed_people( elem->get_job(), elem->get_id() );
+				if( workplaces_difference != 0 )
+				{
+					ELOG("job_market_manager::update_uneployment_level(): workplaces difference:",workplaces_difference);
+					if( !update_workplace_distribution( elem->get_job(), elem->get_id(), workplaces_difference ) )
+					{
+						//Not possible to increase/decrease the amount of workplaces
+						//'max' or 0 reached, the eu will leave the job and start to search
+						//a new one
+						leave_the_job( elem );
+						look_for_a_job( elem );
+					}
+				}
+				if( amount_of_employed_people( elem->get_job(), elem->get_id() ) == 0 )
+				{
+					//No one is working here.. leave the job
+					LOG("job_market_manager::update_uneployment_level(): This unit have a job, but no workplaces consumed..");
+				}
 			}
 		}
+		ELOG("job_market_manager::update_uneployment_level(): Uneployment: ", unemployment);
 		return unemployment;
 	}
 }
@@ -387,7 +394,7 @@ namespace economics
 		salary_class[5] = 2520000; //The highest level.
 
 		//Taxes
-		salary_taxes[0] = 19.5; //Lower lowel, for the poors.
+		salary_taxes[0] = 19; //Lower lowel, for the poors.
 		salary_taxes[1] = 25;
 		salary_taxes[2] = 29.5;
 		salary_taxes[3] = 37.0;

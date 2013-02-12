@@ -85,6 +85,7 @@ namespace city_manager
 	//the amount of workplaces is taken from the population_capacity field in the building descriptor
 	struct workplace_descriptor
 	{
+		string city;
 		string employer_name;
 		job_market::job_entity* job; //Who is working here?
 		long employed_people;

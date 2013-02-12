@@ -198,6 +198,8 @@ namespace city_manager
 		job_market::job_entity* job = player_objects->economics->create_new_job_entity( &job_market::civil_office_job_level1 );
 		if( job )
 		{
+			assert( building->workplace_desc != nullptr );
+			job->city = building->workplace_desc->city;
 			player_objects->economics->register_job_entity( job , civil_welfare_administration_office.population_capacity );
 			building->workplace_desc->job = job;
 		}
@@ -210,6 +212,8 @@ namespace city_manager
 		job_market::job_entity* job = player_objects->economics->create_new_job_entity( &job_market::civil_scullion_job_level0 );
 		if( job )
 		{
+			assert( building->workplace_desc != nullptr );
+			job->city = building->workplace_desc->city;
 			player_objects->economics->register_job_entity( job , civil_small_poor_commercial_building.population_capacity );
 			building->workplace_desc->job = job;
 		}
@@ -404,6 +408,10 @@ namespace city_manager
 		else if ( building->descriptor->type == building_type::workplace )
 		{
 			building->workplace_desc = create_new_workplace( building );
+			if( building->workplace_desc )
+			{
+				building->workplace_desc->city = this_city->get_city_name();
+			}
 		}
 		finance::currency_type tmp = building->descriptor->price;
 		building->building_value = tmp * 0.8; //The value decrease after the construction.. :|

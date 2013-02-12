@@ -190,7 +190,7 @@ namespace population
 		if( pop->entity_eu != nullptr )
 		{
 			pop->entity_eu->set_family_size( &pop->population );
-			game_manager::game_manager::get_instance()->get_player_objects( player_name )->economics->add_economic_unit( pop->entity_eu );
+			player_obj->economics->add_economic_unit( pop->entity_eu , city );
 		}
 		else
 		{

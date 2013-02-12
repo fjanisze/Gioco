@@ -266,11 +266,12 @@ namespace job_market
 	 * This function loop throught all the eu, check if they have a job, if not, 
 	 * enable the job searching algorithm; 
 	 */
-	long job_market_manager::update_uneployment_level( vector< economic_unit* >& eu )
+	long job_market_manager::update_uneployment_level( eu_container& eu  )
 	{
-		LOG("job_market_manager::update_uneployment_level(): Num of EU:",eu.size() );
+		LOG("job_market_manager::update_uneployment_level(): Num of EU:",eu.count() );
 		long unemployment = 0;
-		for( auto elem : eu )
+		economic_unit* elem = eu.get_first_eu();
+		while( elem != nullptr )
 		{
 			if( is_unemployed( elem ) )
 			{
@@ -304,6 +305,7 @@ namespace job_market
 					LOG("job_market_manager::update_uneployment_level(): This unit have a job, but no workplaces consumed..");
 				}
 			}
+			elem = eu.get_next_eu();
 		}
 		ELOG("job_market_manager::update_uneployment_level(): Uneployment: ", unemployment);
 		return unemployment;
@@ -501,6 +503,110 @@ namespace economics
 		}
 	}
 
+	////////////////////////////////////////////////////////////////////
+	//
+	//
+	//	Implementation for eu_container
+	//
+	//
+	//////////////////////////////////////////////////////////////////
+
+	eu_container::eu_container() : head( nullptr ), tail( nullptr ), eu_count( 0 ) , eu_pos( nullptr )
+	{	}
+
+	//Create an empty element
+	eu_node* eu_container::create() throw( )
+	try{
+		eu_node* node = new eu_node;
+		return node;
+	}catch( ... )
+	{
+		return nullptr;
+	}
+
+	//Insert a new element in the container
+	eu_node* eu_container::add( economic_unit* eu, const std::string& city )
+	{
+		eu_node* node = create();
+		if( node != nullptr )
+		{
+			node->eu = eu;
+			//Is the list empty?
+			if( tail == nullptr )
+			{
+				head = tail = node;
+			}
+			else
+			{
+				//Add the element
+				tail->next = node;
+				node->prev = tail;
+				tail = node;
+			}
+			++eu_count;
+			//Update the city link
+			if( head_same_city.find( city ) == head_same_city.end() )
+			{
+				//First time this city is appearing
+				head_same_city[ city ] = node;
+			}
+			else
+			{
+				//Add to the list
+				eu_node* city_tail = head_same_city[ city ];
+				while( city_tail->next_same_city != nullptr )
+				{
+					city_tail = city_tail->next_same_city;
+				}
+				city_tail->next_same_city = tail;
+				tail->prev_same_city = city_tail;
+				city_tail = tail;
+			}
+		}
+		return node;
+	}
+
+	//The next functions are used to find and extract an element from the list
+	economic_unit* eu_container::get_first_eu()
+	{
+		eu_pos = head;
+		if( eu_pos == nullptr )
+		{
+			return nullptr;
+		}
+		return head->eu;
+	}
+
+	economic_unit* eu_container::get_next_eu()
+	{
+		if( eu_pos->next != nullptr )
+		{
+			eu_pos = eu_pos->next;
+			return eu_pos->eu;
+		}
+		return nullptr;
+	}
+
+	//The next functions are used to move throught the eu in the same city
+	economic_unit* eu_container::get_first_eu_city( const std::string& city )
+	{
+		if( head_same_city.find( city ) != head_same_city.end() )
+		{
+			eu_pos = head_same_city[ city ];
+			return eu_pos->eu;
+		}
+		return nullptr;
+	}
+
+	economic_unit* eu_container::get_next_eu_city()
+	{
+		if( eu_pos->next_same_city != nullptr )
+		{
+			eu_pos = eu_pos->next_same_city;
+			return eu_pos->eu;
+		}
+		return nullptr;
+	}
 
 	////////////////////////////////////////////////////////////////////
 	//
@@ -526,9 +632,11 @@ namespace economics
 	economy_manager::~economy_manager()
 	{
 		LOG("economy_manager::~economy_manager(): Destroying the object");
-		for( auto eu_elem : eu_container )
+		economic_unit* eu = eu_all.get_first_eu();
+		while( eu != nullptr )
 		{
-			delete eu_elem;
+			delete eu;
+			eu = eu_all.get_next_eu();
 		}
 		if( eco_variables )
 		{
@@ -596,7 +704,7 @@ namespace economics
 	}
 
 	//Add the economic unit to the current pool
-	bool economy_manager::add_economic_unit( economic_unit* eu )
+	bool economy_manager::add_economic_unit( economic_unit* eu , const string& city )
 	{
 		bool verdict = false;
 		if( eu )
@@ -607,7 +715,7 @@ namespace economics
 			gross_salary = eu->job->gross_salary;
 
 			ELOG("economy_manager::add_economic_unit(): Adding a new EU, family size: ",*eu->family_size,", gross_salary: ",gross_salary,", wallet: ",eu->wallet.available_free_cash());
-			eu_container.push_back( eu );
+			eu_all.add( eu , city );
 		}
 		return verdict;
 	}
@@ -775,12 +883,14 @@ namespace economics
 	void economy_manager::recalculate_amount_of_starving_unit()
 	{
 		eco_variables->amount_of_starving_unit = 0;
-		for( auto elem : eu_container )
+		economic_unit* elem = eu_all.get_first_eu();
+		while( elem != nullptr )
 		{
 			if( elem->is_starving() )
 			{
 				eco_variables->amount_of_starving_unit += elem->get_family_size();
 			}
+			elem = eu_all.get_next_eu();
 		}
 	}
 
@@ -835,13 +945,13 @@ namespace economics
 		if( perception < eu->equity_perception_threshold )
 		{
 			//Good, this ue will impact positively the equity perception level.
-			perception *= ( ( long double ) 1 / ( eu_container.size() + 1 ) );
+			perception *= ( ( long double ) 1 / ( eu_all.count() + 1 ) );
 			modify_tax_equity_perception( ( perception < 0 ? perception : perception * -1 ) );
 		}
 		else
 		{
 			//Not good!
-			perception *= ( ( long double ) 1 / ( eu_container.size() + 1 ) );
+			perception *= ( ( long double ) 1 / ( eu_all.count() + 1 ) );
 			modify_tax_equity_perception( std::abs( perception ) ); 
 		}
 	}
@@ -851,15 +961,16 @@ namespace economics
 	 */
 	currency_type economy_manager::collect_money()
 	{
-		LOG("economy_manager::collect_money(): EU count: ",eu_container.size());
-		if( eu_container.empty() ) 
+		LOG("economy_manager::collect_money(): EU count: ",eu_all.count() );
+		if( eu_all.empty() ) 
 		{
 			return 0; 
 		}
 		currency_type collected_money = 0;
 		public_welfare_funds->zeroes_poor_subsidies_counter(); //Each review has it own statistics.
 		eco_variables->total_eu_population = 0;
-		for( auto eu : eu_container )
+		economic_unit* eu = eu_all.get_first_eu();
+		while( eu != nullptr )
 		{
 			//Refresh the population count
 			eco_variables->total_eu_population += eu->get_family_size();
@@ -876,6 +987,7 @@ namespace economics
 			}
 			ELOG("economy_manager::collect_money(): EU Net Rev.: ", eu->unit_net_revenue );
 			collected_money += eu->unit_net_revenue;
+			eu = eu_all.get_next_eu();
 		}
 		recalculate_amount_of_starving_unit();
 		//Add the collected taxes to the player wallet after the various funds detraction
@@ -890,7 +1002,7 @@ namespace economics
 	void economy_manager::review_economy()
 	{
 		//first step is to update the job market status
-		update_uneployment_level( eu_container );
+		update_uneployment_level( eu_all );
 		//Then collect the money
 		collect_money();
 	}

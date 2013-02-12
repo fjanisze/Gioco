@@ -61,6 +61,8 @@ namespace economics
 	} salary_class;
 
 	class economic_unit;
+	class eu_container;
+
 }
 
 namespace job_market
@@ -89,6 +91,7 @@ namespace job_market
 	struct job_entity
 	{
 		const job_descriptor* descriptor;
+		string city; //Which is the employment city?
 		string employee_name;//Who is your employer?
 		currency_type gross_salary; //This may differ from the base_gross_salary, since the salary change during the time
 	
@@ -96,14 +99,13 @@ namespace job_market
 		     amount_of_free_workplaces;
 
 		map< long , long > workplaces_distribution;//Which eu works here? How much of people?
-
 		job_entity( const job_descriptor* job );
 	};
 
 	class job_market_manager
 	{
 		std::mutex access_mutex;
-		std::vector< job_entity* > available_jobs;
+		std::vector< job_entity* > available_jobs; //All the jobs
 		job_entity* find_job_entity( long workplaces_needed ); 
 		long apply_for_the_job( job_entity* job, long amount_of_workplaces,  economic_unit* eu );
 		void leave_the_job( economic_unit* eu );
@@ -119,7 +121,7 @@ namespace job_market
 		job_entity* look_for_a_job( economic_unit* eu );
 		long get_job_id( economic_unit* eu );
 		bool is_unemployed( economic_unit* eu );
-		long update_uneployment_level( vector< economic_unit* >& eu );
+		long update_uneployment_level( eu_container& eu );
 	};
 };
 
@@ -242,12 +244,50 @@ namespace economics
 		friend class economy_manager;
 	};
 
+	//Container for the eu implementation
+	struct eu_node
+	{
+		economic_unit* eu;
+		string city;
+		//For all the elements:
+		eu_node* next,
+			*prev;
+		//For the elements which belong to the same city
+		eu_node* next_same_city,
+			*prev_same_city;
+		eu_node() : eu( nullptr ), next( nullptr ), prev( nullptr ),
+			next_same_city( nullptr ), prev_same_city( nullptr )
+		{	}
+	};
 
+	class eu_container
+	{
+		eu_node* head,
+			*tail,
+			*eu_pos;
+		map< string, eu_node* > head_same_city; //Head of the list for the eu which belongs to the same city
+		long eu_count;
+		eu_node* create() throw( );
+	public:
+		eu_container();
+		eu_node* add( economic_unit* eu, const std::string& city );
+		economic_unit* get_first_eu();
+		economic_unit* get_next_eu();
+		economic_unit* get_first_eu_city( const std::string& city );
+		economic_unit* get_next_eu_city();
+		long count()
+		{	return eu_count;	}
+		bool empty()
+		{	return eu_count == 0;	}
+	};
+
+	//Economy manager
 	class economy_manager : public job_market_manager
 	{
 		std::mutex eu_container_mutex;
 		std::string		player_name;
-		vector< economic_unit* > eu_container;
+		eu_container		eu_all;
+		map< string, economic_unit* > eu_per_city;
 		game_wallet		player_wallet;
 		economic_variables*	eco_variables;
 		void modify_tax_equity_perception( long double value );
@@ -266,7 +306,7 @@ namespace economics
 		economy_manager( const std::string& player );
 		~economy_manager();
 		economic_unit* create_economic_unit( job_entity* job );
-		bool add_economic_unit( economic_unit* eu );
+		bool add_economic_unit( economic_unit* eu , const string& city );
 		currency_type get_basic_class_salary( salary_class sclass );
 		void review_economy();
 		const economic_variables* get_the_economic_variables();

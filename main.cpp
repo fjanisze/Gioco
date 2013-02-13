@@ -23,7 +23,7 @@ void execution_thread_c(void*)
 	do{
 		objects->population->review_population();
 		objects->economics->review_economy();
-		Sleep( 200	 );
+		Sleep( 200 );
 	}while( 1 );
 
 	LOG("void execution_thread_c(): Is quitting!");

@@ -118,7 +118,7 @@ namespace job_market
 		~job_market_manager();
 		job_entity* create_new_job_entity( const job_descriptor* job );
 		long register_job_entity( job_entity* job , long workplaces );
-		job_entity* look_for_a_job( economic_unit* eu );
+		job_entity* look_for_a_job( economic_unit* eu , const string& eu_city );
 		long get_job_id( economic_unit* eu );
 		bool is_unemployed( economic_unit* eu );
 		long update_uneployment_level( eu_container& eu );
@@ -149,6 +149,21 @@ namespace economics
 		public_welfare();
 		void set_welfare_availability( bool status );
 		bool is_welfare_available();
+	};
+
+	//Some economic and financial information about this economy
+	struct economy_info
+	{
+		currency_type total_taxes_net_revenue,
+			      total_revenue_from_building_rental,
+			      total_building_maintanance_cost,
+			      total_welfare_funding;
+		void clear();
+		economy_info() : total_taxes_net_revenue( 0 ),
+				total_revenue_from_building_rental( 0 ),
+				total_building_maintanance_cost( 0 ),
+				total_welfare_funding( 0 )
+		{	}
 	};
 
 	/*
@@ -231,7 +246,7 @@ namespace economics
 		bool is_paying_the_rent_price()
 		{	return have_payed_rental_price;	}
 		economic_unit();
-		long get_id();
+		long get_id() const;
 		job_entity* get_job()
 		{	return job;	}
 		void set_job( job_entity* n_job )
@@ -264,7 +279,7 @@ namespace economics
 	{
 		eu_node* head,
 			*tail,
-			*eu_pos;
+			*eu_pos; //Do not use this index for internal search operations
 		map< string, eu_node* > head_same_city; //Head of the list for the eu which belongs to the same city
 		long eu_count;
 		eu_node* create() throw( );
@@ -275,6 +290,7 @@ namespace economics
 		economic_unit* get_next_eu();
 		economic_unit* get_first_eu_city( const std::string& city );
 		economic_unit* get_next_eu_city();
+		string get_eu_city( const economic_unit* eu );
 		long count()
 		{	return eu_count;	}
 		bool empty()
@@ -292,6 +308,7 @@ namespace economics
 		economic_variables*	eco_variables;
 		void modify_tax_equity_perception( long double value );
 		public_welfare* public_welfare_funds;
+		economy_info last_cycle_info;
 	private:
 		currency_type apply_expense_and_cost( economic_unit* eu );
 		void calculate_tax_equity_perception( currency_type gross_salary, currency_type net_salary, currency_type savings , economic_unit* eu );
@@ -317,6 +334,7 @@ namespace economics
 		void remove_starving_state( economic_unit* eu );
 		void recalculate_amount_of_starving_unit();
 		double set_salary_tax_level( salary_class sc , double new_level );
+		economy_info get_cycle_statistic();
 	};
 }
 

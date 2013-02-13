@@ -841,6 +841,13 @@ namespace console_ui
 			finance::currency_type poor_welfare_total_distributed = eco->get_public_walfare_funds()->get_poor_subsidies_total_funding();
 			cout<<"Poor subsidies fund: "<<color_fore_green<<format_cur_type( poor_welfare )<<color_fore_white<<", money distributed: "<<color_fore_green<<format_cur_type( poor_welfare_total_distributed )<<color_fore_white<<endl;
 		}
+		//Show the amount of collected taxes:
+		economics::economy_info eco_info = eco->get_cycle_statistic();
+		cout<<"\nOther economic information:"<<endl;
+		cout<<"a) Total taxes income: "<<color_fore_green<<format_cur_type( eco_info.total_taxes_net_revenue )<<color_fore_white<<endl;
+		cout<<"b) Total income from building rental: "<<color_fore_green<<format_cur_type( eco_info.total_revenue_from_building_rental )<<color_fore_white<<endl;
+		cout<<"c) Total building maintanance cost: "<<color_fore_red<<format_cur_type( eco_info.total_building_maintanance_cost )<<color_fore_white<<endl;
+		cout<<"c) Total welfare funding: "<<color_fore_red<<format_cur_type( eco_info.total_welfare_funding )<<color_fore_white<<endl;
 		return 1;
 	}
 
@@ -1196,7 +1203,7 @@ namespace game_manager
 
 		//Increase the wallet size
 		LOG("game_manager::create_test_scenario(): Adding Money ");
-		player_obj->economics->player_add_cash( 5000000000 );
+		player_obj->economics->player_add_cash( 1000000 );
 
 		//Create one city for 'Filip'
 		LOG("game_manager::create_test_scenario(): Creating a city in the map (Roma)");

@@ -231,7 +231,7 @@ namespace job_market
 
 	//Look and apply for a job. If the unit have already a job, it try to increase the amount
 	//of workplaces used, if is not possible, leave the job and look for a new one
-	job_entity* job_market_manager::look_for_a_job( economic_unit* eu )
+	job_entity* job_market_manager::look_for_a_job( economic_unit* eu , const string& eu_city )
 	{
 		job_entity* job = nullptr;
 		long eu_id = eu->get_id();
@@ -243,6 +243,13 @@ namespace job_market
 			//Look for a job with fit the family size
 			for( auto elem : available_jobs )
 			{
+				//Each EU will search for jobs in is own city
+				if( eu_city != elem->city )
+				{
+					LOG_WARN("job_market_manager::look_for_a_job(): EU:",eu_id,", cannot work in ",elem->city,", since is from:", eu_city );
+					continue;
+				}
+				//Try to apply for the job
 				if( apply_for_the_job( elem, required_workspaces, eu ) == 0 )
 				{
 					job = eu->get_job(); //Ok
@@ -271,12 +278,14 @@ namespace job_market
 		LOG("job_market_manager::update_uneployment_level(): Num of EU:",eu.count() );
 		long unemployment = 0;
 		economic_unit* elem = eu.get_first_eu();
+		string eu_city;
 		while( elem != nullptr )
 		{
+			eu_city = eu.get_eu_city( elem );
 			if( is_unemployed( elem ) )
 			{
 				//Look for a job
-				job_entity* job = look_for_a_job( elem );
+				job_entity* job = look_for_a_job( elem , eu_city );
 				if( is_unemployed( elem ) ) //Still unemployed?
 				{
 					unemployment += elem->get_family_size();
@@ -296,7 +305,7 @@ namespace job_market
 						//'max' or 0 reached, the eu will leave the job and start to search
 						//a new one
 						leave_the_job( elem );
-						look_for_a_job( elem );
+						look_for_a_job( elem , eu_city );
 					}
 				}
 				if( amount_of_employed_people( elem->get_job(), elem->get_id() ) == 0 )
@@ -484,7 +493,7 @@ namespace economics
 		return 0;	
 	}
 
-	long economic_unit::get_id()
+	long economic_unit::get_id() const
 	{
 		return eu_id;
 	}
@@ -501,6 +510,15 @@ namespace economics
 		{
 			job_entity* job;
 		}
+	}
+
+	//economy_info structure
+	void economy_info::clear()
+	{
+		total_taxes_net_revenue = 0;
+		total_revenue_from_building_rental = 0;
+		total_building_maintanance_cost = 0;
+		total_welfare_funding = 0;
 	}
 
 	////////////////////////////////////////////////////////////////////
@@ -531,6 +549,7 @@ namespace economics
 		if( node != nullptr )
 		{
 			node->eu = eu;
+			node->city = city;
 			//Is the list empty?
 			if( tail == nullptr )
 			{
@@ -606,6 +625,23 @@ namespace economics
 			return eu_pos->eu;
 		}
 		return nullptr;
+	}
+
+	//Return the city where this eu is located
+	string eu_container::get_eu_city( const economic_unit* eu )
+	{
+		string city;
+		eu_node* pos = head;
+		long eu_id = eu->get_id();
+		while( pos != nullptr )
+		{
+			if( pos->eu->get_id() == eu_id )
+			{
+				return pos->city;
+			}
+			pos = pos->next;
+		}
+		return city;
 	}
 
 	////////////////////////////////////////////////////////////////////
@@ -815,6 +851,7 @@ namespace economics
 			ELOG("economy_manager::handle_starving_unit(): Paying with the savings, cash: ",eu->wallet.available_free_cash(),", expenses: ",needed_money);
 			eu->wallet.get_money_cash() -= needed_money;
 		}
+		last_cycle_info.total_welfare_funding += financed;
 		return financed * POOR_SUBSIDIES_ACCESS_COST; //The procedure have a cost, can the player pay for it?
 	}
 
@@ -867,8 +904,10 @@ namespace economics
 		{
 			taxes -= handle_starving_unit( eu, needed_money ); //The function return the financing cost, which impact negatively on the revenue 
 		}
-
 		eu->have_payed_rental_price = ( revenue_from_rental > 0 );
+		//Update the economy statistic
+		last_cycle_info.total_taxes_net_revenue += taxes;
+		last_cycle_info.total_revenue_from_building_rental += revenue_from_rental;
 		return taxes + revenue_from_rental;
 	}
 
@@ -984,6 +1023,7 @@ namespace economics
 			{
 				ELOG("economy_manager::collect_money(): Applying costs to ", player_name,", for: ",eu->applicable_costs.player_maintanance_cost);
 				eu->unit_net_revenue -= eu->applicable_costs.player_maintanance_cost;
+				last_cycle_info.total_building_maintanance_cost += eu->applicable_costs.player_maintanance_cost;
 			}
 			ELOG("economy_manager::collect_money(): EU Net Rev.: ", eu->unit_net_revenue );
 			collected_money += eu->unit_net_revenue;
@@ -1001,10 +1041,11 @@ namespace economics
 	//calculate and distribute the salaries, apply the taxing rules ecc
 	void economy_manager::review_economy()
 	{
+		last_cycle_info.clear();
 		//first step is to update the job market status
-		update_uneployment_level( eu_all );
+		long uneployment_level = update_uneployment_level( eu_all );
 		//Then collect the money
-		collect_money();
+		currency_type collected_money = collect_money();
 	}
 
 	const economic_variables* economy_manager::get_the_economic_variables( )
@@ -1049,6 +1090,11 @@ namespace economics
 		LOG("economy_manager::set_salary_tax_level(): From:",current_level,", To:",new_level);
 		eco_variables->salary_taxes[ sc ] = new_level;
 		return current_level;
+	}
+
+	economy_info economy_manager::get_cycle_statistic()
+	{
+		return last_cycle_info;
 	}
 }
 

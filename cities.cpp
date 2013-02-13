@@ -16,6 +16,8 @@ namespace city_manager
 	//Special buildings and offices
 	const building_descriptor civil_welfare_administration_office = { 5 , "Welfare administration" , "This construction is needed to make the social poor welfare work",building_type::workplace, false, true, 25000000, 0, 6000000, 220 , 600, new civil_welfare_office_actions, population::population_class::class_1  };
 	const building_descriptor civil_small_poor_commercial_building ={ 6 , "Commercial wretch shop" , "Small and poor multistore" , building_type::workplace , true, false , 400000, 0, 35000, 90, 60, new civil_small_poor_commercial_actions, population::population_class::class_0 };
+	const building_descriptor civil_small_poor_market ={ 7 , "Small market" , "Ideal place to bargain various products" , building_type::workplace , true, false , 1455000, 0, 82000, 160, 350, new civil_small_poor_market_actions, population::population_class::class_0 };
+
 
 	const building_descriptor* buildings_table [] =
 	{
@@ -24,10 +26,84 @@ namespace city_manager
 		&civil_small_appartment,
 		&civil_medium_appartment,
 		&civil_small_poor_commercial_building,
+		&civil_small_poor_market,
 		&civil_welfare_administration_office,
 		nullptr
 	};
 
+	////////////////////////////////////////////////////////////////////
+	//
+	//
+	//	Implementation for building_info and building_descriptor
+	//
+	//
+	////////////////////////////////////////////////////////////////////
+	
+	building_descriptor::~building_descriptor()
+	{
+		if( actions != nullptr )
+		{
+			delete actions;
+		}
+	}
+
+	building_info::building_info() : descriptor( nullptr ), 
+		workplace_desc( nullptr )
+	{	}
+
+	building_info::~building_info()
+	{
+		if( descriptor != nullptr )
+		{
+			delete descriptor;
+		}
+	}
+
+	building_event_action::building_event_action()
+	{
+	}
+
+	void civil_welfare_office_actions::construction_completed( building_info* building, game_manager::player_game_objects* player_objects )
+	{
+		LOG("civil_welfare_office_actions::construction_completed(): Enabling the welfare for ", player_objects->player->get_player_name() );
+		player_objects->economics->get_public_walfare_funds()->set_welfare_availability( true );
+		job_market::job_entity* job = player_objects->economics->create_new_job_entity( &job_market::civil_office_job_level1 );
+		if( job )
+		{
+			assert( building->workplace_desc != nullptr );
+			job->city = building->workplace_desc->city;
+			player_objects->economics->register_job_entity( job , civil_welfare_administration_office.population_capacity );
+			building->workplace_desc->job = job;
+		}
+	}
+	
+	void civil_small_poor_commercial_actions::construction_completed( building_info* building, game_manager::player_game_objects* player_objects )
+	{
+		ELOG("civil_welfare_office_actions::construction_completed(): Completed, new workplaces available ");
+		//Register a new job in the job market
+		job_market::job_entity* job = player_objects->economics->create_new_job_entity( &job_market::civil_scullion_job_level0 );
+		if( job )
+		{
+			assert( building->workplace_desc != nullptr );
+			job->city = building->workplace_desc->city;
+			player_objects->economics->register_job_entity( job , civil_small_poor_commercial_building.population_capacity );
+			building->workplace_desc->job = job;
+		}
+	}
+
+	void civil_small_poor_market_actions::construction_completed( building_info* building, game_manager::player_game_objects* player_objects )
+	{
+		ELOG("civil_small_poor_market_actions::construction_completed(): Completed, new workplaces available ");
+		//Register a new job in the job market
+		job_market::job_entity* job = player_objects->economics->create_new_job_entity( &job_market::civil_scullion_job_level0 );
+		if( job )
+		{
+			assert( building->workplace_desc != nullptr );
+			job->city = building->workplace_desc->city;
+			player_objects->economics->register_job_entity( job , civil_small_poor_commercial_building.population_capacity );
+			building->workplace_desc->job = job;
+		}
+	}
 
 	////////////////////////////////////////////////////////////////////
 	//
@@ -156,66 +232,6 @@ namespace city_manager
 		for( auto elem : cities )
 		{
 			delete elem;
-		}
-	}
-
-	////////////////////////////////////////////////////////////////////
-	//
-	//
-	//	Implementation for building_info and building_descriptor
-	//
-	//
-	////////////////////////////////////////////////////////////////////
-	
-	building_descriptor::~building_descriptor()
-	{
-		if( actions != nullptr )
-		{
-			delete actions;
-		}
-	}
-
-	building_info::building_info() : descriptor( nullptr ), 
-		workplace_desc( nullptr )
-	{	}
-
-	building_info::~building_info()
-	{
-		if( descriptor != nullptr )
-		{
-			delete descriptor;
-		}
-	}
-
-	building_event_action::building_event_action()
-	{
-	}
-
-	void civil_welfare_office_actions::construction_completed( building_info* building, game_manager::player_game_objects* player_objects )
-	{
-		LOG("civil_welfare_office_actions::construction_completed(): Enabling the welfare for ", player_objects->player->get_player_name() );
-		player_objects->economics->get_public_walfare_funds()->set_welfare_availability( true );
-		job_market::job_entity* job = player_objects->economics->create_new_job_entity( &job_market::civil_office_job_level1 );
-		if( job )
-		{
-			assert( building->workplace_desc != nullptr );
-			job->city = building->workplace_desc->city;
-			player_objects->economics->register_job_entity( job , civil_welfare_administration_office.population_capacity );
-			building->workplace_desc->job = job;
-		}
-	}
-	
-	void civil_small_poor_commercial_actions::construction_completed( building_info* building, game_manager::player_game_objects* player_objects )
-	{
-		ELOG("civil_welfare_office_actions::construction_completed(): Completed, new workplaces available ");
-		//Register a new job in the job market
-		job_market::job_entity* job = player_objects->economics->create_new_job_entity( &job_market::civil_scullion_job_level0 );
-		if( job )
-		{
-			assert( building->workplace_desc != nullptr );
-			job->city = building->workplace_desc->city;
-			player_objects->economics->register_job_entity( job , civil_small_poor_commercial_building.population_capacity );
-			building->workplace_desc->job = job;
 		}
 	}
 

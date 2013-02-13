@@ -50,6 +50,13 @@ namespace city_manager
 		void construction_completed( building_info* building, game_manager::player_game_objects* player_objects );
 	};
 
+	//Implementation for the small poor market
+	class civil_small_poor_market_actions : public building_event_action
+	{
+	public:
+		void construction_completed( building_info* building, game_manager::player_game_objects* player_objects );
+	}; 
+
 	typedef enum building_type
 	{
 		habitable,
@@ -102,6 +109,7 @@ namespace city_manager
 
 	//Special buildings and offices
 	extern const building_descriptor civil_small_poor_commercial_building;
+	extern const building_descriptor civil_small_poor_market;
 	extern const building_descriptor civil_welfare_administration_office;
 
 	extern const building_descriptor* buildings_table [];

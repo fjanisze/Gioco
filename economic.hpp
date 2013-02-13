@@ -157,12 +157,14 @@ namespace economics
 		currency_type total_taxes_net_revenue,
 			      total_revenue_from_building_rental,
 			      total_building_maintanance_cost,
-			      total_welfare_funding;
+			      total_welfare_funding,
+			      total_net_income;
 		void clear();
 		economy_info() : total_taxes_net_revenue( 0 ),
 				total_revenue_from_building_rental( 0 ),
 				total_building_maintanance_cost( 0 ),
-				total_welfare_funding( 0 )
+				total_welfare_funding( 0 ),
+				total_net_income( 0 )
 		{	}
 	};
 

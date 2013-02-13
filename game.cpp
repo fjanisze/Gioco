@@ -832,7 +832,7 @@ namespace console_ui
 		std::string human_player = game_manager::game_manager::get_instance()->get_human_player_name();
 		economics::economy_manager* eco = game_manager::game_manager::get_instance()->get_player_objects( human_player )->economics;
 		finance::currency_type player_cash = eco->player_available_money();
-		cout<<"You bank account saldo is: "<<color_fore_green<<format_cur_type( player_cash )<<color_fore_white<<endl;
+		cout<<"You bank account saldo is: "<<( player_cash > 0 ? color_fore_green : color_fore_red )<<format_cur_type( player_cash )<<color_fore_white<<endl;
 		//Print information about the player funds
 		if( eco->get_public_walfare_funds()->is_welfare_available() )
 		{
@@ -848,6 +848,7 @@ namespace console_ui
 		cout<<"b) Total income from building rental: "<<color_fore_green<<format_cur_type( eco_info.total_revenue_from_building_rental )<<color_fore_white<<endl;
 		cout<<"c) Total building maintanance cost: "<<color_fore_red<<format_cur_type( eco_info.total_building_maintanance_cost )<<color_fore_white<<endl;
 		cout<<"c) Total welfare funding: "<<color_fore_red<<format_cur_type( eco_info.total_welfare_funding )<<color_fore_white<<endl;
+		cout<<"\nTotal net income: "<<( eco_info.total_net_income > 0 ? color_fore_green : color_fore_red )<<format_cur_type( eco_info.total_net_income )<<color_fore_white<<endl;
 		return 1;
 	}
 
@@ -1067,14 +1068,23 @@ namespace console_ui
 			else
 			{
 				cout.precision(10);
-				cout<<color_fore_green<<" This construction cost "<<format_cur_type( city_manager::buildings_table[ i ]->price );
+				cout<<color_fore_green<<" Price: "<<format_cur_type( city_manager::buildings_table[ i ]->price );
+				if( city_manager::buildings_table[ i ]->type == city_manager::building_type::habitable )
+				{
+					cout<<", Allowed population: "<<city_manager::buildings_table[ i ]->population_capacity;
+				}
+				else
+				{
+					//Cannot have those information here.
+				}
+				cout<<", maintanance cost: "<<format_cur_type( city_manager::buildings_table[ i ]->maintanance_cost )<<endl;
 				building_possibilities.push_back( true );
 			}
 			cout<<color_fore_white<<endl; 
 		}
 		cout<<" #"<<i + 1<<" - Quit\n";
 		cout<<"Make your choice [ 1 - "<< i <<" ]:";
-		choice_range choice( 1 , i );
+		choice_range choice( 1 , i + 1 );
 		cin>>choice;
 		--choice.choice;
 		if( choice.choice == i )

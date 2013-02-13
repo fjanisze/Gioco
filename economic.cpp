@@ -312,6 +312,7 @@ namespace job_market
 				{
 					//No one is working here.. leave the job
 					LOG("job_market_manager::update_uneployment_level(): This unit have a job, but no workplaces consumed..");
+					leave_the_job( elem );
 				}
 			}
 			elem = eu.get_next_eu();
@@ -519,6 +520,7 @@ namespace economics
 		total_revenue_from_building_rental = 0;
 		total_building_maintanance_cost = 0;
 		total_welfare_funding = 0;
+		total_net_income = 0;
 	}
 
 	////////////////////////////////////////////////////////////////////
@@ -1046,6 +1048,7 @@ namespace economics
 		long uneployment_level = update_uneployment_level( eu_all );
 		//Then collect the money
 		currency_type collected_money = collect_money();
+		last_cycle_info.total_net_income = collected_money;
 	}
 
 	const economic_variables* economy_manager::get_the_economic_variables( )

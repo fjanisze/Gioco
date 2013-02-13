@@ -13,7 +13,7 @@ namespace city_manager
 	const building_descriptor civil_small_appartment = { 3 , "Appartment", "Building with a set of small appartment", building_type::habitable, true,false, 14000000, 720, 250000 , 110 , 300 , nullptr , population::population_class::class_0 };
 	const building_descriptor civil_medium_appartment = { 4 , "Medium Appartment", "Building with a set of medium size apparment",building_type::habitable, true, false, 32000000, 550, 500000, 250 , 800 , nullptr , population::population_class::class_0 };
 
-	//Special buildings and offices
+	//Special buildings, commercial and offices
 	const building_descriptor civil_welfare_administration_office = { 5 , "Welfare administration" , "This construction is needed to make the social poor welfare work",building_type::workplace, false, true, 25000000, 0, 6000000, 220 , 600, new civil_welfare_office_actions, population::population_class::class_1  };
 	const building_descriptor civil_small_poor_commercial_building ={ 6 , "Commercial wretch shop" , "Small and poor multistore" , building_type::workplace , true, false , 400000, 0, 35000, 90, 60, new civil_small_poor_commercial_actions, population::population_class::class_0 };
 	const building_descriptor civil_small_poor_market ={ 7 , "Small market" , "Ideal place to bargain various products" , building_type::workplace , true, false , 1455000, 0, 82000, 160, 350, new civil_small_poor_market_actions, population::population_class::class_0 };
@@ -95,12 +95,12 @@ namespace city_manager
 	{
 		ELOG("civil_small_poor_market_actions::construction_completed(): Completed, new workplaces available ");
 		//Register a new job in the job market
-		job_market::job_entity* job = player_objects->economics->create_new_job_entity( &job_market::civil_scullion_job_level0 );
+		job_market::job_entity* job = player_objects->economics->create_new_job_entity( &job_market::civil_hodman_job_level0 );
 		if( job )
 		{
 			assert( building->workplace_desc != nullptr );
 			job->city = building->workplace_desc->city;
-			player_objects->economics->register_job_entity( job , civil_small_poor_commercial_building.population_capacity );
+			player_objects->economics->register_job_entity( job , civil_small_poor_market.population_capacity );
 			building->workplace_desc->job = job;
 		}
 	}
@@ -294,27 +294,26 @@ namespace city_manager
 		//Is possible to build one construction at time.
 		if( !is_construction_ongoing() )
 		{
-			//Is the building already present? If yes, can be multiple building constructed?
-			if( building->one_build_per_player )
+			if( eco->player_available_money() >= building->price )//Has the player enough money?
 			{
-				//Have to check in all the cities
 				return_value = 1;
-				for( auto elem : *( player_objects->cities->get_the_cities() ) )
+				//Is the building already present? If yes, can be multiple building constructed?
+				if( building->one_build_per_player )
 				{
-					if( elem->is_the_building_present( building ) )
+					//Have to check in all the cities
+					for( auto elem : *( player_objects->cities->get_the_cities() ) )
 					{
-						return_value = 0; //not possible
-						break;
+						if( elem->is_the_building_present( building ) )
+						{
+							return_value = 0; //not possible
+							break;
+						}
 					}
 				}
-			}
-			else if( !building->allowed_multiple_builds && is_the_building_present( building ) )
-			{
-				return_value = 0;
-			}
-			else if( eco->player_available_money() >= building->price )//Has the player enough money?
-			{
-				return_value = 1; 
+				else if( !building->allowed_multiple_builds && is_the_building_present( building ) )
+				{
+					return_value = 0;
+				}
 			}
 		}
 		if( !return_value )

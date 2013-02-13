@@ -946,7 +946,7 @@ namespace console_ui
 		command_pack cmd;
 		int return_value = numeric_limits< int >::max();
 		do{
-			cout<<color_fore_iwhite<<"\n[ City Manager ]";
+			cout<<color_fore_iwhite<<"\n[ City Manager, "<<city_name<<" ]";
 			cout<<color_fore_white<<" What to do?\n:>";
 			cmd = std::move( command_input() );
 			if( !cmd.command.empty() )

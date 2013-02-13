@@ -85,6 +85,7 @@ namespace job_market
 	//A serie of standard descriptor
 	extern const job_descriptor civil_unemployed_jon_level0 ;
 	extern const job_descriptor civil_scullion_job_level0;
+	extern const job_descriptor civil_hodman_job_level0;
 	extern const job_descriptor civil_office_job_level1;
 
 	//Each EU which have a job should have a job_entity

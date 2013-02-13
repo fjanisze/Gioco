@@ -30,7 +30,8 @@ namespace job_market
 
 	const job_descriptor civil_unemployed_jon_level0 = { 0 , "Unemployed", 0 }; //The 0 ID shall be always for the unemployed
 	const job_descriptor civil_scullion_job_level0 = { 1 , "Scullion", 19500 };
-	const job_descriptor civil_office_job_level1 = { 2 , "Office employee" , 35000 };
+	const job_descriptor civil_hodman_job_level0 = { 2 , "Hodman", 21000 };
+	const job_descriptor civil_office_job_level1 = { 3 , "Office employee" , 35000 };
 
 	job_entity::job_entity( const job_descriptor* job ) : descriptor( job )
 	{

@@ -15,7 +15,7 @@
 #include <mutex>
 
 
-#define BASE_GROW_RATION 1.1545084972495 //Take the decimal part of the golden ratio and divide them by 4
+#define BASE_GROW_RATION 1.1545 //Take the decimal part of the golden ratio and divide them by 4
 #define STARVING_RATIO_THRESHOLD 0.25 //If more than 25% of the population is starving, then a quick depopulation trend will begin
 
 typedef long long mlong;

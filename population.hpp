@@ -5,7 +5,7 @@
 #define POPULATION_HPP
 
 #include "logging/logger.hpp"
-#include "economic.hpp"
+#include "economic/economic.hpp"
 #include "common_structures.hpp"
 #include <string>
 #include <vector>

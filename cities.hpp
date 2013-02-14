@@ -10,7 +10,7 @@
 #include <map>
 #include <cassert>
 #include "events.hpp"
-#include "economic.hpp"
+#include "economic/economic.hpp"
 #include "population.hpp"
 
 typedef long long mlong;

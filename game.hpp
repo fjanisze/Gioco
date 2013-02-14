@@ -26,7 +26,7 @@
 #include <locale>
 #include <atomic>
 
-#include "economic.hpp"
+#include "economic/economic.hpp"
 
 using namespace std;
 

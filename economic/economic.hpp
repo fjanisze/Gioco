@@ -4,8 +4,8 @@
 #ifndef ECONOMIC_HPP
 #define ECONOMIC_HPP
 
-#include "logging/logger.hpp"
-#include "common_structures.hpp"
+#include "../logging/logger.hpp"
+#include "../common_structures.hpp"
 #include <vector>
 #include <map>
 #include <exception>

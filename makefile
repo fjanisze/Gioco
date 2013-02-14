@@ -1,5 +1,5 @@
 all :
-	g++ --std=c++11 ./logging/logger.cpp ./logging/logger.hpp ./logging/log.hpp ./logging/log.cpp game.hpp game.cpp ./economic/economic.cpp population.cpp cities.cpp events.cpp main.cpp -lstdthread -lpthread -o game.exe
+	g++ --std=c++11 ./logging/logger.cpp ./logging/logger.hpp ./logging/log.hpp ./logging/log.cpp game.hpp game.cpp ./economic/economic.cpp ./economic/finance.cpp ./economic/banking.cpp population.cpp cities.cpp events.cpp main.cpp -lstdthread -lpthread -o game.exe
 
 all_obj : 
 	g++ --std=c++11 -lstdthread -lpthread -c ./logging/logger.hpp ./logging/log.hpp ./logging/log.cpp game.hpp game.cpp main.cpp

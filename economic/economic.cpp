@@ -1,29 +1,6 @@
 #include "economic.hpp"
 
-namespace finance
-{
-	game_wallet& game_wallet::operator=( const currency_type& value )
-	{
-		money_cash = value;
-		return *this;
-	}
 
-	game_wallet::game_wallet( const currency_type& value )
-	{
-		money_cash = value;
-	}
-
-	game_wallet::game_wallet( const game_wallet& wallet )
-	{
-		money_cash = wallet.money_cash;
-	}
-
-	currency_type game_wallet::available_free_cash()
-	{
-		return money_cash;
-	}
-
-}
 
 namespace job_market
 {
@@ -446,7 +423,7 @@ namespace economics
 		salary_taxes_equity_perception = 0.5; //This value is changed at every review_economy loop, when the net salary is distributed
 	}
 
-	////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////
 	//
 	//
 	//	Implementation for economic_unit
@@ -460,7 +437,8 @@ namespace economics
 	{
 		eu_id = eu_next_unique_id++;
 		//At the very beginning the eu has nothing.
-		wallet = 0;
+		wallet = nullptr;
+		eu_bank = nullptr;
 		family_size = nullptr;
 		starving_unit = false;
 		equity_perception_threshold = 0;
@@ -692,8 +670,12 @@ namespace economics
 	try{
 		LOG("economy_manager::create_economic_unit(): New EU requested, job: ", job != nullptr );
 		economic_unit* eu = new economic_unit;
-		game_wallet wallet( 0 );
-		eu->wallet = wallet;
+		//Create the bank account for this unit
+		eu->eu_bank = banking.find_bank();
+		assert( eu->eu_bank != nullptr );
+		bank_account* acc = eu->eu_bank->open_new_account( eu->eu_id );
+		assert( acc != nullptr );
+		eu->wallet = acc;
 		if( job == nullptr )
 		{
 			//Create a default job: unemployed!!
@@ -753,7 +735,7 @@ namespace economics
 			assert( eu->job != nullptr );
 			gross_salary = eu->job->gross_salary;
 
-			ELOG("economy_manager::add_economic_unit(): Adding a new EU, family size: ",*eu->family_size,", gross_salary: ",gross_salary,", wallet: ",eu->wallet.available_free_cash());
+			ELOG("economy_manager::add_economic_unit(): Adding a new EU, family size: ",*eu->family_size,", gross_salary: ",gross_salary,", wallet: ",eu->wallet->get_balance() );
 			eu_all.add( eu , city );
 		}
 		return verdict;
@@ -825,7 +807,7 @@ namespace economics
 		LOG("economy_manager::handle_starving_unit(): EU:",eu->eu_id,",Needed money:",needed_money);
 		currency_type financed = 0;
 		//If the free cash of the unit is not sufficient to cover the costs, the unit will be marked as poor!
-		if( eu->wallet.available_free_cash() < needed_money || eu->starving_unit )
+		if( eu->wallet->get_balance() < needed_money || eu->starving_unit )
 		{
 			//Try to access the poor support program
 			if( public_welfare_funds->is_welfare_available() &&
@@ -845,14 +827,13 @@ namespace economics
 				{
 					eu->starving_unit = true;
 				}
-				eu->wallet.get_money_cash() = 0; //Pay what you can...
 			}
 		}
 		else
 		{
 			remove_starving_state( eu ); // If the unit is starving, remove this state.
-			ELOG("economy_manager::handle_starving_unit(): Paying with the savings, cash: ",eu->wallet.available_free_cash(),", expenses: ",needed_money);
-			eu->wallet.get_money_cash() -= needed_money;
+			ELOG("economy_manager::handle_starving_unit(): Paying with the savings, cash: ",eu->wallet->get_balance(),", expenses: ",needed_money);
+			eu->wallet->withdraw( needed_money );
 		}
 		last_cycle_info.total_welfare_funding += financed;
 		return financed * POOR_SUBSIDIES_ACCESS_COST; //The procedure have a cost, can the player pay for it?
@@ -885,7 +866,7 @@ namespace economics
 			if( savings < 0 )
 			{
 				//Since is very poor refund the taxes 
-				eu->wallet.get_money_cash() += taxes;
+				eu->wallet->deposit( taxes );
 				taxes = 0;//No taxes since were refunded
 				this_unit_is_starving = true;
 				needed_money = std::abs( savings );
@@ -893,9 +874,9 @@ namespace economics
 			else
 			{
 				remove_starving_state( eu );
-				eu->wallet.get_money_cash() += savings; //put the savings in the eu wallet.
+				eu->wallet->deposit( savings ); //put the savings in the eu wallet.
 			}
-			ELOG("economy_manager::get_revenue_from_eu(): New salary_taxes_equity_perception: ",eco_variables->salary_taxes_equity_perception, ", Total savings for this unit: ",eu->wallet.available_free_cash() );
+			ELOG("economy_manager::get_revenue_from_eu(): New salary_taxes_equity_perception: ",eco_variables->salary_taxes_equity_perception, ", Total savings for this unit: ",eu->wallet->get_balance() );
 		}
 		else
 		{
@@ -940,7 +921,7 @@ namespace economics
 	//savings the unit have. More money means less negative impact on temporary low saving ratio
 	void economy_manager::correct_savings_and_salary_impact_on_equity( economic_unit* eu, currency_type net_salary, currency_type savings )
 	{
-		currency_type total_savings = eu->wallet.available_free_cash(), gross_salary = eu->job->gross_salary;
+		currency_type total_savings = eu->wallet->get_balance(), gross_salary = eu->job->gross_salary;
 		if( total_savings == 0 )
 		{
 			total_savings = 100;

@@ -14,6 +14,8 @@
 #include <stdlib.h>
 #include <ctime>
 #include <cassert>
+#include "finance.hpp"
+#include "banking.hpp"
 using namespace std;
 
 typedef long long mlong;
@@ -21,32 +23,6 @@ typedef long long mlong;
 #define TAX_EQUITY_PERCEPTION_SENSIBILITY 1000 //Not 0!! >=1, higher value then lower sensibility
 #define POOR_SUBSIDIES_ACCESS_COST 0.15 //15% of the provided sum
 #define SALARY_CLASS_MIN_DELTA 10 //Used in get_basic_salary_class
-
-namespace finance
-{
-	typedef long double longd;
-	typedef long long mlong;
-	typedef long double currency_type;
-
-	//The game_wallet structure contain the information about the player wealth
-	class game_wallet
-	{
-		currency_type money_cash; //Amount of money available in the form of cash
-	public:
-		game_wallet() : money_cash( 0 )
-		{	}
-
-		game_wallet( const currency_type& value );
-		game_wallet( const game_wallet& wallet );
-
-		game_wallet& operator=( const game_wallet& ) = default;
-		game_wallet& operator=( const currency_type& value );
-
-		currency_type available_free_cash();
-		currency_type& get_money_cash()
-		{	return money_cash;	}
-	};
-}
 
 namespace economics
 {
@@ -130,6 +106,7 @@ namespace economics
 {
 	using namespace finance;
 	using namespace job_market;
+	using namespace banking;
 
 	class public_welfare
 	{
@@ -217,7 +194,8 @@ namespace economics
 		long eu_id;
 		long* family_size; //Well, this may be a very large number, depending on the size of the population_entity which encapsulate this eu
 		job_market::job_entity* job; //Have this economic unit a job? here are the job information
-		game_wallet wallet; //The amount of cash holded by this eu
+		bank_account* wallet; //The amount of cash holded by this eu
+		bank_entity* eu_bank;
 		salary_class salary_cl;//Class for this salary
 		expense_and_cost applicable_costs; //Costs which belongs to this unit.
 		revenues_and_profits applicable_revenues;
@@ -309,6 +287,8 @@ namespace economics
 		map< string, economic_unit* > eu_per_city;
 		game_wallet		player_wallet;
 		economic_variables*	eco_variables;
+		banking_manager		banking;
+	private:
 		void modify_tax_equity_perception( long double value );
 		public_welfare* public_welfare_funds;
 		economy_info last_cycle_info;

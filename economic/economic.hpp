@@ -318,6 +318,7 @@ namespace economics
 		void recalculate_amount_of_starving_unit();
 		double set_salary_tax_level( salary_class sc , double new_level );
 		economy_info get_cycle_statistic();
+		banking_manager* get_banking_manager();
 	};
 }
 

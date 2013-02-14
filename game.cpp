@@ -852,6 +852,15 @@ namespace console_ui
 		return 1;
 	}
 
+	int user_interface::bank( const command_pack& )
+	{
+		banking::bank_entity* central_bank = game_obj->economics->get_banking_manager()->get_central_bank();
+		cout<<"\nCentral bank reserve: "<<color_fore_green<<format_cur_type( central_bank->bank_reserve_status() )<<color_fore_white<<endl;
+		cout<<"Amount of bank accounts: "<<central_bank->number_of_account()<<endl;
+		cout<<"Sum on deposit: "<<color_fore_green<<format_cur_type( central_bank->total_deposit() )<<color_fore_white<<endl;
+		return 1;
+	}
+
 	int user_interface::population_info( const command_pack& cmd )
 	{
 		population::population_manager* pop_mng_inst = game_obj->population;

@@ -1,6 +1,10 @@
 #define LOGGING_LEVEL_1
 #define LOGGING_LEVEL_2
 
+
+#ifndef BANKING_HPP
+#define BANKING_HPP
+
 #include "../common_structures.hpp"
 #include "../logging/logger.hpp"
 #include "finance.hpp"
@@ -73,6 +77,8 @@ namespace banking
 		currency_type deposit( bank_account* acc, currency_type amount );
 		currency_type get_balance( bank_account_id acc_id );
 		currency_type get_balance( bank_account* acc );
+		long number_of_account();
+		currency_type total_deposit();
 	};
 
 	/*
@@ -84,5 +90,8 @@ namespace banking
 	public:
 		banking_manager();
 		bank_entity* find_bank();
+		bank_entity* get_central_bank();
 	};
 }
+
+#endif

@@ -1081,5 +1081,10 @@ namespace economics
 	{
 		return last_cycle_info;
 	}
+
+	banking_manager* economy_manager::get_banking_manager()
+	{
+		return &banking;
+	}
 }
 

@@ -40,6 +40,7 @@ namespace banking
 		//Create the 'list' of bank account number
 		for( int i = 0 ; i < BASE_AMOUNT_OF_CC ; i++ )
 		{
+			bank_accounts.push_back( nullptr );
 			next_free_acc_id.push( i ); 
 		}
 	}
@@ -76,6 +77,8 @@ namespace banking
 
 		acc->owner_id = owner;
 		acc->bank_acc_id = id;
+
+		return acc;
 
 	}catch( std::bad_alloc& xa )
 	{
@@ -171,6 +174,30 @@ namespace banking
 		return available_cash;
 	}
 
+	long bank_entity::number_of_account()
+	{
+		long num = 0;
+		for( auto elem : bank_accounts )
+		{
+			if( elem != nullptr )
+				++num;
+		}
+		return num;
+	}
+
+	currency_type bank_entity::total_deposit()
+	{
+		currency_type amount = 0;
+		for( auto elem : bank_accounts )
+		{
+			if( elem != nullptr )
+			{
+				amount += elem->cash_balance;
+			}
+		}
+		return amount;
+	}
+
 	//////////////////////////////////////////////////////////////////
 	//
 	//
@@ -190,6 +217,11 @@ namespace banking
 	 * just return a pointer to the only available bank
 	 */
 	bank_entity* banking_manager::find_bank()
+	{
+		return &central_bank;
+	}
+
+	bank_entity* banking_manager::get_central_bank()
 	{
 		return &central_bank;
 	}

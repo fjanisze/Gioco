@@ -28,6 +28,7 @@
 
 #include "economic/economic.hpp"
 
+
 using namespace std;
 
 typedef long long mlong;
@@ -331,6 +332,7 @@ namespace console_ui
 		int list_player_cities( const command_pack& );
 		int enter_city( const command_pack& );
 		int wallet( const command_pack& );
+		int bank( const command_pack& );
 		int population_info( const command_pack& );
 		int tax_manager( const command_pack& );
 	};
@@ -346,6 +348,7 @@ namespace console_ui
 		{ "entercity", &user_interface::enter_city  },
 		{ "population", &user_interface::population_info },
 		{ "taxes", &user_interface::tax_manager },
+		{ "bank", &user_interface::bank },
 		{ "" , nullptr }
 	};
 

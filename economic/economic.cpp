@@ -666,7 +666,7 @@ namespace economics
 	}
 
 	//Create a basic economic unit
-	economic_unit* economy_manager::create_economic_unit( job_entity* job )
+	economic_unit* economy_manager::create_economic_unit( job_entity* job, eu_type_t eu_type )
 	try{
 		LOG("economy_manager::create_economic_unit(): New EU requested, job: ", job != nullptr );
 		economic_unit* eu = new economic_unit;
@@ -676,19 +676,25 @@ namespace economics
 		bank_account* acc = eu->eu_bank->open_new_account( eu->eu_id );
 		assert( acc != nullptr );
 		eu->wallet = acc;
-		if( job == nullptr )
+		//Different creation procedure for different type of units
+		if( eu_type == eu_type_t::population_unit )
 		{
-			//Create a default job: unemployed!!
-			eu->job = create_new_job_entity( &civil_unemployed_jon_level0 );
+			if( job == nullptr )
+			{
+				//Create a default job: unemployed!!
+				eu->job = create_new_job_entity( &civil_unemployed_jon_level0 );
+			}
+			else
+			{
+				eu->job = job;
+			}
+			calculate_impact_on_equity_factors( eu );
+			ELOG("economy_manager::create_economic_unit(): New EU:",eu->eu_id,",Job: ", eu->job->descriptor->name ,", Equity: ",eu->equity_perception_threshold,", SalIE: ",eu->net_salary_impact_on_equity,", SavIE: ",eu->savings_impact_on_equity );
 		}
-		else
+		else if( eu_type == eu_type_t::corporate_unit )
 		{
-			eu->job = job;
+			ELOG("economy_manager::create_economic_unit(): New EU:",eu->eu_id,", is a corporate unit");
 		}
-
-		calculate_impact_on_equity_factors( eu );
-	
-		ELOG("economy_manager::create_economic_unit(): New EU:",eu->eu_id,",Job: ", eu->job->descriptor->name ,", Equity: ",eu->equity_perception_threshold,", SalIE: ",eu->net_salary_impact_on_equity,", SavIE: ",eu->savings_impact_on_equity );
 		return eu;
 	}catch( std::exception& xa )
 	{
@@ -732,10 +738,16 @@ namespace economics
 		{
 			std::lock_guard< std::mutex > lock( eu_container_mutex );
 			currency_type gross_salary = 0;
-			assert( eu->job != nullptr );
-			gross_salary = eu->job->gross_salary;
-
-			ELOG("economy_manager::add_economic_unit(): Adding a new EU, family size: ",*eu->family_size,", gross_salary: ",gross_salary,", wallet: ",eu->wallet->get_balance() );
+			if( eu->eu_type == eu_type_t::population_unit )
+			{
+				assert( eu->job != nullptr );
+				gross_salary = eu->job->gross_salary;
+				ELOG("economy_manager::add_economic_unit(): Adding EU:",eu->get_id(),", family size: ",*eu->family_size,", gross_salary: ",gross_salary,", wallet: ",eu->wallet->get_balance() );
+			}
+			else if( eu->eu_type == eu_type_t::corporate_unit )
+			{
+				ELOG("economy_manager::add_economic_unit(): Adding EU:",eu->get_id(),", which is a corporate type");
+			}	
 			eu_all.add( eu , city );
 		}
 		return verdict;
@@ -1005,11 +1017,11 @@ namespace economics
 			}
 			if( eu->applicable_costs.player_maintanance_cost > 0 )
 			{
-				ELOG("economy_manager::collect_money(): Applying costs to ", player_name,", for: ",eu->applicable_costs.player_maintanance_cost);
+				ELOG("economy_manager::collect_money(): EU:",eu->get_id(),", Mnt:",eu->applicable_costs.player_maintanance_cost);
 				eu->unit_net_revenue -= eu->applicable_costs.player_maintanance_cost;
 				last_cycle_info.total_building_maintanance_cost += eu->applicable_costs.player_maintanance_cost;
 			}
-			ELOG("economy_manager::collect_money(): EU Net Rev.: ", eu->unit_net_revenue );
+			ELOG("economy_manager::collect_money(): EU:",eu->get_id(),",Net Rev.: ", eu->unit_net_revenue );
 			collected_money += eu->unit_net_revenue;
 			eu = eu_all.get_next_eu();
 		}

@@ -53,8 +53,6 @@ namespace job_market
 
 		string name;
 
-
-
 		currency_type base_gross_salary;
 	};
 
@@ -183,6 +181,12 @@ namespace economics
 		{	}
 	};
 
+	typedef enum eu_type_t
+	{
+		population_unit = 1,
+		corporate_unit		//Like a firm
+	} eu_type_t ;
+
 	/*
 	 * For each population_entity an economic_unit is defined, and since for each building
 	 * a population_entity is defined, then for each building is possible to calculate the average
@@ -192,6 +196,7 @@ namespace economics
 	{
 		static long eu_next_unique_id;
 		long eu_id;
+		eu_type_t eu_type;
 		long* family_size; //Well, this may be a very large number, depending on the size of the population_entity which encapsulate this eu
 		job_market::job_entity* job; //Have this economic unit a job? here are the job information
 		bank_account* wallet; //The amount of cash holded by this eu
@@ -220,7 +225,7 @@ namespace economics
 		void set_revenues( const revenues_and_profits& );
 		currency_type get_unit_net_revenue();
 		long get_family_size()
-		{	return *family_size; }
+		{	return  ( family_size != nullptr ) ? *family_size : 0; }
 		bool is_starving()
 		{	return starving_unit;	}
 		currency_type get_gross_salary();
@@ -305,7 +310,7 @@ namespace economics
 	public:
 		economy_manager( const std::string& player );
 		~economy_manager();
-		economic_unit* create_economic_unit( job_entity* job );
+		economic_unit* create_economic_unit( job_entity* job, eu_type_t eu_type );
 		bool add_economic_unit( economic_unit* eu , const string& city );
 		currency_type get_basic_class_salary( salary_class sclass );
 		void review_economy();

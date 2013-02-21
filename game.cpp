@@ -1043,11 +1043,11 @@ namespace console_ui
 					if( elem->descriptor->type == city_manager::building_type::habitable )
 					{
 						cout<<" - Population: "<<elem->population->get_population()<<" , value:  "<<format_cur_type( elem->building_value )<<", ";
-						cout<<"Revenue: "<<format_cur_type( elem->population->get_unit_net_revenue() );
+						cout<<"Revenue: "<<format_cur_type( elem->population->get_unit_net_revenue() )<<", Mnt cost: "<<format_cur_type( elem->descriptor->maintanance_cost );
 					}
 					else
 					{
-						cout<<" - Workplaces: "<<elem->workplace_desc->job->amount_of_free_workplaces;
+						cout<<" - Workplaces: "<<elem->workplace_desc->job->amount_of_free_workplaces<<", Value: "<<format_cur_type( elem->building_value )<<", Mnt cost: "<<format_cur_type( elem->descriptor->maintanance_cost );
 					}
 				}
 				cout<<endl;
@@ -1086,7 +1086,7 @@ namespace console_ui
 				{
 					//Cannot have those information here.
 				}
-				cout<<", maintanance cost: "<<format_cur_type( city_manager::buildings_table[ i ]->maintanance_cost )<<endl;
+				cout<<", maintanance cost: "<<format_cur_type( city_manager::buildings_table[ i ]->maintanance_cost );
 				building_possibilities.push_back( true );
 			}
 			cout<<color_fore_white<<endl; 

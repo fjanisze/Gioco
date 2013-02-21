@@ -247,6 +247,18 @@ namespace city_manager
 	try{
 		workplace_descriptor* workplace_desc = new workplace_descriptor;
 		workplace_desc->employer_name = building->get_name();
+
+		//The economic unit object is needed as well
+		economics::economic_unit* eu = player_objects->economics->create_economic_unit( nullptr, economics::eu_type_t::corporate_unit );
+		if( eu )
+		{
+			economics::expense_and_cost costs;
+			costs.player_maintanance_cost = building->descriptor->maintanance_cost;
+			eu->set_costs( costs );
+			workplace_desc->eu = eu;
+			player_objects->economics->add_economic_unit( eu , this_city->get_city_name() );
+		}
+
 		return workplace_desc;
 	}catch( std::bad_alloc& xa )
 	{

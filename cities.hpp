@@ -95,8 +95,10 @@ namespace city_manager
 		string city;
 		string employer_name;
 		job_market::job_entity* job; //Who is working here?
+		economics::economic_unit* eu;
 		long employed_people;
-		workplace_descriptor() : job( nullptr ), employed_people( 0 )
+		workplace_descriptor() : job( nullptr ), employed_people( 0 ),
+					eu( nullptr )
 		{	}
 	};
 
@@ -133,22 +135,24 @@ namespace city_manager
 		}
 	};
 
+	class city;
+
 	//Responsible for managing the workplaces
 	class workplace_manager
 	{
+	protected:
+		game_manager::player_game_objects* player_objects;
+		city* this_city;
 	public:
 		workplace_descriptor* create_new_workplace( building_info* building );
 	};
 
-	class city;
-
 	//This class is responsible for the city construction management
 	class construction_management : public events::event_entity , public workplace_manager
 	{
-		game_manager::player_game_objects* player_objects;
+		
 		vector< building_info* > constructions; //Those are the buildings available on the city area 
 		map< long , building_info* > construction_triggers;
-		city* this_city;
 		void construction_completed( building_info* building );
 		bool is_construction_ongoing() const;
 		bool is_the_building_present( const building_descriptor* building ) const;

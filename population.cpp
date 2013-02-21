@@ -162,7 +162,7 @@ namespace population
 		pop->max_population = max_population;
 		pop->pop_class = p_class;
 		//For each population entity the proper economic unit have to be created
-		economics::economic_unit* eu = player_obj->economics->create_economic_unit( nullptr );
+		economics::economic_unit* eu = player_obj->economics->create_economic_unit( nullptr , economics::eu_type_t::population_unit );
 		if( eu )
 		{
 			//Provide the costs and expenses structure

@@ -5,7 +5,12 @@ namespace goods_manager
 	//Good descriptor definition
 	const good_descriptor_t descriptor_food_bread = { 1 , "Bread", 2 , good_category_t::is_food , good_category_food_t::is_bread };
 	const good_descriptor_t descriptor_food_meat = { 2 , "Meat", 11 , good_category_t::is_food , good_category_food_t::is_meat };
-	const good_descriptor_t descriptor_food_fish = { 3 , "Fish", 27 , good_category_t::is_food , good_category_food_t::is_fish };
+	const good_descriptor_t descriptor_food_fish = { 3 , "Fish", 17 , good_category_t::is_food , good_category_food_t::is_fish };
+	const good_descriptor_t descriptor_food_tomato = { 4 , "Tomatoes", 3 , good_category_t::is_food , good_category_food_t::is_tomato };
+	const good_descriptor_t descriptor_food_pasta = { 5 , "Pasta", 3 , good_category_t::is_food , good_category_food_t::is_pasta };
+	const good_descriptor_t descriptor_food_rice = { 6 , "Rice", 4 , good_category_t::is_food , good_category_food_t::is_rice };
+	const good_descriptor_t descriptor_food_vegetables = { 7 , "Vegetables", 7 , good_category_t::is_food , good_category_food_t::is_vegetables };
+	const good_descriptor_t descriptor_food_fruit = { 8 , "Fruit", 10 , good_category_t::is_food , good_category_food_t::is_fruit };
 
 
 	const good_descriptor_t* food_descriptor_table[]
@@ -13,6 +18,11 @@ namespace goods_manager
 		&descriptor_food_bread,
 		&descriptor_food_meat,
 		&descriptor_food_fish,
+		&descriptor_food_tomato,
+		&descriptor_food_pasta,
+		&descriptor_food_rice,
+		&descriptor_food_vegetables,
+		&descriptor_food_fruit,
 		nullptr
 	};
 
@@ -35,14 +45,6 @@ namespace goods_manager
 	}
 
 	
-	//////////////////////////////////////////////////////////////////
-	//
-	//
-	//	Implementation for good_category_food_obj
-	//
-	//
-	//////////////////////////////////////////////////////////////////
-
 
 	//////////////////////////////////////////////////////////////////
 	//
@@ -130,6 +132,19 @@ namespace goods_manager
 	goods_manager::goods_manager()
 	{
 		LOG("goods_manager::goods_manager(): Created, registering the goods");
+	}
+
+	goods_container::~goods_container()
+	{
+		LOG("good_container::~goods_container(): Cleaning up");
+		//Clear all the resources
+		for( auto elem : goods )
+		{
+			for( auto good : elem.second.goods )
+			{
+				delete *good;
+			}
+		}
 	}
 }
 

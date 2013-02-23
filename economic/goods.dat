@@ -1,0 +1,4 @@
+#List of 'food' goods
+@good_category: "Food" , 0 #Category name and category number ( index )
+# Sub category number, name , description , price 
+0 , "Bread" , "200g of fresh bread" , 4 

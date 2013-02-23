@@ -61,6 +61,11 @@ namespace goods_manager
 	extern const good_descriptor_t descriptor_food_bread;
 	extern const good_descriptor_t descriptor_food_meat;
 	extern const good_descriptor_t descriptor_food_fish;
+	extern const good_descriptor_t descriptor_food_tomato;
+	extern const good_descriptor_t descriptor_food_pasta;
+	extern const good_descriptor_t descriptor_food_rice;
+	extern const good_descriptor_t descriptor_food_vegetables;
+	extern const good_descriptor_t descriptor_food_fruit;
 
 	extern const good_descriptor_t* food_descriptor_table[];
 
@@ -116,6 +121,7 @@ namespace goods_manager
 		int fill_from_table( vector< good_node* > container , const good_descriptor_t* table[] );
 	public:
 		goods_container();
+		~goods_container();
 	};
 
 	class goods_manager : public goods_container

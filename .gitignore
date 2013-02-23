@@ -1,4 +1,6 @@
 *.obj
 *.exe
 *.log
+*.gch
+
 

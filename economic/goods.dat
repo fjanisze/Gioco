@@ -1,4 +1,21 @@
+#Name for each subcategory
+@subcategory_defs:
+{0} , "Food"
+{1} , "Beverage"
+
 #List of 'food' goods
-@good_category: "Food" , 0 #Category name and category number ( index )
-# Sub category number, name , description , price 
-0 , "Bread" , "200g of fresh bread" , 4 
+#Multiple subcategories are allowed, but not needed for all the goods
+#The general format is:
+# Sequence of subcategory ID within curly braces, Good unique ID, Name , Description, Price
+
+@good_category: "Aliment" , 0 #Category name and category number ( index )
+#Food subcategory
+{0} , "Bread" , "200g of fresh bread" , 4 
+{0} , "Meat" , "A pieco of cow, 500g.", 11
+{0} , "Fish" , "For the fish lover, a trout", 25
+{0} , "Tomatoes" , "A basket of tomatoes", 5
+#Beverage subcategory
+{1} , "Water" , "A bottle of sparkling water", 2
+{1} , "Orange juice" , "Fresh orange juice", 4
+{1} , "Vodka" , "When you feel down, drink a little of vodka!" , 29
+

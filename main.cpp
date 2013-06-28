@@ -16,16 +16,11 @@ void execution_thread_b(void*)
 
 void execution_thread_c(void*)
 {
-	LOG("void execution_thread_c(): Is starting! Will handle the population_manager and economy_manager for the human player");
-	std::string human_player = game_manager::game_manager::get_instance()->get_human_player_name();
-	game_manager::player_game_objects* objects = game_manager::game_manager::get_instance()->get_player_objects( human_player );
-	assert( objects != nullptr );
+	LOG("void execution_thread_c(): Is starting!");
 	do{
-		objects->population->review_population();
-		objects->economics->review_economy();
+		cout<<"Doing nothing..\";
 		Sleep( 200 );
 	}while( 1 );
-
 	LOG("void execution_thread_c(): Is quitting!");
 }
 
@@ -37,8 +32,6 @@ int main()
 	//This thread will run the event manager object.
 	_beginthread( &execution_thread_b, 0 , nullptr );
 
-	//Force the creationg of the game object instances
-	game_manager::game_manager::get_instance()->create_test_scenario(); 
 	
 	LOG("int main(): Starting the execution threads..");
 

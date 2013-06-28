@@ -1,6 +1,8 @@
 #define LOGGING_LEVEL_1
 #define LOGGING_LEVEL_2
 
+
+#include "logging/logger.hpp"
 #include "game.hpp"
 #include <process.h>
 
@@ -18,7 +20,7 @@ void execution_thread_c(void*)
 {
 	LOG("void execution_thread_c(): Is starting!");
 	do{
-		cout<<"Doing nothing..\";
+		cout<<"Doing nothing..\n";
 		Sleep( 200 );
 	}while( 1 );
 	LOG("void execution_thread_c(): Is quitting!");

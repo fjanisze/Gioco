@@ -37,7 +37,7 @@ namespace console_ui
 		return out_stream;
 	}
 
-	std::string format_cur_type( const finance::currency_type& value )
+	std::string format_cur_type( const mlong& value )
 	{
 		//TODO
 		string value_str;
@@ -273,9 +273,6 @@ namespace console_ui
 	void user_interface::input_loop()
 	{
 		command_pack command;
-		game_mng_inst = game_manager::game_manager::get_instance();
-		human_player = game_mng_inst->get_human_player_name();
-		game_obj = game_mng_inst->get_player_objects( human_player );
 		int return_value;
 		do{
 			LOG("user_interface::input_loop(): Waiting for input");
@@ -309,6 +306,45 @@ namespace console_ui
 			LOG_WARN("user_interface::execute_a_command(): Cannot execute \'",cmd.command,"\'. The command is unknow");
 		}
 		return return_value;
+	}
+}
+
+////////////////////////////////////////////////////////////////////
+//
+//
+//	Follow the implementation for game_manager
+//
+//
+////////////////////////////////////////////////////////////////////
+
+namespace game_manager
+{
+
+	game_manager* game_manager::instance = nullptr;
+
+	game_manager* game_manager::get_instance()
+	{
+		if( instance == nullptr )
+		{
+			instance = new game_manager;
+		}
+		return instance;
+	}
+
+	game_manager::game_manager()
+	{
+		LOG("game_manager::game_manager(): New game manager");
+	}
+
+	game_manager::~game_manager()
+	{
+		//TODO:  The memory allocated by the call to get_instance is not freed
+		LOG("game_manager::~game_manager(): Game manager destroyed");
+	}
+
+	game_map::gameplay_map* game_manager::get_the_game_map()
+	{
+		return &map;
 	}
 }
 

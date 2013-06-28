@@ -5,7 +5,9 @@
 #define GAME_HPP
 
 #include "logging/logger.hpp"
+#include "mytypes.hpp"
 #include "map.hpp"
+#include "events.hpp"
 #include <typeinfo>
 #include <list>
 #include <iostream>
@@ -25,14 +27,6 @@
 #include <atomic>
 
 using namespace std;
-
-typedef long long mlong;
-
-
-namespace game_manager
-{
-	struct player_game_objects;
-}
 
 namespace player_info
 {
@@ -67,6 +61,21 @@ namespace player_info
 	};
 }
 
+namespace game_manager
+{
+	class game_manager
+	{
+		static game_manager* instance;
+		game_map::gameplay_map   map; //Here we have the game map
+	public:
+		static game_manager* get_instance();
+		game_manager();
+		~game_manager();
+	public:
+		game_map::gameplay_map* get_the_game_map();
+	};
+};
+
 
 namespace console_ui
 {
@@ -80,6 +89,17 @@ namespace console_ui
 		colors( long possible_color ) : color( possible_color )
 		{	}
 	};
+
+	struct choice_range
+	{
+		long down_limit,
+		     up_limit;
+		long choice;
+		choice_range( mlong from, mlong to ) : down_limit( from ) , up_limit( to )
+		{	}
+	
+	};
+	
 
 	static colors color_fore_white( FOREGROUND_WHITE );
 	static colors color_fore_red( FOREGROUND_RED );
@@ -102,7 +122,7 @@ namespace console_ui
 		command_pack( command_pack&& ) = default;
 	};
 
-	std::string format_cur_type( const finance::currency_type& value );
+	std::string format_cur_type( const mlong value );
 
 	//Some c-out/in operator were overloaded to allow string coloring and other stuff
 	std::ostream& operator<<( ostream& out_stream , const colors& color );
@@ -125,8 +145,6 @@ namespace console_ui
 
 	class user_interface : public console_input
 	{
-		game_manager::player_game_objects* game_obj;
-		game_manager::game_manager* game_mng_inst;
 		std::string human_player;
 	public:
 		void print_obj_list(const field_coordinate& coord);

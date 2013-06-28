@@ -1,3 +1,3 @@
 
 //Definition of some types
-typedef long mlong;
+typedef long long mlong;

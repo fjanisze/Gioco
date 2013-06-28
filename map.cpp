@@ -4,6 +4,18 @@
 #include "logging/logger.hpp"
 #include "map.hpp"
 
+namespace game_objects
+{
+
+	bool is_a_terrain_object(const object_descriptor& obj)
+	{
+		if( obj.obj_id < 10 ) 
+			return true;
+		return false;
+	}
+}
+
+
 namespace game_map
 {
 

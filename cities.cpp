@@ -15,7 +15,7 @@ namespace city_manager
 
 	//Special buildings, commercial and offices
 	const building_descriptor civil_welfare_administration_office = { 5 , "Welfare administration" , "This construction is needed to make the social poor welfare work",building_type::workplace, false, true, 25000000, 0, 6000000, 220 , 600, new civil_welfare_office_actions, population::population_class::class_1  };
-	const building_descriptor civil_small_poor_commercial_building ={ 6 , "Commercial wretch shop" , "Small and poor multistore" , building_type::workplace , true, false , 400000, 0, 35000, 90, 60, new civil_small_poor_commercial_actions, population::population_class::class_0 };
+	const building_descriptor civil_small_poor_commercial_building ={ 6 , "Commercial wretch shop" , "Small and poor multistore" , building_type::workplace , true, false , 400000, 0, /*35000*/ 0, 90, 60, new civil_small_poor_commercial_actions, population::population_class::class_0 };
 	const building_descriptor civil_small_poor_market ={ 7 , "Small market" , "Ideal place to bargain various products" , building_type::workplace , true, false , 1455000, 0, 82000, 160, 350, new civil_small_poor_market_actions, population::population_class::class_0 };
 
 

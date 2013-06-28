@@ -167,7 +167,7 @@ namespace job_market
 	//This eu is applying for this job
 	long job_market_manager::apply_for_the_job( job_entity* job , long amount_of_workplaces, economic_unit* eu )
 	{
-		ELOG("job_market_manager::apply_for_the_job(): The unit:",eu->get_id()," is applying for the job:",job->descriptor->job_id,", needed workplaces:",amount_of_workplaces,", free workplaces:",job->amount_of_free_workplaces);
+		ELOG("job_market_manager::apply_for_the_job(): EU: ",eu->get_id()," is applying for the job:",job->descriptor->job_id,", needed workplaces:",amount_of_workplaces,", free workplaces:",job->amount_of_free_workplaces);
 		long uneployed = amount_of_workplaces;
 		if( job->amount_of_free_workplaces >= amount_of_workplaces ) //Are the workspaces enough?
 		{
@@ -1043,6 +1043,7 @@ namespace economics
 		//Then collect the money
 		currency_type collected_money = collect_money();
 		last_cycle_info.total_net_income = collected_money;
+		//Once a while the function will print a dump of the economic unit
 	}
 
 	const economic_variables* economy_manager::get_the_economic_variables( )

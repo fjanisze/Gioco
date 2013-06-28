@@ -2,6 +2,7 @@
 #define MAP_HPP
 
 #include "mytypes.hpp"
+#include "map_common.hpp"
 #include <map>
 #include <vector>
 #include <string>
@@ -9,6 +10,7 @@
 #include <algorithm>
 
 using namespace std;
+using namespace map_common;
 
 namespace game_objects
 {
@@ -18,18 +20,6 @@ namespace game_objects
 		obj_land = 0,
 		obj_building
 	}object_type;
-
-	struct object_descriptor
-	{
-		unsigned obj_id;
-
-		string name,
-		       description;
-
-		long price;
-
-		char symbol;
-	};
 
 	//Some standard objects
 	static const object_descriptor base_land = { 1, "Land" , "Piece of land, nothing more", 100, 'X' };
@@ -49,20 +39,6 @@ namespace game_map
 
 	static const mlong base_field_value = 1000;
 	static const char not_discovered_field_symbol = '?';
-
-	typedef enum field_state
-	{
-		not_owned = 0,
-		owned = 1,
-		not_explored = 2,  //It mean that the player has not discovered this field
-	}field_state;
-
-	struct field_coordinate 
-	{
-		field_coordinate(unsigned xp = 0, unsigned yp = 0) : x(xp), y(yp) {}
-		unsigned x,
-			 y;
-	};
 
 	//declaration for field_manager
 	class field_manager;

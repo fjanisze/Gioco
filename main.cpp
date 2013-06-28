@@ -6,6 +6,8 @@
 #include "game.hpp"
 #include <process.h>
 
+#include "buildings.hpp"
+
 
 void execution_thread_b(void*)
 {
@@ -30,6 +32,9 @@ void execution_thread_c(void*)
 int main()
 {
 	console_ui::user_interface ui;
+
+	//Read the building descriptor
+	buildings::building_manager buildings;
 
 	//This thread will run the event manager object.
 	_beginthread( &execution_thread_b, 0 , nullptr );

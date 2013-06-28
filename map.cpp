@@ -1,5 +1,4 @@
 #define LOGGING_LEVEL_1
-#define LOGGING_LEVEL_2
 
 #include "logging/logger.hpp"
 #include "map.hpp"
@@ -221,7 +220,7 @@ namespace game_map
 
 	field_manager* gameplay_map::add_obj_to_field(const field_coordinate& coord, const object_descriptor* obj)
 	{
-		LOG("gameplay_map::add_obj_to_field(): Parm: ", coord.x, ":", coord.y," -> ", obj->name.c_str());
+		ELOG("gameplay_map::add_obj_to_field(): Parm: ", coord.x, ":", coord.y," -> ", obj->name.c_str());
 		//Get map index
 		long index = calculate_index( coord );
 		if( index >= 0 )
@@ -294,7 +293,7 @@ namespace game_map
 				if( j < amount_of_trees_per_crop )
 				{
 					//More items have to be added
-					LOG("gameplay_map::generate_random_map(): Adding more trees near the crop.. " , amount_of_trees_per_crop - j , " remaining" );
+					ELOG("gameplay_map::generate_random_map(): Adding more trees near the crop.. " , amount_of_trees_per_crop - j , " remaining" );
 					while( j < amount_of_trees_per_crop  )
 					{
 						tmp_coord = find_closest_field_of_type( current_field , &terrain_grass );

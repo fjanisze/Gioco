@@ -1,0 +1,16 @@
+#
+# This file contain a set of building descriptor
+#
+
+@new_descriptor;
+	@type: APPARTMENT;
+	@name: "Bingo Appartment";
+	@description: "Small appartments for small wallets";
+	@construction_time: 15;
+
+	@units: 4;
+	@unit_capacity: 7 #so the total capacity is 28 for this building;
+	@unit_base_price: 70000;
+
+	@building_price: 250000 #Money needed to build this building;
+@end;

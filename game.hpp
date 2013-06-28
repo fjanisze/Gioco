@@ -1,6 +1,3 @@
-#define LOGGING_LEVEL_1
-#define LOGGING_LEVEL_2
-
 #ifndef GAME_HPP
 #define GAME_HPP
 

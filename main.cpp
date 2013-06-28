@@ -20,7 +20,7 @@ void execution_thread_c(void*)
 {
 	LOG("void execution_thread_c(): Is starting!");
 	do{
-		cout<<"Doing nothing..\n";
+		LOG("void execution_thread_c(): Doing nothing!!");
 		Sleep( 200 );
 	}while( 1 );
 	LOG("void execution_thread_c(): Is quitting!");
@@ -34,6 +34,8 @@ int main()
 	//This thread will run the event manager object.
 	_beginthread( &execution_thread_b, 0 , nullptr );
 
+	//Creating the game scenario
+	game_manager::game_manager::get_instance()->create_test_scenario_1();
 	
 	LOG("int main(): Starting the execution threads..");
 

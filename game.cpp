@@ -346,5 +346,20 @@ namespace game_manager
 	{
 		return &map;
 	}
+
+	//Create a test scenario
+	void game_manager::create_test_scenario_1()
+	{
+		LOG("game_manager::create_test_scenario_1(): Creating a test scenario");
+	
+		map.create_new_map( 50 );
+		map.generate_random_map();
+
+		//Create one city for 'Filip'
+		LOG("game_manager::create_test_scenario(): Creating a city in the map, Roma and Milano");
+		map.create_a_city_at_random_coord( "Roma" );
+		map.create_a_city_at_random_coord( "Milano" );
+		
+	}
 }
 

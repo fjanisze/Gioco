@@ -73,6 +73,7 @@ namespace game_manager
 		~game_manager();
 	public:
 		game_map::gameplay_map* get_the_game_map();
+		void create_test_scenario_1();
 	};
 };
 

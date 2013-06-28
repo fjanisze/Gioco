@@ -4,6 +4,11 @@
 #include "mytypes.hpp"
 #include <string>
 #include <fstream>
+#include <utility>
+#include <cassert>
+#include <vector>
+
+using namespace std;
 
 #define BUILDING_FILENAME "buildings.dat"
 
@@ -12,12 +17,17 @@ namespace buildings
 	typedef enum building_type_t
 	{
 		appartment,
-		office
+		office,
+		error
 	} building_type_t; 
+
+	extern const string building_types_str[];
 
 	//Include some common information about the building
 	struct building_descriptor_t
 	{
+		long obj_id;
+		
 		//Generic info
 		building_type_t type;
 
@@ -28,11 +38,32 @@ namespace buildings
 		mlong construction_time; //in game cycles
 
 		mlong price;
+
+		building_descriptor_t() = default;
 	};
 
 	struct appartment_descriptor_t
 	{
 		building_descriptor_t descriptor;
+
+		long units,
+		     unit_capacity;
+
+		mlong unit_price;
+
+		appartment_descriptor_t() = default;
+	};
+
+	//Needed to collect all the information during the instruction parsing
+	struct all_information_t
+	{
+		building_descriptor_t general;
+		long units,
+		     unit_capacity;
+
+		mlong unit_price;
+
+		all_information_t() = default;
 	};
 
 	//Allowed instruction in the building descriptor file
@@ -41,11 +72,24 @@ namespace buildings
 	//Handle the available buildings, reading them from the file ecc.
 	class building_manager
 	{
+		static long building_id;
+		std::vector< appartment_descriptor_t* > available_appartments;
+	private:
+		all_information_t* current_instruction;
+		building_type_t get_proper_type( const string& cmd );
+	private:
 		int read_building_file();
 		short continue_parsing( const std::string& line );
-		short get_the_instruction( size_t pos, const std::string& line );
+		std::pair< short, string > get_the_instruction( size_t pos, const std::string& line );
+		void remove_comments( string& line );
+		void remove_spaces( string& line );
+		bool check_if_current_instr_is_valid();
+		void finalize_instruction();
+		void add_new_appartment();
+		bool execute_instruction( std::pair< short, string >& instr );
 	public:
 		building_manager();
+		~building_manager();
 	};
 }
 

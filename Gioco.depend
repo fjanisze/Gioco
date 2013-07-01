@@ -1,0 +1,110 @@
+# depslib dependency file v1.0
+1372410260 source:d:\gioco\buildings.cpp
+	"logging/logger.hpp"
+	"buildings.hpp"
+
+1358956542 d:\gioco\logging\logger.hpp
+	"log.hpp"
+
+1360315221 d:\gioco\logging\log.hpp
+	<iostream>
+	<memory>
+	<string>
+	<fstream>
+	<stdexcept>
+	<ctime>
+	<sstream>
+	<mutex>
+
+1372409982 d:\gioco\buildings.hpp
+	"mytypes.hpp"
+	<string>
+	<fstream>
+	<utility>
+	<cassert>
+	<vector>
+
+1372383756 d:\gioco\mytypes.hpp
+
+1372390065 source:d:\gioco\cities.cpp
+
+1372389071 source:d:\gioco\city_map.cpp
+	"city_map.hpp"
+
+1372388983 d:\gioco\city_map.hpp
+	"map_common.hpp"
+	"mytypes.hpp"
+
+1372387210 d:\gioco\map_common.hpp
+	<string>
+
+1360059936 source:d:\gioco\events.cpp
+	"events.hpp"
+
+1360753001 d:\gioco\events.hpp
+	"logging/logger.hpp"
+	<ctime>
+	<mutex>
+	<list>
+
+1372390729 source:d:\gioco\game.cpp
+	"game.hpp"
+
+1372390729 d:\gioco\game.hpp
+	"logging/logger.hpp"
+	"mytypes.hpp"
+	"map.hpp"
+	"events.hpp"
+	<typeinfo>
+	<list>
+	<iostream>
+	<limits>
+	<process.h>
+	<vector>
+	<exception>
+	<stdlib.h>
+	<string>
+	<ctime>
+	<cmath>
+	<windows.h>
+	<cassert>
+	<memory>
+	<map>
+	<locale>
+	<atomic>
+
+1372387316 d:\gioco\map.hpp
+	"mytypes.hpp"
+	"map_common.hpp"
+	<map>
+	<vector>
+	<string>
+	<list>
+	<algorithm>
+
+1357663227 source:d:\gioco\logging\file.cpp
+	"file.hpp"
+
+1357652519 d:\gioco\logging\file.hpp
+	<iostream>
+	<thread>
+	<process.h>
+	"logger.hpp"
+
+1360318323 source:d:\gioco\logging\log.cpp
+	"log.hpp"
+	<cassert>
+
+1358956555 source:d:\gioco\logging\logger.cpp
+	"logger.hpp"
+
+1372396161 source:d:\gioco\main.cpp
+	"logging/logger.hpp"
+	"game.hpp"
+	<process.h>
+	"buildings.hpp"
+
+1372387250 source:d:\gioco\map.cpp
+	"logging/logger.hpp"
+	"map.hpp"
+

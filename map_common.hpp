@@ -2,6 +2,7 @@
 #define MAP_COMMON_HPP
 
 #include <string>
+#include <SFML/Graphics.hpp>
 
 namespace map_common
 {
@@ -12,7 +13,7 @@ namespace map_common
 		not_explored = 2,  //It mean that the player has not discovered this field
 	}field_state;
 
-	struct field_coordinate 
+	struct field_coordinate
 	{
 		field_coordinate(unsigned xp = 0, unsigned yp = 0) : x(xp), y(yp) {}
 		unsigned x,
@@ -29,6 +30,9 @@ namespace map_common
 		long price;
 
 		char symbol;
+
+		//Graphic related stuff
+		sf::Color color;
 	};
 }
 

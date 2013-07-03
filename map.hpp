@@ -25,11 +25,11 @@ namespace game_objects
 	}object_type;
 
 	//Some standard objects
-	static const object_descriptor base_land = { 1, "Land" , "Piece of land, nothing more", 100, 'X' };
-	static const object_descriptor terrain_grass = { 2, "Grass", "Fresh grass", 200, '.'};
-	static const object_descriptor terrain_forest = { 3, "Forest", "A lot of tree", 600 , 'F' };
-	static const object_descriptor terrain_dummy = { 4, "DUMMY", "A dummy terrain", 0 , '?' };
-	static const object_descriptor terrain_city = { 5, "City", "In this field a city was deployed", 0 , 'C' }; //The value of those fields depend on the items present in the city
+	static const object_descriptor base_land = { 1, "Land" , "Piece of land, nothing more", 100, 'X' , sf::Color::White };
+	static const object_descriptor terrain_grass = { 2, "Grass", "Fresh grass", 200, '.' , sf::Color( 150 , 250 , 120 ) };
+	static const object_descriptor terrain_forest = { 3, "Forest", "A lot of tree", 600 , 'F' , sf::Color( 34 , 90 , 28 ) };
+	static const object_descriptor terrain_dummy = { 4, "DUMMY", "A dummy terrain", 0 , '?' , sf::Color::Black };
+	static const object_descriptor terrain_city = { 5, "City", "In this field a city was deployed", 0 , 'C' , sf::Color( 190 , 0 , 10 ) }; //The value of those fields depend on the items present in the city
 	//Some specific objects
 
 	bool is_a_terrain_object(const object_descriptor& obj);
@@ -37,7 +37,6 @@ namespace game_objects
 
 namespace game_map
 {
-
 	using namespace game_objects;
 
 	static const mlong base_field_value = 1000;
@@ -138,7 +137,7 @@ namespace game_map
         ~game_map();
         bool configure_viewport( const map_viewport_settings_t& conf );
         void set_proper_vertex_position( sf::VertexArray* vertex , long& cur_x, long& cur_y , long size_x , long size_y );
-        void set_vertex_texture( sf::VertexArray* vertex );
+        void set_vertex_texture( field_graphics_t* field );
         long create_vertex_map();
         void destroy_vertex_map();
         std::vector< field_graphics_t* >* get_vertex_data();
@@ -150,6 +149,7 @@ namespace game_map
 	{
 		obj_list_t obj_list; //List of objects present on this field
 		char symbol; // graphical symbol for this field
+		object_descriptor* visible_obj_descriptor; //The one which is visible on the map, correspond to the 'symbol' for the console UI
 		object_descriptor* create_new_obj_descriptor();
 	public:
 		field_manager();
@@ -158,6 +158,7 @@ namespace game_map
 	public:
 		obj_list_t& get_obj_list();
 		char get_field_symbol();
+		object_descriptor* get_visible_object();
 	};
 }
 

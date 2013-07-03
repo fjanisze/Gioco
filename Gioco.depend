@@ -35,8 +35,9 @@
 	"map_common.hpp"
 	"mytypes.hpp"
 
-1372387210 d:\gioco\map_common.hpp
+1372832433 d:\gioco\map_common.hpp
 	<string>
+	<SFML/Graphics.hpp>
 
 1360059936 source:d:\gioco\events.cpp
 	"events.hpp"
@@ -73,7 +74,7 @@
 	<locale>
 	<atomic>
 
-1372825665 d:\gioco\map.hpp
+1372832881 d:\gioco\map.hpp
 	"mytypes.hpp"
 	"map_common.hpp"
 	<map>
@@ -442,7 +443,7 @@
 	"buildings.hpp"
 	"ui.hpp"
 
-1372825805 source:d:\gioco\map.cpp
+1372832707 source:d:\gioco\map.cpp
 	"logging/logger.hpp"
 	"map.hpp"
 
@@ -464,6 +465,6 @@
 	<OpenGL/gl.h>
 	<OpenGL/glu.h>
 
-1372825081 source:d:\gioco\ui.cpp
+1372825833 source:d:\gioco\ui.cpp
 	"ui.hpp"
 

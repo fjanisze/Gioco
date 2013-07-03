@@ -504,7 +504,7 @@ namespace game_map
                 field_graphics_t* field = new field_graphics_t( elem );
                 //Set the proper coordinate to the vertex quad.
                 set_proper_vertex_position( field->vertex , current_x_pos , current_y_pos , field_x_size , field_y_size );
-                set_vertex_texture( field->vertex );
+                set_vertex_texture( field );
                 g_map.push_back( field );
                 ++amount_of_vertex;
             }
@@ -556,10 +556,16 @@ namespace game_map
         cur_y = tmp_y;
 	}
 
-	void game_map::set_vertex_texture( sf::VertexArray* vertex )
+	void game_map::set_vertex_texture( field_graphics_t* field )
 	{
-	    (*vertex)[0].color = sf::Color::Blue;
-        (*vertex)[2].color = sf::Color::Blue;
+	    sf::VertexArray& vertex = *field->vertex;
+	    //Different color/texture depending on the field type
+	    map_common::object_descriptor* obj = field->field->manager->get_visible_object();
+
+        for( short i = 0 ; i < 4 ; i++  )
+        {
+            vertex[ i ].color = obj->color;
+        }
 	}
 
 	game_map::game_map()
@@ -595,6 +601,8 @@ namespace game_map
 		*od = base_land;
 		symbol = base_land.symbol;
 
+		visible_obj_descriptor = od;
+
 		obj_list.push_back( od );
 	}
 
@@ -628,6 +636,7 @@ namespace game_map
 			{
 				//ELOG("field_manager::add_object(): Setting new symbol for the field, symbol:'",obj_d->symbol,"' Name: ",obj_d->name );
 				symbol = obj_d->symbol; //new symbol for this field
+				visible_obj_descriptor = obj_d;
 				//Remove other terrain objects, only one terrain at once is allowed in a field
 				for( auto it = begin( obj_list ) ; it != end( obj_list ) ; it++ )
 				{
@@ -642,6 +651,12 @@ namespace game_map
 			//Add the object to the list
 			obj_list.push_back( obj_d );
 		}
+	}
+
+	//Return the descriptor of the 'visible' object
+	object_descriptor* field_manager::get_visible_object()
+	{
+	    return visible_obj_descriptor;
 	}
 
 	obj_list_t& field_manager::get_obj_list()

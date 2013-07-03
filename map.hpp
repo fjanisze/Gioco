@@ -85,6 +85,7 @@ namespace game_map
 		long num_of_fields;
 		void set_invalid_coord( field_coordinate& coord );
 		bool check_field_type_presence( const field_coordinate& coord,  const object_descriptor& expected_obj );
+		long put_forest_between_two_fields( long amount_of_trees_per_crop ,field_coordinate from , field_coordinate to );
 	public:
 		field_coordinate find_closest_field_of_type( const field_coordinate& origin, const object_descriptor* type );
 	public:

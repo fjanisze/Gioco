@@ -245,8 +245,8 @@ namespace game_map
 	void gameplay_map::generate_random_map()
 	{
 	    std::lock_guard< std::mutex > lock( map_mutex );
-		const double tree_factor = 0.5;
-		const short amount_of_crop = 100;
+		const double tree_factor = 0.32;
+		const short amount_of_crop = 200;
 		srand( time( nullptr ) );
 
 		long amount_of_tree = num_of_fields * tree_factor;
@@ -262,7 +262,8 @@ namespace game_map
 		field_coordinate current_field, next_field , tmp_coord;
 		long nearest_field,
 		     amount_of_trees_per_crop = amount_of_tree / ( amount_of_crop + 1 );
-		for( long i = 0 , j ; i < crop_coord.size() ; i++ )
+
+		for( long i = 0 , num_of_tree_inserted = 0 ; i < crop_coord.size() ; i++ )
 		{
 			current_field = crop_coord.back();
 			crop_coord.pop_back();
@@ -272,32 +273,14 @@ namespace game_map
 			if( nearest_field >= 0 )
 			{
 				//We found something, now populate the fields between those two points
-				for( j = 0 ; j < amount_of_trees_per_crop ; j++)
-				{
-					if( !are_coordinates_equal( current_field, crop_coord[ nearest_field ] ) )
-					{
-						next_field = path_find_next_field( current_field, crop_coord[ nearest_field ] );
-					}
-					else
-					{
-						break;
-					}
-
-					if( next_field.x < 0 )
-					{
-						//Path over
-						break;
-					}
-
-					add_obj_to_field( next_field , &terrain_forest );
-					current_field = next_field;
-				}
-				ELOG("gameplay_map::generate_random_map(): No more closest fields found, next_field.x < 0, amount of trees inserted ",j, " max amount of trees for this crop ",amount_of_trees_per_crop );
-				if( j < amount_of_trees_per_crop )
+                num_of_tree_inserted = put_forest_between_two_fields( amount_of_trees_per_crop , current_field , crop_coord[ nearest_field ] );
+				ELOG("gameplay_map::generate_random_map(): No more closest fields found, next_field.x < 0, amount of trees inserted ", num_of_tree_inserted , " max amount of trees for this crop ",amount_of_trees_per_crop );
+				//Check if more trees need to be added
+				if( num_of_tree_inserted < amount_of_trees_per_crop )
 				{
 					//More items have to be added
-					ELOG("gameplay_map::generate_random_map(): Adding more trees near the crop.. " , amount_of_trees_per_crop - j , " remaining" );
-					while( j < amount_of_trees_per_crop  )
+					ELOG("gameplay_map::generate_random_map(): Adding more trees near the crop.. " , amount_of_trees_per_crop - num_of_tree_inserted , " remaining" );
+					while( num_of_tree_inserted < amount_of_trees_per_crop  )
 					{
 						tmp_coord = find_closest_field_of_type( current_field , &terrain_grass );
 						if( are_coord_valid( tmp_coord ) )
@@ -305,7 +288,7 @@ namespace game_map
 							add_obj_to_field( tmp_coord, &terrain_forest );
 						}
 						else break;
-						++j;
+						++num_of_tree_inserted;
 					}
 				}
 			}
@@ -318,6 +301,34 @@ namespace game_map
 			//This guarantee that will be not used again as 'current_field'
 			crop_coord.insert( crop_coord.begin(),  current_field );
 		}
+	}
+
+	//Populate the fields between two points
+	long gameplay_map::put_forest_between_two_fields( long amount_of_trees_per_crop ,
+            field_coordinate from , field_coordinate to )
+	{
+	    long amount_of_new_tree = 0;
+	    field_coordinate current_field = from , next_field;
+        for( long j = 0 ; j < amount_of_trees_per_crop ; j++)
+        {
+            if( !are_coordinates_equal( current_field, to ) )
+            {
+                next_field = path_find_next_field( current_field, to);
+            }
+            else
+            {
+                break;
+            }
+            if( next_field.x < 0 )
+            {
+                //Path over
+                break;
+            }
+            add_obj_to_field( next_field , &terrain_forest );
+            current_field = next_field;
+            ++amount_of_new_tree;
+        }
+        return amount_of_new_tree;
 	}
 
 	bool gameplay_map::are_coord_valid( const field_coordinate& coord )

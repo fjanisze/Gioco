@@ -1,4 +1,5 @@
 #define LOGGING_LEVEL_1
+//#define LOGGING_LEVEL_2
 
 #include "logging/logger.hpp"
 #include "map.hpp"
@@ -8,7 +9,7 @@ namespace game_objects
 
 	bool is_a_terrain_object(const object_descriptor& obj)
 	{
-		if( obj.obj_id < 10 ) 
+		if( obj.obj_id < 10 )
 			return true;
 		return false;
 	}
@@ -180,17 +181,17 @@ namespace game_map
 		map_size = size;
 		num_of_fields = size * size;
 		long id = 0, x_pos = 0, y_pos = 0;
-		
+
 		for( long i = 0 ; i < size*size ; i++ )
 		{
 			mp_field = new map_field;
-			mp_field->manager = new field_manager; 
+			mp_field->manager = new field_manager;
 
 			mp_field->field_id = ++id;
 			mp_field->state = not_owned | not_explored;
 			mp_field->value = terrain_grass.price; //The grass will be the basic terrain
 
-			mp_field->manager->add_object( &terrain_grass ); 
+			mp_field->manager->add_object( &terrain_grass );
 
 			//setting coordinates
 			mp_field->coord.x = x_pos;
@@ -249,7 +250,7 @@ namespace game_map
 		long amount_of_tree = num_of_fields * tree_factor;
 		LOG("gameplay_map::generate_random_map(): Generating a random map, # of crop: ",amount_of_crop," amount of trees: ",amount_of_tree);
 		//Generate a random distrution of map coordinates
-		vector< field_coordinate > crop_coord; 
+		vector< field_coordinate > crop_coord;
 		for( short i = 0 ; i < amount_of_crop ; i++ )
 		{
 			crop_coord.push_back( field_coordinate( rand() % map_size, rand() % map_size ) );
@@ -262,7 +263,7 @@ namespace game_map
 		for( long i = 0 , j ; i < crop_coord.size() ; i++ )
 		{
 			current_field = crop_coord.back();
-			crop_coord.pop_back(); 
+			crop_coord.pop_back();
 			//Look for the nearest field, the idea is that the forest
 			//will grow connecting one crop field to another
 			nearest_field = first_closest_field( current_field, crop_coord );
@@ -412,7 +413,7 @@ namespace game_map
 
 	//The next function create a city field in a specific point of the map
 	field_manager* gameplay_map::create_a_city_at_random_coord( const string& name )
-	{ 
+	{
 		ELOG("gameplay_map::create_a_city_at_random_coord(): Creating \'", name  );
 		field_manager* field = nullptr;
 		//First of all, the proper object will be addeo
@@ -426,6 +427,116 @@ namespace game_map
 			LOG_ERR("gameplay_map::create_a_city_at_random_coord(): Unable to create the city!! Not found any valid random coordinate");
 		}
 		return field;
+	}
+
+    ////////////////////////////////////////////////////////////////////
+	//
+	//
+	//	Implementation for game_map
+	//
+	//
+	////////////////////////////////////////////////////////////////////
+
+    field_graphics_t::field_graphics_t( const map_field* m_field )
+    {
+        assert( m_field != nullptr );
+        //ELOG("field_graphics_t::field_graphics_t(): Field ID: ", m_field->field_id );
+        field = m_field;
+        //Create and empty vertex
+        vertex = new(nothrow) sf::VertexArray( sf::Quads , 4 );
+        assert( vertex != nullptr );
+    }
+
+    field_graphics_t::~field_graphics_t()
+    {
+        if( vertex )
+        {
+            delete vertex;
+        }
+    }
+
+    //Need to be called in order to configure properly the map
+    bool game_map::configure_viewport( const map_viewport_settings_t& conf )
+    try{
+        LOG("game_map::configure_viewport(): Width: ",conf.map_width, ", Height: ",conf.map_height );
+        //Make a local copy
+        settings = new map_viewport_settings_t;
+        *settings = conf;
+        return true;
+    }catch( std::exception& xa )
+    {
+        LOG_ERR("game_map::configure_viewport(): Exception catched, aborting ");
+        return false;
+    }
+
+	//This function loop through all the map fields and create the relative vertex, return the amount of vertex
+	long game_map::create_vertex_map()
+	{
+	    std::vector< map_field* >& map = get_fieldmap();
+	    LOG("game_map::create_vertex_map(): Creating the vertex obj for the whole map. Map size: ", map.size() );
+	    long amount_of_vertex = 0;
+	    //Prepare the needed calculation constraint
+	    long field_per_axis = std::sqrt( map.size() );
+	    assert( field_per_axis > 0 );
+	    long field_x_size = settings->map_width / field_per_axis;
+	    long field_y_size = settings->map_height / field_per_axis;
+	    long current_x_pos = 0,
+            current_y_pos = 0;
+
+        try{
+
+            for( auto& elem : map )
+            {
+                field_graphics_t* field = new field_graphics_t( elem );
+                //Create a single vertex
+                field->vertex = new sf::VertexArray( sf::Quads , 4 );
+                //Set the proper coordinate to the vertex quad.
+                set_proper_vertex_position( field->vertex , current_x_pos , current_y_pos , field_x_size , field_y_size );
+            }
+
+        }catch( std::exception& xa )
+        {
+            LOG_ERR("game_map::create_vertex_map(): Exception: ", xa.what(), ", need to abort the execution!");
+            amount_of_vertex = -1;
+        }
+
+	    return amount_of_vertex;
+	}
+
+	//Set the proper position for the vertex, cur_x and cur_y will be modified
+	void game_map::set_proper_vertex_position( sf::VertexArray* vertex , long& cur_x, long& cur_y ,
+                                                                long size_x , long size_y )
+	{
+	    //ELOG("game_map::set_proper_vertex_position(): cur_x: ", cur_x , ", cur_y: ", cur_y, ", size_x: ",size_x , ", size_y: ",size_y);
+	    long tmp_x = cur_x + size_x,
+            tmp_y = cur_y;
+        //Moving down of one fow?
+	    if( tmp_x >= settings->map_width )
+        {
+            tmp_x = 0;
+            tmp_y = cur_y + size_y;
+        }
+        //Set the position
+        (*vertex)[0].position = sf::Vector2f( tmp_x , tmp_y );
+        (*vertex)[1].position = sf::Vector2f( tmp_x + size_x, tmp_y );
+        (*vertex)[2].position = sf::Vector2f( tmp_x + size_x, tmp_y + size_y );
+        (*vertex)[3].position = sf::Vector2f( tmp_x , tmp_y + size_y );
+        //update the current position
+        cur_x = tmp_x;
+        cur_y = tmp_y;
+	}
+
+	game_map::game_map()
+	{
+	    settings = nullptr;
+	}
+
+	game_map::~game_map()
+	{
+	    if( settings )
+        {
+            delete settings;
+        }
 	}
 
 	////////////////////////////////////////////////////////////////////
@@ -443,7 +554,7 @@ namespace game_map
 		*od = base_land;
 		symbol = base_land.symbol;
 
-		obj_list.push_back( od );	
+		obj_list.push_back( od );
 	}
 
 	field_manager::~field_manager()
@@ -465,7 +576,7 @@ namespace game_map
 	}
 
 	bool field_manager::add_object(const object_descriptor* obj)
-	{	
+	{
 		if( obj )
 		{
 			object_descriptor* obj_d = create_new_obj_descriptor();
@@ -499,7 +610,7 @@ namespace game_map
 
 	char field_manager::get_field_symbol()
 	{
-		return symbol;	
+		return symbol;
 	}
 
 }

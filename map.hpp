@@ -8,6 +8,8 @@
 #include <string>
 #include <list>
 #include <algorithm>
+#include <SFML/Graphics.hpp>
+#include <cassert>
 
 using namespace std;
 using namespace map_common;
@@ -50,7 +52,7 @@ namespace game_map
 	{
 		long field_id;
 		field_coordinate coord;
-		short state; 
+		short state;
 		int owner;
 		long value;
 		field_manager* manager;
@@ -81,7 +83,7 @@ namespace game_map
 		void set_invalid_coord( field_coordinate& coord );
 		bool check_field_type_presence( const field_coordinate& coord,  const object_descriptor& expected_obj );
 	public:
-		field_coordinate find_closest_field_of_type( const field_coordinate& origin, const object_descriptor* type ); 
+		field_coordinate find_closest_field_of_type( const field_coordinate& origin, const object_descriptor* type );
 	public:
 		void create_new_map( long size );
 		gameplay_map();
@@ -89,7 +91,7 @@ namespace game_map
 		~gameplay_map();
 		field_manager* add_obj_to_field(const field_coordinate& coord, const object_descriptor* obj);
 		void generate_random_map();
-		auto get_fieldmap() -> decltype( map ) { return map; }
+		vector< map_field* >& get_fieldmap() { return map; }
 		long get_map_size() { return map_size; };
 		long calculate_index( const field_coordinate& coord);
 		bool are_coord_valid( const field_coordinate& coord);
@@ -97,6 +99,38 @@ namespace game_map
 	public:
 		void make_all_map_explored();
 		field_manager* create_a_city_at_random_coord( const string& name );
+	};
+
+	//This is the structure which needs to be used to configure the graphic apparence for the map
+	//On the base of those values the proper vertex are created.
+	struct map_viewport_settings_t
+	{
+	    //Those values are in pixels
+	    long map_width,
+            map_height;
+	};
+
+	//Object reppresenting the graphical reppresentation of the field
+	struct field_graphics_t
+	{
+        const map_field* field; //Relative field
+	    sf::VertexArray* vertex; //For the graphical rappresentation
+
+	    field_graphics_t( const map_field* m_field );
+	    ~field_graphics_t();
+	};
+
+	//This is the higher abstraction level for the game map, it handle vertex and so on
+	class game_map : public gameplay_map
+	{
+	    map_viewport_settings_t* settings;
+	    std::vector< field_graphics_t > g_map; //g_ stand for graphic
+    public:
+        game_map();
+        ~game_map();
+        bool configure_viewport( const map_viewport_settings_t& conf );
+        void set_proper_vertex_position( sf::VertexArray* vertex , long& cur_x, long& cur_y , long size_x , long size_y );
+        long create_vertex_map();
 	};
 
 	//field_manager is responsible to managing the objects that lead on a field

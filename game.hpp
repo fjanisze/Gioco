@@ -63,13 +63,13 @@ namespace game_manager
 	class game_manager
 	{
 		static game_manager* instance;
-		game_map::gameplay_map   map; //Here we have the game map
+		game_map::game_map   map; //Here we have the game map
 	public:
 		static game_manager* get_instance();
 		game_manager();
 		~game_manager();
 	public:
-		game_map::gameplay_map* get_the_game_map();
+		game_map::game_map* get_the_game_map();
 		void create_test_scenario_1();
 	};
 };
@@ -77,11 +77,11 @@ namespace game_manager
 
 namespace console_ui
 {
-	
-#define WHITE_INTENSE_COLOR  FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY 
+
+#define WHITE_INTENSE_COLOR  FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY
 #define FOREGROUND_WHITE FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE
 
-	struct colors 
+	struct colors
 	{
 		long color;
 		colors( long possible_color ) : color( possible_color )
@@ -95,9 +95,9 @@ namespace console_ui
 		long choice;
 		choice_range( mlong from, mlong to ) : down_limit( from ) , up_limit( to )
 		{	}
-	
+
 	};
-	
+
 
 	static colors color_fore_white( FOREGROUND_WHITE );
 	static colors color_fore_red( FOREGROUND_RED );
@@ -156,7 +156,7 @@ namespace console_ui
 	};
 
 	//List of possible commands
-	static command command_list[] = 
+	static command command_list[] =
 	{
 		{ "help" , &user_interface::help },
 		{ "quit" , &user_interface::quit  },

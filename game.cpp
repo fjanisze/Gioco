@@ -22,7 +22,7 @@ namespace player_info
 	{
 		return player;
 	}
-	
+
 	std::string player_manager::get_player_name()
 	{
 		return player->name;
@@ -158,7 +158,7 @@ namespace console_ui
 		return std::move( cmd );
 	}
 
-	user_interface::user_interface() //: game( game_manager_ptr )  
+	user_interface::user_interface() //: game( game_manager_ptr )
 	{
 	}
 
@@ -186,7 +186,7 @@ namespace console_ui
 						cout<<color_fore_red;
 						break;
 					case '.':
-					
+
 					default:
 						cout<<color_fore_white;
 						break;
@@ -343,7 +343,7 @@ namespace game_manager
 		LOG("game_manager::~game_manager(): Game manager destroyed");
 	}
 
-	game_map::gameplay_map* game_manager::get_the_game_map()
+	game_map::game_map* game_manager::get_the_game_map()
 	{
 		return &map;
 	}
@@ -352,15 +352,24 @@ namespace game_manager
 	void game_manager::create_test_scenario_1()
 	{
 		LOG("game_manager::create_test_scenario_1(): Creating a test scenario");
-	
+
+        //Generate the random map.
 		map.create_new_map( 50 );
 		map.generate_random_map();
+
+        //Create the viewport
+		game_map::map_viewport_settings_t configuration;
+		configuration.map_height = 600;
+		configuration.map_width = 600;
+		map.configure_viewport( configuration );
+		//Populate the vertex map
+		map.create_vertex_map();
 
 		//Create one city for 'Filip'
 		LOG("game_manager::create_test_scenario(): Creating a city in the map, Roma and Milano");
 		map.create_a_city_at_random_coord( "Roma" );
 		map.create_a_city_at_random_coord( "Milano" );
-		
+
 	}
 }
 

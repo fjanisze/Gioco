@@ -14,7 +14,13 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0" />
+					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/include" />
 				</Compiler>
+				<Linker>
+					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/bin" />
+					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/lib" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/Gioco" prefix_auto="1" extension_auto="1" />
@@ -23,18 +29,63 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0" />
+					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/bin" />
+					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/lib" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
+			<Add option="-DSFML_STATIC" />
+			<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0" />
+			<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/include" />
 		</Compiler>
+		<Linker>
+			<Add library="sfml-graphics" />
+			<Add library="sfml-window" />
+			<Add library="sfml-system" />
+			<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/bin" />
+			<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/lib" />
+		</Linker>
+		<Unit filename="buildings.cpp" />
+		<Unit filename="buildings.hpp" />
+		<Unit filename="cities.cpp" />
+		<Unit filename="cities.hpp" />
+		<Unit filename="city_map.cpp" />
+		<Unit filename="city_map.hpp" />
+		<Unit filename="events.cpp" />
+		<Unit filename="events.hpp" />
+		<Unit filename="game.cpp" />
+		<Unit filename="game.hpp" />
+		<Unit filename="logging/file.cpp" />
+		<Unit filename="logging/file.hpp" />
+		<Unit filename="logging/log.cpp" />
+		<Unit filename="logging/log.hpp" />
+		<Unit filename="logging/logger.cpp" />
+		<Unit filename="logging/logger.hpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="map.cpp" />
+		<Unit filename="map.hpp" />
+		<Unit filename="map_common.hpp" />
+		<Unit filename="mytypes.hpp" />
+		<Unit filename="ui.cpp" />
+		<Unit filename="ui.hpp" />
 		<Extensions>
+			<DoxyBlocks>
+				<comment_style block="0" line="0" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
 			<code_completion />
 			<envvars />
 			<debugger />

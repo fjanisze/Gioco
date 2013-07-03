@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <SFML/Graphics.hpp>
 #include <cassert>
+#include <mutex>
 
 using namespace std;
 using namespace map_common;
@@ -77,6 +78,9 @@ namespace game_map
 
 	class gameplay_map : public map_calculation
 	{
+    protected:
+	    std::mutex map_mutex;
+    private:
 		vector< map_field* > map;
 		long map_size;
 		long num_of_fields;
@@ -120,17 +124,24 @@ namespace game_map
 	    ~field_graphics_t();
 	};
 
+	typedef std::vector< field_graphics_t* > field_graphic_vector_t;
+
 	//This is the higher abstraction level for the game map, it handle vertex and so on
 	class game_map : public gameplay_map
 	{
+	    static game_map* instance;
 	    map_viewport_settings_t* settings;
-	    std::vector< field_graphics_t > g_map; //g_ stand for graphic
+	    std::vector< field_graphics_t* > g_map; //g_ stand for graphic
     public:
+        static game_map* get_instance();
         game_map();
         ~game_map();
         bool configure_viewport( const map_viewport_settings_t& conf );
         void set_proper_vertex_position( sf::VertexArray* vertex , long& cur_x, long& cur_y , long size_x , long size_y );
+        void set_vertex_texture( sf::VertexArray* vertex );
         long create_vertex_map();
+        void destroy_vertex_map();
+        std::vector< field_graphics_t* >* get_vertex_data();
 	};
 
 	//field_manager is responsible to managing the objects that lead on a field

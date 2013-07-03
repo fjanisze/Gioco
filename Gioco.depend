@@ -47,10 +47,10 @@
 	<mutex>
 	<list>
 
-1372755998 source:d:\gioco\game.cpp
+1372822826 source:d:\gioco\game.cpp
 	"game.hpp"
 
-1372747589 d:\gioco\game.hpp
+1372822790 d:\gioco\game.hpp
 	"logging/logger.hpp"
 	"mytypes.hpp"
 	"map.hpp"
@@ -73,7 +73,7 @@
 	<locale>
 	<atomic>
 
-1372755257 d:\gioco\map.hpp
+1372825665 d:\gioco\map.hpp
 	"mytypes.hpp"
 	"map_common.hpp"
 	<map>
@@ -83,6 +83,7 @@
 	<algorithm>
 	<SFML/Graphics.hpp>
 	<cassert>
+	<mutex>
 
 1365233432 d:\sfml\sfml-2.0-windows-gcc-4.7-mingw-32bits\sfml-2.0\include\sfml\graphics.hpp
 	<SFML/Window.hpp>
@@ -434,23 +435,24 @@
 1358956555 source:d:\gioco\logging\logger.cpp
 	"logger.hpp"
 
-1372820449 source:d:\gioco\main.cpp
+1372822720 source:d:\gioco\main.cpp
 	"logging/logger.hpp"
 	"game.hpp"
 	<process.h>
 	"buildings.hpp"
 	"ui.hpp"
 
-1372811599 source:d:\gioco\map.cpp
+1372825805 source:d:\gioco\map.cpp
 	"logging/logger.hpp"
 	"map.hpp"
 
-1372820414 d:\gioco\ui.hpp
+1372823109 d:\gioco\ui.hpp
 	"logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
 	<SFML/Graphics/RenderWindow.hpp>
 	<cassert>
+	"map.hpp"
 
 1365233432 d:\sfml\sfml-2.0-windows-gcc-4.7-mingw-32bits\sfml-2.0\include\sfml\opengl.hpp
 	<SFML/Config.hpp>
@@ -462,6 +464,6 @@
 	<OpenGL/gl.h>
 	<OpenGL/glu.h>
 
-1372820394 source:d:\gioco\ui.cpp
+1372825081 source:d:\gioco\ui.cpp
 	"ui.hpp"
 

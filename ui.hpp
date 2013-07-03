@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <cassert>
+#include "map.hpp"
 
 namespace graphic_ui
 {
@@ -15,6 +16,8 @@ namespace graphic_ui
         long window_width,
             window_height;
 
+        game_map::map_viewport_settings_t viewport_setting;
+
         game_window_config_t();
     };
 
@@ -22,6 +25,7 @@ namespace graphic_ui
     class game_ui
     {
         static game_ui* instance;
+        game_map::game_map* map;
     private:
         game_window_config_t ui_config;
         bool is_the_window_running;
@@ -29,6 +33,7 @@ namespace graphic_ui
         sf::RenderWindow& create_render_window();
         void handle_event( const sf::Event& event );
         void screen_refresh();
+        void draw_gameplay_map();
     public:
         static game_ui* get_instance();
         void main_loop();

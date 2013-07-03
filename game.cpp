@@ -345,7 +345,7 @@ namespace game_manager
 
 	game_map::game_map* game_manager::get_the_game_map()
 	{
-		return &map;
+		return game_map::game_map::get_instance();
 	}
 
 	//Create a test scenario
@@ -354,21 +354,13 @@ namespace game_manager
 		LOG("game_manager::create_test_scenario_1(): Creating a test scenario");
 
         //Generate the random map.
-		map.create_new_map( 50 );
-		map.generate_random_map();
-
-        //Create the viewport
-		game_map::map_viewport_settings_t configuration;
-		configuration.map_height = 600;
-		configuration.map_width = 600;
-		map.configure_viewport( configuration );
-		//Populate the vertex map
-		map.create_vertex_map();
+		get_the_game_map()->create_new_map( 50 );
+		get_the_game_map()->generate_random_map();
 
 		//Create one city for 'Filip'
 		LOG("game_manager::create_test_scenario(): Creating a city in the map, Roma and Milano");
-		map.create_a_city_at_random_coord( "Roma" );
-		map.create_a_city_at_random_coord( "Milano" );
+		get_the_game_map()->create_a_city_at_random_coord( "Roma" );
+		get_the_game_map()->create_a_city_at_random_coord( "Milano" );
 
 	}
 }

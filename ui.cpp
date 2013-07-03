@@ -21,6 +21,9 @@ namespace graphic_ui
         //Window size in pixels.
         window_height = 600;
         window_width = 800;
+        //Game viewport
+        viewport_setting.map_width = 600;
+        viewport_setting.map_height = 600;
     }
 
     ////////////////////////////////////////////////////////////////////
@@ -49,6 +52,11 @@ namespace graphic_ui
         //Create the proper instance, check if this is the only one
         assert( instance == nullptr );
         instance = this;
+        //Create the viewport
+		map = game_map::game_map::get_instance();
+		map->configure_viewport( ui_config.viewport_setting );
+		//Populate the vertex map
+		map->create_vertex_map();
         //Create the window
         create_render_window();
     }
@@ -101,6 +109,8 @@ namespace graphic_ui
 
             screen_refresh();
         }
+        //We are quitting, let's clean
+        map->destroy_vertex_map();
     }
 
     //Handle the events from the window
@@ -113,14 +123,28 @@ namespace graphic_ui
             LOG("game_ui::handle_event(): Closing the window, was requested to quit");
             break;
         default:
+            break;
         };
     }
 
-    //Redraw the convas
+    //Redraw the graphic elements.
     void game_ui::screen_refresh()
     {
-        window.clear();
+        window.clear( sf::Color::White );
+
+        draw_gameplay_map();
+
         window.display();
+    }
+
+    //Draw the gameplay map
+    void game_ui::draw_gameplay_map()
+    {
+        game_map::field_graphic_vector_t* vertex = map->get_vertex_data();
+        for( auto &elem : *vertex )
+        {
+            window.draw( *elem->vertex );
+        }
     }
 }
 

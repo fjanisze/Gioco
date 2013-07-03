@@ -175,6 +175,7 @@ namespace game_map
 
 	void gameplay_map::create_new_map( long size )
 	try{
+	    std::lock_guard< std::mutex > lock( map_mutex );
 		LOG( "gameplay_map::create_new_map(): Creating new map, size=", size );
 		map.reserve( size * size );
 		map_field* mp_field;
@@ -243,6 +244,7 @@ namespace game_map
 
 	void gameplay_map::generate_random_map()
 	{
+	    std::lock_guard< std::mutex > lock( map_mutex );
 		const double tree_factor = 0.5;
 		const short amount_of_crop = 100;
 		srand( time( nullptr ) );
@@ -437,6 +439,7 @@ namespace game_map
 	//
 	////////////////////////////////////////////////////////////////////
 
+
     field_graphics_t::field_graphics_t( const map_field* m_field )
     {
         assert( m_field != nullptr );
@@ -452,6 +455,16 @@ namespace game_map
         if( vertex )
         {
             delete vertex;
+        }
+    }
+
+    game_map* game_map::instance = nullptr;
+
+    game_map* game_map::get_instance()
+    {
+        if( instance == nullptr )
+        {
+            instance = new game_map;
         }
     }
 
@@ -472,6 +485,7 @@ namespace game_map
 	//This function loop through all the map fields and create the relative vertex, return the amount of vertex
 	long game_map::create_vertex_map()
 	{
+	    std::lock_guard< std::mutex > lock( map_mutex );
 	    std::vector< map_field* >& map = get_fieldmap();
 	    LOG("game_map::create_vertex_map(): Creating the vertex obj for the whole map. Map size: ", map.size() );
 	    long amount_of_vertex = 0;
@@ -488,10 +502,11 @@ namespace game_map
             for( auto& elem : map )
             {
                 field_graphics_t* field = new field_graphics_t( elem );
-                //Create a single vertex
-                field->vertex = new sf::VertexArray( sf::Quads , 4 );
                 //Set the proper coordinate to the vertex quad.
                 set_proper_vertex_position( field->vertex , current_x_pos , current_y_pos , field_x_size , field_y_size );
+                set_vertex_texture( field->vertex );
+                g_map.push_back( field );
+                ++amount_of_vertex;
             }
 
         }catch( std::exception& xa )
@@ -503,27 +518,48 @@ namespace game_map
 	    return amount_of_vertex;
 	}
 
+	//Clear the used resources
+    void game_map::destroy_vertex_map()
+    {
+        LOG("game_map::destroy_vertex_map(): Cleaning.." );
+        for( auto& elem : g_map )
+        {
+            if( elem->vertex != nullptr )
+            {
+                delete elem->vertex;
+                elem->vertex = nullptr;
+            }
+        }
+    }
+
 	//Set the proper position for the vertex, cur_x and cur_y will be modified
 	void game_map::set_proper_vertex_position( sf::VertexArray* vertex , long& cur_x, long& cur_y ,
                                                                 long size_x , long size_y )
 	{
 	    //ELOG("game_map::set_proper_vertex_position(): cur_x: ", cur_x , ", cur_y: ", cur_y, ", size_x: ",size_x , ", size_y: ",size_y);
-	    long tmp_x = cur_x + size_x,
+        long tmp_x = cur_x,
             tmp_y = cur_y;
-        //Moving down of one fow?
-	    if( tmp_x >= settings->map_width )
-        {
-            tmp_x = 0;
-            tmp_y = cur_y + size_y;
-        }
         //Set the position
         (*vertex)[0].position = sf::Vector2f( tmp_x , tmp_y );
         (*vertex)[1].position = sf::Vector2f( tmp_x + size_x, tmp_y );
         (*vertex)[2].position = sf::Vector2f( tmp_x + size_x, tmp_y + size_y );
         (*vertex)[3].position = sf::Vector2f( tmp_x , tmp_y + size_y );
         //update the current position
+        tmp_x += size_x;
+        //Moving down of one fow?
+	    if( tmp_x >= settings->map_width )
+        {
+            tmp_x = 0;
+            tmp_y = cur_y + size_y;
+        }
         cur_x = tmp_x;
         cur_y = tmp_y;
+	}
+
+	void game_map::set_vertex_texture( sf::VertexArray* vertex )
+	{
+	    (*vertex)[0].color = sf::Color::Blue;
+        (*vertex)[2].color = sf::Color::Blue;
 	}
 
 	game_map::game_map()
@@ -537,6 +573,11 @@ namespace game_map
         {
             delete settings;
         }
+	}
+
+	std::vector< field_graphics_t* >* game_map::get_vertex_data()
+	{
+	    return &g_map;
 	}
 
 	////////////////////////////////////////////////////////////////////

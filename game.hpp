@@ -63,7 +63,6 @@ namespace game_manager
 	class game_manager
 	{
 		static game_manager* instance;
-		game_map::game_map   map; //Here we have the game map
 	public:
 		static game_manager* get_instance();
 		game_manager();

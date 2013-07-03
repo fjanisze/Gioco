@@ -28,9 +28,6 @@ void graphical_ui_thread(void*)
 
 int main()
 {
-//	console_ui::user_interface ui;
-    graphic_ui::game_ui ui;
-
 	//Read the building descriptor
 	buildings::building_manager buildings;
 
@@ -39,6 +36,9 @@ int main()
 
 	//Creating the game scenario
 	game_manager::game_manager::get_instance()->create_test_scenario_1();
+
+	//	console_ui::user_interface ui;
+    graphic_ui::game_ui ui;
 
 	LOG("int main(): Starting the execution threads..");
 

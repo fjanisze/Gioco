@@ -9,7 +9,7 @@ namespace graphic_ui
     ////////////////////////////////////////////////////////////////////
 	//
 	//
-	//	Implementation for game_window_config_t
+	//	Implementation for game_window_config_t and the console manager
 	//
 	//
 	////////////////////////////////////////////////////////////////////
@@ -19,11 +19,91 @@ namespace graphic_ui
         //Default setting
         full_screen = false;
         //Window size in pixels.
-        window_height = 600;
+        window_height = 630;
         window_width = 800;
         //Game viewport
         viewport_setting.map_width = 600;
         viewport_setting.map_height = 600;
+    }
+
+    console_wnd_t::console_wnd_t( long x_off , long y_off , long wnd_width, long wnd_height )
+    {
+       create( x_off, y_off , wnd_width , wnd_height );
+    }
+
+    console_wnd_t::console_wnd_t()
+    {
+    }
+
+    void console_wnd_t::create( long x_off , long y_off , long wnd_width, long wnd_height )
+    {
+        LOG("console_wnd_t::create(): Creating a new console object: ",x_off,",",y_off,",",wnd_width,",",wnd_height);
+        x_offset = x_off;
+        y_offset = y_off;
+        width = wnd_width;
+        height = wnd_height;
+        //set as quad
+        vertex = sf::VertexArray( sf::Quads , 4 );
+        //Create the vertex position
+        vertex[ 0 ].position = sf::Vector2f( x_off, y_off );
+        vertex[ 1 ].position = sf::Vector2f( x_off + width , y_off );
+        vertex[ 2 ].position = sf::Vector2f( x_off + width , y_off + height );
+        vertex[ 3 ].position = sf::Vector2f( x_off , y_off + height );
+        //Set a default color
+        set_color( sf::Color( 10 , 30 , 150 ) );
+        //Configure properly the text entity
+        text.setPosition( vertex[ 0 ].position );
+        text.setCharacterSize( 12 );
+    }
+
+    void console_wnd_t::set_color( sf::Color color )
+    {
+        for( short i = 0 ; i < 4 ; i++  )
+        {
+            vertex[ i ].color = color;
+        }
+    }
+
+    console_manager::console_manager( )
+    {
+    }
+
+    //Initializate the console window
+    short console_manager::init_consoles( const game_window_config_t& window_config )
+    {
+        //The initialization is done on the base of the window information.
+        long console_height  = window_config.window_height - window_config.viewport_setting.map_height ,
+            console_width = window_config.window_width;
+        //Info Console
+        info_console.create( 0 , window_config.viewport_setting.map_height , console_width , console_height );
+        info_console.set_color( sf::Color( 10 , 20 , 30 ) );
+        //Main console
+        console_height = window_config.window_height - console_height;
+        console_width = window_config.window_width - window_config.viewport_setting.map_width;
+        main_console.create( window_config.viewport_setting.map_width , 0 , console_width , console_height );
+        main_console.set_color( sf::Color( 20 , 30 , 40 ) );
+
+        //Copy the font
+        font = &window_config.font;
+        main_console.text.setFont( * font );
+        info_console.text.setFont( * font );
+
+    }
+
+    //Draw the console in the proper context
+    void console_manager::draw_console( sf::RenderWindow& window )
+    {
+        window.draw( main_console.vertex );
+        window.draw( info_console.vertex );
+        //text
+        window.draw( main_console.text );
+        window.draw( info_console.text );
+    }
+
+    //Write a message in the info console
+    void console_manager::write_info( const std::string& msg )
+    {
+        info_console.text.setString( msg );
     }
 
     ////////////////////////////////////////////////////////////////////
@@ -55,14 +135,29 @@ namespace graphic_ui
         //Create the viewport
 		map = game_map::game_map::get_instance();
 		map->configure_viewport( ui_config.viewport_setting );
+
+		//font
+		load_and_set_font();
+
 		//Populate the vertex map
 		map->create_vertex_map();
+		//Init the console
+		init_consoles( ui_config );
         //Create the window
         create_render_window();
     }
 
     game_ui::~game_ui()
     {
+    }
+
+    //Set the proper font.
+    void game_ui::load_and_set_font()
+    {
+        if( !ui_config.font.loadFromFile("consola.ttf") )
+        {
+            LOG_WARN("game_ui::load_and_set_font(): Unable to load the selected font arial.ttf");
+        }
     }
 
     //Configure and create the appropriate window
@@ -122,17 +217,58 @@ namespace graphic_ui
             is_the_window_running = false;
             LOG("game_ui::handle_event(): Closing the window, was requested to quit");
             break;
+        case sf::Event::MouseMoved:
+            //The mouse is moving over the game window.
+            mouse_moving_event( event );
+            break;
         default:
             break;
         };
     }
 
+    //Manage the mouse moving event
+    void game_ui::mouse_moving_event( const sf::Event& event )
+    {
+        static std::stringstream message;
+        //Check if the mouse is moving in the gameplay area or over some menu ecc..
+        if( is_over_the_game_map( event ) )
+        {
+            game_map::field_graphics_t* field = map->get_field_at_pos( event.mouseMove.x , event.mouseMove.y );
+
+            if( field != nullptr )
+            {;
+                //Chage the message
+                message.str("");//Clear
+                message << "Field name: "<<field->descriptor->name <<", ID: "<<field->field->field_id<<"\nMouse coord: "<<event.mouseMove.x<<","<<event.mouseMove.y<<std::endl;
+                write_info( message.str() );
+            }
+            else
+            {
+                write_info( "Unknow position" );
+            }
+        }
+    }
+
+    //This function returns true if the user is moving over the playable area
+    bool game_ui::is_over_the_game_map( const sf::Event& event )
+    {
+        if( event.mouseMove.x >= 0 && event.mouseMove.x <= ui_config.viewport_setting.map_width )
+        {
+            if( event.mouseMove.y >=0 && event.mouseMove.y <= ui_config.viewport_setting.map_width )
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     //Redraw the graphic elements.
     void game_ui::screen_refresh()
     {
-        window.clear( sf::Color::White );
+        window.clear( sf::Color::Black );
 
         draw_gameplay_map();
+        draw_console( window );
 
         window.display();
     }

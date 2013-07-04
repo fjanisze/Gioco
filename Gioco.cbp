@@ -14,10 +14,14 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add option="-DSFML_STATIC" />
 					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0" />
 					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/include" />
 				</Compiler>
 				<Linker>
+					<Add library="sfml-graphics" />
+					<Add library="sfml-window" />
+					<Add library="sfml-system" />
 					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/bin" />
 					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/lib" />
 				</Linker>
@@ -29,11 +33,15 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-DSFML_STATIC" />
 					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0" />
 					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add library="sfml-graphics" />
+					<Add library="sfml-window" />
+					<Add library="sfml-system" />
 					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/bin" />
 					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/lib" />
 				</Linker>

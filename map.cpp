@@ -456,6 +456,8 @@ namespace game_map
         assert( m_field != nullptr );
         //ELOG("field_graphics_t::field_graphics_t(): Field ID: ", m_field->field_id );
         field = m_field;
+        manager = m_field->manager;
+        descriptor = m_field->manager->get_visible_object();
         //Create and empty vertex
         vertex = new(nothrow) sf::VertexArray( sf::Quads , 4 );
         assert( vertex != nullptr );
@@ -467,6 +469,22 @@ namespace game_map
         {
             delete vertex;
         }
+    }
+
+    //Return true is the provided coordinate belong to this field
+    inline
+    bool field_graphics_t::is_within_the_field( long x, long y )
+    {
+        //Check the x coord
+        if( x > (*vertex)[ 0 ].position.x && x <= (*vertex)[ 1 ].position.x )
+        {
+            //Check the y coord
+            if( y > (*vertex)[ 0 ].position.y && y <= (*vertex)[ 2 ].position.y )
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     game_map* game_map::instance = nullptr;
@@ -595,6 +613,29 @@ namespace game_map
 	std::vector< field_graphics_t* >* game_map::get_vertex_data()
 	{
 	    return &g_map;
+	}
+
+	//Return the field object which belong to the provided coordinates
+	field_graphics_t* game_map::get_field_at_pos( long x , long y )
+	{
+	    static field_graphics_t* field = nullptr;
+	    if( field != nullptr )
+        {
+            if( field->is_within_the_field( x , y ) )
+            {
+                return field;
+            }
+            field = nullptr;
+        }
+        for( auto cur_field : g_map )
+        {
+            if( cur_field->is_within_the_field( x , y ) )
+            {
+                field = cur_field;
+                break;
+            }
+        }
+        return field;
 	}
 
 	////////////////////////////////////////////////////////////////////

@@ -117,11 +117,16 @@ namespace game_map
 	//Object reppresenting the graphical reppresentation of the field
 	struct field_graphics_t
 	{
+	    const map_common::object_descriptor* descriptor;
         const map_field* field; //Relative field
+        const field_manager* manager; //Link to the manager for this field
+        //Vertex
 	    sf::VertexArray* vertex; //For the graphical rappresentation
 
 	    field_graphics_t( const map_field* m_field );
 	    ~field_graphics_t();
+
+	    bool is_within_the_field( long x, long y);
 	};
 
 	typedef std::vector< field_graphics_t* > field_graphic_vector_t;
@@ -142,6 +147,7 @@ namespace game_map
         long create_vertex_map();
         void destroy_vertex_map();
         std::vector< field_graphics_t* >* get_vertex_data();
+        field_graphics_t* get_field_at_pos( long x , long y );
 	};
 
 	//field_manager is responsible to managing the objects that lead on a field

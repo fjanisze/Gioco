@@ -45,7 +45,8 @@ int main()
 
 	//_beginthread( &graphical_ui_thread, 0 , nullptr );
 
- //   ui.main_loop();
+
+   ui.main_loop();
 
 //	delete game_manager::game_manager::get_instance();
 	return 0;

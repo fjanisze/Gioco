@@ -89,30 +89,37 @@ namespace citymap_field_container
         cur_node->adjacent_node[ ad_node::right ] = node;
         //Now set the bottom/top pointers
         long row_size = std::sqrt( size );
-        for( long node_i = 0 ; node_i < row_size ; node_i++ )
-        {
-            set_topbottom_link( all_nodes[ node_i ] , row_size );
-        }
+        set_topbottom_link( first_node , row_size );
     }
 
     void citymap_container::set_topbottom_link( node_t* node , long size )
     {
+        node_t* last_node = nullptr;
         if( node->adjacent_node[ ad_node::bottom ] == nullptr )
         {
-            //Are we in the last row?
+            //Check if we are in the last row
             if( node->node_index >= ( amount_of_nodes - size ) )
             {
-                //Link with the first row
-                long row_index = node->node_index % size;
-                node->adjacent_node[ ad_node::bottom ] = all_nodes[ row_index ];
-                //Link with the last row..
-                all_nodes[ row_index ]->adjacent_node[ ad_node::top ] = node;
+                //Check if this is the last node in the whole structure (right down corner)
+                if( node->node_index == ( amount_of_nodes - 1 ) )
+                {
+                    node->adjacent_node[ ad_node::bottom ] = first_node;
+                    first_node->adjacent_node[ ad_node::top ] = node;
+                    //Close the recursion
+                    return;
+                }
+                {
+                    last_node = all_nodes[ node->node_index % size ];
+                    last_node = last_node->adjacent_node[ ad_node::right ];
+                }
             }
             else
             {
-                node->adjacent_node[ ad_node::bottom ] = all_nodes[ node->node_index + size ];
-                set_topbottom_link( node->adjacent_node[ ad_node::bottom ] , size );
+                last_node = all_nodes[ node->node_index + size ];
             }
+            node->adjacent_node[ ad_node::bottom ] = last_node;
+            last_node->adjacent_node[ ad_node::top ] = node;
+            set_topbottom_link( node->adjacent_node[ ad_node::bottom ] , size );
         }
     }
 }

@@ -28,10 +28,10 @@
 
 1372390065 source:d:\gioco\cities.cpp
 
-1372997974 source:d:\gioco\city_map.cpp
+1372999813 source:d:\gioco\city_map.cpp
 	"city_map.hpp"
 
-1372997654 d:\gioco\city_map.hpp
+1372999715 d:\gioco\city_map.hpp
 	"logging/logger.hpp"
 	"map_common.hpp"
 	"mytypes.hpp"
@@ -442,7 +442,7 @@
 1358956555 source:d:\gioco\logging\logger.cpp
 	"logger.hpp"
 
-1372997767 source:d:\gioco\main.cpp
+1372999548 source:d:\gioco\main.cpp
 	"logging/logger.hpp"
 	"game.hpp"
 	<process.h>

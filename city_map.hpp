@@ -60,7 +60,11 @@ namespace citymap_field_container
         bool check_map_size( long size );
     public:
         citymap_container();
+        ~citymap_container();
         node_t* create( long size );
+        node_t* set_field( long index , citymap::citymap_field_t* field );
+        long clear_all_the_field();
+        long get_size() { return amount_of_nodes; }
     };
 }
 
@@ -68,13 +72,26 @@ namespace citymap
 {
 	using namespace map_common;
 
+	//Possible type of field
+	typedef enum field_type_t
+	{
+	    grass_field, //An empty terrain with grass, is possible to built such a fields
+	    custom_field, //It mean that something was build here..
+	} field_type_t;
+
 	struct city_field_descriptor
 	{
+	    //Should be unique
 		mlong obj_id;
-
+		//Information about the field, name ecc.
 		std::string name,
                 desc;
+        //Describe the kind of terrain we are facing with
+        field_type_t field_type;
 	};
+
+	//Admitted type for the field
+	extern const city_field_descriptor city_field_grass;
 
 	//Contains some information on the city
 	struct citymap_info_t
@@ -92,6 +109,8 @@ namespace citymap
 	{
 	    //ID for the field
 	    mlong field_id;
+	    //Descriptor, with generic information on the field
+	    city_field_descriptor* descriptor;
 	    //Coordinate of the field
 	    field_coordinate coord;
 
@@ -99,6 +118,8 @@ namespace citymap
 	    sf::VertexArray vertex;
 
 	    citymap_field_t();
+	    city_field_descriptor* new_descriptor() throw( std::bad_alloc );
+	    ~citymap_field_t();
 	};
 
 
@@ -110,8 +131,11 @@ namespace citymap
 	    long next_field_id;
 	    citymap_info_t city_info;
 	    long get_next_id();
+	    citymap_field_t* create_citymap_field( field_type_t type );
 	public:
 	    citymap_t( int map_size );
+	    ~citymap_t();
+	    bool fill_empty_map();
 	};
 }
 

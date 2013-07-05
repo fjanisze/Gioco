@@ -247,19 +247,18 @@ namespace graphic_ui
                 write_info( "Unknow position" );
             }
         }
+        message.str("");
     }
 
     //This function returns true if the user is moving over the playable area
     bool game_ui::is_over_the_game_map( const sf::Event& event )
     {
-        if( event.mouseMove.x >= 0 && event.mouseMove.x <= ui_config.viewport_setting.map_width )
+        if( event.mouseMove.x > ui_config.viewport_setting.map_width  ||
+            event.mouseMove.y > ui_config.viewport_setting.map_height )
         {
-            if( event.mouseMove.y >=0 && event.mouseMove.y <= ui_config.viewport_setting.map_width )
-            {
-                return true;
-            }
+            return false;
         }
-        return false;
+        return true;
     }
 
     //Redraw the graphic elements.

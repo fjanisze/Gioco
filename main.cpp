@@ -7,6 +7,7 @@
 
 #include "buildings.hpp"
 #include "ui.hpp"
+#include "city_map.hpp"
 
 
 void execution_thread_b(void*)
@@ -44,8 +45,8 @@ int main()
 
 	//_beginthread( &graphical_ui_thread, 0 , nullptr );
 
-    ui.main_loop();
+ //   ui.main_loop();
 
-	delete game_manager::game_manager::get_instance();
+//	delete game_manager::game_manager::get_instance();
 	return 0;
 }

@@ -211,6 +211,7 @@ namespace graphic_ui
         }
         //We are quitting, let's clean
         map->destroy_vertex_map();
+        LOG("game_ui::main_loop(): Quitting..");
     }
 
     //Handle the events from the window

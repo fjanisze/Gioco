@@ -162,6 +162,7 @@ namespace citymap_field_container
                 ++count;
             }
         }
+        all_nodes.clear();
         return count;
     }
 }
@@ -404,8 +405,12 @@ namespace citymap
          LOG("citymap_graphic_t::clear_all_vertex(): Amount of vertex ", vertex.size() );
          for( auto elem : vertex )
          {
-             delete elem;
+             if( elem )
+             {
+                delete elem;
+             }
          }
+         vertex.clear();
      }
 }
 

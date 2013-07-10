@@ -46,7 +46,7 @@ int main()
 	//_beginthread( &graphical_ui_thread, 0 , nullptr );
 	citymap::citymap_t city( 100 , ui.get_viewport_settings() );
 
-   ui.main_loop();
+    ui.main_loop();
 
 //	delete game_manager::game_manager::get_instance();
 	return 0;

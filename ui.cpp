@@ -26,6 +26,11 @@ namespace graphic_ui
         viewport_setting.map_height = 600;
     }
 
+    game_map::map_viewport_settings_t game_ui::get_viewport_settings()
+    {
+        return ui_config.viewport_setting;
+    }
+
     console_wnd_t::console_wnd_t( long x_off , long y_off , long wnd_width, long wnd_height )
     {
        create( x_off, y_off , wnd_width , wnd_height );

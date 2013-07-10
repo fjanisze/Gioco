@@ -28,10 +28,10 @@
 
 1372390065 source:d:\gioco\cities.cpp
 
-1372999813 source:d:\gioco\city_map.cpp
+1373435802 source:d:\gioco\city_map.cpp
 	"city_map.hpp"
 
-1373004160 d:\gioco\city_map.hpp
+1373436838 d:\gioco\city_map.hpp
 	"logging/logger.hpp"
 	"map_common.hpp"
 	"mytypes.hpp"
@@ -40,8 +40,9 @@
 	<SFML/Graphics.hpp>
 	<vector>
 	<algorithm>
+	<mutex>
 
-1372832433 d:\gioco\map_common.hpp
+1373428686 d:\gioco\map_common.hpp
 	<string>
 	<SFML/Graphics.hpp>
 
@@ -80,7 +81,7 @@
 	<locale>
 	<atomic>
 
-1372910366 d:\gioco\map.hpp
+1373428448 d:\gioco\map.hpp
 	"mytypes.hpp"
 	"map_common.hpp"
 	<map>
@@ -442,7 +443,7 @@
 1358956555 source:d:\gioco\logging\logger.cpp
 	"logger.hpp"
 
-1372999874 source:d:\gioco\main.cpp
+1373436697 source:d:\gioco\main.cpp
 	"logging/logger.hpp"
 	"game.hpp"
 	<process.h>
@@ -454,7 +455,7 @@
 	"logging/logger.hpp"
 	"map.hpp"
 
-1372907895 d:\gioco\ui.hpp
+1373435983 d:\gioco\ui.hpp
 	"logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
@@ -473,6 +474,6 @@
 	<OpenGL/gl.h>
 	<OpenGL/glu.h>
 
-1372913818 source:d:\gioco\ui.cpp
+1373436037 source:d:\gioco\ui.cpp
 	"ui.hpp"
 

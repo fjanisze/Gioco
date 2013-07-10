@@ -10,6 +10,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <algorithm>
+#include <mutex>
 
 namespace citymap
 {
@@ -65,6 +66,10 @@ namespace citymap_field_container
         node_t* set_field( long index , citymap::citymap_field_t* field );
         long clear_all_the_field();
         long get_size() { return amount_of_nodes; }
+        bool empty() { return amount_of_nodes == 0; }
+        std::vector< node_t* >::iterator begin();
+        std::vector< node_t* >::iterator end();
+        typedef std::vector< node_t* >::iterator iterator;
     };
 }
 
@@ -114,17 +119,37 @@ namespace citymap
 	    //Coordinate of the field
 	    field_coordinate coord;
 
-	    //Related vertex
-	    sf::VertexArray vertex;
-
 	    citymap_field_t();
 	    city_field_descriptor* new_descriptor() throw( std::bad_alloc );
 	    ~citymap_field_t();
 	};
 
+    using namespace citymap_field_container;
+
+	//This class is responsible for the handling of the graphical appearence of the city.
+	class citymap_graphic_t
+	{
+        std::mutex mutex;
+	    //Copy of the game map
+	    citymap_container* map;
+	    //Vertex information
+	    std::vector< sf::VertexArray* > vertex;
+	    sf::VertexArray* create_single_vertex( node_t* node );
+	    //Information needed for the field creation
+	    long field_width,
+            field_height;
+	    //Viewport information
+	    game_map::map_viewport_settings_t viewport_settings;
+    public:
+        citymap_container* set_citymap_container( citymap_container* city_map );
+        void set_viewport_settings( game_map::map_viewport_settings_t viewport );
+        long create_vertex_map();
+        void clear_all_vertex();
+	};
+
 
     //handle a city object
-	class citymap_t
+	class citymap_t : public citymap_graphic_t
 	{
 	    citymap_field_container::citymap_container map;
     private:
@@ -133,7 +158,7 @@ namespace citymap
 	    long get_next_id();
 	    citymap_field_t* create_citymap_field( field_type_t type );
 	public:
-	    citymap_t( int map_size );
+	    citymap_t( int map_size , game_map::map_viewport_settings_t viewport  );
 	    ~citymap_t();
 	    bool fill_empty_map();
 	};

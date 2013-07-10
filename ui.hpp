@@ -81,6 +81,7 @@ namespace graphic_ui
     public:
         static game_ui* get_instance();
         void main_loop();
+        game_map::map_viewport_settings_t get_viewport_settings();
         game_ui();
         ~game_ui();
     };

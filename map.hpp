@@ -105,15 +105,6 @@ namespace game_map
 		field_manager* create_a_city_at_random_coord( const string& name );
 	};
 
-	//This is the structure which needs to be used to configure the graphic apparence for the map
-	//On the base of those values the proper vertex are created.
-	struct map_viewport_settings_t
-	{
-	    //Those values are in pixels
-	    long map_width,
-            map_height;
-	};
-
 	//Object reppresenting the graphical reppresentation of the field
 	struct field_graphics_t
 	{

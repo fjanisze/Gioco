@@ -4,6 +4,21 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
+namespace game_map
+{
+    //This is the structure which needs to be used to configure the graphic apparence for the map
+	//On the base of those values the proper vertex are created.
+	struct map_viewport_settings_t
+	{
+	    //Those values are in pixels
+	    long map_width,
+            map_height;
+        //Set to non valid values
+        map_viewport_settings_t() : map_width( -1 ) , map_height( -1 )
+        {   }
+	};
+}
+
 namespace map_common
 {
 	typedef enum field_state

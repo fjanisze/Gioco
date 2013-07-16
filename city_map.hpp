@@ -145,6 +145,7 @@ namespace citymap
         void set_viewport_settings( game_map::map_viewport_settings_t viewport );
         long create_vertex_map();
         void clear_all_vertex();
+        std::vector< sf::VertexArray* >* get_city_vertex();
 	};
 
 

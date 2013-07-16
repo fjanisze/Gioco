@@ -394,6 +394,11 @@ namespace citymap
          default:
             break;
          };
+         //Set the color
+         (*ver)[0].color = field_color;
+         (*ver)[1].color = field_color;
+         (*ver)[2].color = field_color;
+         (*ver)[3].color = field_color;
          return ver;
      }
 
@@ -410,6 +415,11 @@ namespace citymap
              }
          }
          vertex.clear();
+     }
+
+     std::vector< sf::VertexArray* >* citymap_graphic_t::get_city_vertex()
+     {
+         return &vertex;
      }
 
     ////////////////////////////////////////////////////////////////////
@@ -515,6 +525,11 @@ namespace citymap
     long city_agent::get_city_id()
     {
         return city->city_id;
+    }
+
+    std::vector< sf::VertexArray* >* city_agent::get_vertex()
+    {
+        return city->citymap->get_city_vertex();
     }
 }
 

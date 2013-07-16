@@ -110,7 +110,7 @@ namespace game_map
 	{
 	    const map_common::object_descriptor* descriptor;
         const map_field* field; //Relative field
-        const field_manager* manager; //Link to the manager for this field
+        field_manager* manager; //Link to the manager for this field
         //Vertex
 	    sf::VertexArray* vertex; //For the graphical rappresentation
 
@@ -159,6 +159,7 @@ namespace game_map
 		char get_field_symbol();
 		object_descriptor* get_visible_object();
 		void add_city_agent( citymap::city_agent* agent );
+		citymap::city_agent* get_city_agent();
 	};
 }
 

@@ -78,6 +78,7 @@ namespace citymap
         city_agent( city_manager* manager , city_info_t* city_info );
         bool set_city_coord( map_common::field_coordinate coord );
         long get_city_id();
+        std::vector< sf::VertexArray* >* get_vertex();
     };
 }
 

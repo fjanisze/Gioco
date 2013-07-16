@@ -237,15 +237,32 @@ namespace graphic_ui
     //The user press one mouse button
     void game_ui::mouse_press_event( const sf::Event& event )
     {
-        if( current_view == type_of_view_t::game_map_view )
+        //Check if the mouse is moving in the gameplay area or over some menu ecc..
+        if( is_over_the_game_map( event ) )
         {
-            //the user press the button over the game map
-            //The only action allowed is to open the city map if any thus check if there's any city under this position.
-
-        }
-        else if( current_view == type_of_view_t::city_map_view )
-        {
-            //The user press the button over the city map
+            if( current_view == type_of_view_t::game_map_view )
+            {
+                game_map::field_graphics_t* field = map->get_field_at_pos( event.mouseButton.x , event.mouseButton.y );
+                if( field == nullptr )
+                {
+                    write_info("No action available!");
+                    return;
+                }
+                //the user press the button over the game map
+                //The only action allowed is to open the city map if any thus check if there's any city under this position.
+                citymap::city_agent* agent = field->manager->get_city_agent();
+                if( agent )
+                {
+                    //Ok.. Entering the city view.
+                    LOG("game_ui::mouse_press_event(): Entering the city id:",agent->get_city_id());
+                    current_city = agent;
+                    current_view = type_of_view_t::city_map_view;
+                }
+            }
+            else if( current_view == type_of_view_t::city_map_view )
+            {
+                //The user press the button over the city map
+            }
         }
     }
 
@@ -304,7 +321,14 @@ namespace graphic_ui
     {
         window.clear( sf::Color::Black );
 
-        draw_gameplay_map();
+        if( current_view == type_of_view_t::game_map_view )
+        {
+            draw_gameplay_map();
+        }
+        else if( current_view == type_of_view_t::city_map_view )
+        {
+            draw_current_city();
+        }
         draw_console( window );
 
         window.display();
@@ -317,6 +341,16 @@ namespace graphic_ui
         for( auto &elem : *vertex )
         {
             window.draw( *elem->vertex );
+        }
+    }
+
+    //Draw the current city
+    void game_ui::draw_current_city()
+    {
+        std::vector< sf::VertexArray* >* vertex = current_city->get_vertex();
+        for( auto &elem : *vertex )
+        {
+            window.draw( *elem );
         }
     }
 }

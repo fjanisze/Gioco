@@ -729,5 +729,9 @@ namespace game_map
 	    city_agent = agent;
 	}
 
+	citymap::city_agent* field_manager::get_city_agent()
+	{
+	    return city_agent;
+	}
 }
 

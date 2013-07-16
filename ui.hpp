@@ -77,6 +77,7 @@ namespace graphic_ui
         static game_ui* instance;
         game_map::game_map* map;
         type_of_view_t current_view; //On the base of the current view different action are possible
+        citymap::city_agent* current_city;
     public:
         bool is_over_the_game_map( const sf::Event& event );
     private:
@@ -87,6 +88,7 @@ namespace graphic_ui
         void handle_event( const sf::Event& event );
         void screen_refresh();
         void draw_gameplay_map();
+        void draw_current_city();
         void mouse_moving_event( const sf::Event& event );
         void mouse_press_event( const sf::Event& event );
         void game_map_mouse_move( const sf::Event& event );

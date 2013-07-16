@@ -29,24 +29,18 @@ void graphical_ui_thread(void*)
 
 int main()
 {
-	//Read the building descriptor
-	buildings::building_manager buildings;
+
 
 	//This thread will run the event manager object.
 	_beginthread( &execution_thread_b, 0 , nullptr );
 
+    game_manager::game_manager* game_manager = game_manager::game_manager::get_instance();
+    game_manager->init();
+
 	//Creating the game scenario
-	game_manager::game_manager::get_instance()->create_test_scenario_1();
+	game_manager->create_test_scenario_1();
+    game_manager->handle_game();
 
-	//	console_ui::user_interface ui;
-    graphic_ui::game_ui ui;
-
-	LOG("int main(): Starting the execution threads..");
-
-	//_beginthread( &graphical_ui_thread, 0 , nullptr );
-	citymap::citymap_t city( 100 , ui.get_viewport_settings() );
-
-    ui.main_loop();
 
 //	delete game_manager::game_manager::get_instance();
 	return 0;

@@ -157,11 +157,57 @@ namespace citymap
 	    citymap_info_t city_info;
 	    long get_next_id();
 	    citymap_field_t* create_citymap_field( field_type_t type );
+        bool fill_empty_map();
 	public:
 	    citymap_t( int map_size , game_map::map_viewport_settings_t viewport  );
 	    ~citymap_t();
-	    bool fill_empty_map();
 	};
+
+	//This structure handles the information related with a city (like the owner or the city name) as the citymap_t itself
+	struct city_info_t
+	{
+	    //ID for the city, should be unique
+	    long city_id;
+	    //Generic information
+	    std::string name;
+	    field_coordinate coord; //Position of the city on the map
+	    //citymap structure which implement the city
+	    citymap_t* citymap;
+
+	    city_info_t( long id , const std::string& city_name );
+	    city_info_t() = delete;
+	};
+
+	class city_agent;
+
+	//Handle the cities
+	class city_manager
+	{
+	    static long next_city_id;
+	    std::vector< city_info_t* > city_container; //All the cities are contained in this vector
+	    //Each city have its own city_agent
+	    std::vector< city_agent* > agents;
+	    //The viewport settings are needed for the city map creation
+	    game_map::map_viewport_settings_t viewport_settings;
+	    long get_next_city_id();
+	    city_info_t* find_city_info( long city_id );
+	    city_agent* create_new_agent( city_info_t* city_info );
+    public:
+        city_agent* get_city_agent( long city_id );
+        city_manager( game_map::map_viewport_settings_t viewport );
+        city_agent* create_new_city( const std::string& name , long size );
+	};
+
+    //A city agent is an object responsible for managing operation on a specific city
+    class city_agent
+    {
+        city_info_t* city;
+        city_manager* mng;
+    public:
+        city_agent( city_manager* manager , city_info_t* city_info );
+        bool set_city_coord( field_coordinate coord );
+        long get_city_id();
+    };
 }
 
 #endif

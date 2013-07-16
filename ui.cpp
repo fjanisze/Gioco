@@ -145,11 +145,11 @@ namespace graphic_ui
 		load_and_set_font();
 
 		//Populate the vertex map
-		map->create_vertex_map();
+	//	map->create_vertex_map();
 		//Init the console
 		init_consoles( ui_config );
         //Create the window
-        create_render_window();
+   //     create_render_window();
     }
 
     game_ui::~game_ui()

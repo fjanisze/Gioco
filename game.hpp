@@ -4,7 +4,10 @@
 #include "logging/logger.hpp"
 #include "mytypes.hpp"
 #include "map.hpp"
+#include "buildings.hpp"
 #include "events.hpp"
+#include "city_map.hpp"
+#include "ui.hpp"
 #include <typeinfo>
 #include <list>
 #include <iostream>
@@ -60,9 +63,14 @@ namespace player_info
 
 namespace game_manager
 {
+
+    //Manage the whole game logic
 	class game_manager
 	{
+	    std::mutex mutex;
 		static game_manager* instance;
+		buildings::building_manager* buildings;
+		citymap::city_manager* city_manager;
 	public:
 		static game_manager* get_instance();
 		game_manager();
@@ -70,6 +78,8 @@ namespace game_manager
 	public:
 		game_map::game_map* get_the_game_map();
 		void create_test_scenario_1();
+		void init();
+		void handle_game();
 	};
 };
 

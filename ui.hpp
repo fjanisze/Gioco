@@ -1,3 +1,6 @@
+#ifndef UI_HPP
+#define UI_HPP
+
 #include "logging/logger.hpp"
 #include <SFML/OpenGL.hpp>
 #include <SFML/Graphics.hpp>
@@ -73,12 +76,12 @@ namespace graphic_ui
         game_window_config_t ui_config;
         bool is_the_window_running;
         sf::RenderWindow window;
-        sf::RenderWindow& create_render_window();
         void handle_event( const sf::Event& event );
         void screen_refresh();
         void draw_gameplay_map();
         void mouse_moving_event( const sf::Event& event );
     public:
+        sf::RenderWindow& create_render_window();
         static game_ui* get_instance();
         void main_loop();
         game_map::map_viewport_settings_t get_viewport_settings();
@@ -86,3 +89,5 @@ namespace graphic_ui
         ~game_ui();
     };
 }
+
+#endif

@@ -351,17 +351,44 @@ namespace game_manager
 	//Create a test scenario
 	void game_manager::create_test_scenario_1()
 	{
+	    std::lock_guard< std::mutex > lock(mutex);
 		LOG("game_manager::create_test_scenario_1(): Creating a test scenario");
 
         //Generate the random map.
 		get_the_game_map()->create_new_map( 50 );
 		get_the_game_map()->generate_random_map();
 
-		//Create one city for 'Filip'
+		//Create the cities on the map
 		LOG("game_manager::create_test_scenario(): Creating a city in the map, Roma and Milano");
 		get_the_game_map()->create_a_city_at_random_coord( "Roma" );
 		get_the_game_map()->create_a_city_at_random_coord( "Milano" );
+		//Create the cities in the game.
+		city_manager->create_new_city("Roma", 50);
+		city_manager->create_new_city("Milano", 50);
+	}
 
+	void game_manager::init()
+	{
+        std::lock_guard< std::mutex > lock(mutex);
+	    LOG("game_manager::init(): Initialize the game..");
+	    //Read the building descriptor
+        buildings = new(nothrow) buildings::building_manager;
+        assert( buildings != nullptr );
+        //City manager
+        city_manager = new citymap::city_manager( graphic_ui::game_ui::get_instance()->get_viewport_settings() );
+        assert( city_manager != nullptr );
+	}
+
+	void game_manager::handle_game()
+	{
+        std::lock_guard< std::mutex > lock(mutex);
+	    LOG("game_manager::handle_game(): Starting");
+	    //User Interface object
+	    graphic_ui::game_ui* game_ui = graphic_ui::game_ui::get_instance();
+	    //Populate the map with all the vertex
+	    get_the_game_map()->create_vertex_map();
+	    game_ui->create_render_window();
+	    game_ui->main_loop();
 	}
 }
 

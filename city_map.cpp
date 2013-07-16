@@ -51,7 +51,7 @@ namespace citymap_field_container
 
         if( !check_map_size( size ) )
         {
-            LOG_ERR("citymap_container::create(): Map size not valid.. ");
+            LOG_ERR("citymap_container::create(): Map size ",size," not valid. ");
             return nullptr;
         }
         node_t* node = nullptr;
@@ -444,12 +444,11 @@ namespace citymap
     city_agent* city_manager::create_new_city( const std::string& name , long size )
     {
         long city_id = get_next_city_id();
-        long map_size = 50; //Standard size
-        LOG("city_manager::create_new_city(): Creating a new city, name: ", name , ", ID: ", city_id , ", size: ", map_size );
+        LOG("city_manager::create_new_city(): Creating a new city, name: ", name , ", ID: ", city_id , ", size: ", size );
         city_info_t* new_city = new(std::nothrow) city_info_t( city_id , name );
         assert( new_city != nullptr );
         //Going ahead with the resource creation
-        new_city->citymap = new(std::nothrow) citymap_t( map_size, viewport_settings );
+        new_city->citymap = new(std::nothrow) citymap_t( size, viewport_settings );
         assert( new_city->citymap != nullptr );
         //Add to the container
         city_container.push_back( new_city );
@@ -492,6 +491,20 @@ namespace citymap
             }
         }
         return city;
+    }
+
+    long city_manager::get_city_id( const std::string& name )
+    {
+        long result = -1;
+        for( auto elem : city_container )
+        {
+            if( elem->name == name )
+            {
+                result = elem->city_id;
+                break;
+            }
+        }
+        return result;
     }
 
     city_agent::city_agent( city_manager* manager , city_info_t* city_info ) : mng( manager ), city( city_info )

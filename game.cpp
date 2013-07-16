@@ -358,13 +358,13 @@ namespace game_manager
 		get_the_game_map()->create_new_map( 50 );
 		get_the_game_map()->generate_random_map();
 
+        //Create the cities in the game.
+		citymap::city_agent* roma_agent = city_manager->create_new_city( "Roma", 100 );
+		citymap::city_agent* milano_agent = city_manager->create_new_city( "Milano", 100 );
+
 		//Create the cities on the map
-		LOG("game_manager::create_test_scenario(): Creating a city in the map, Roma and Milano");
-		get_the_game_map()->create_a_city_at_random_coord( "Roma" );
-		get_the_game_map()->create_a_city_at_random_coord( "Milano" );
-		//Create the cities in the game.
-		city_manager->create_new_city("Roma", 50);
-		city_manager->create_new_city("Milano", 50);
+		get_the_game_map()->create_a_city_at_random_coord( "Roma" , roma_agent );
+		get_the_game_map()->create_a_city_at_random_coord( "Milano" , milano_agent );
 	}
 
 	void game_manager::init()

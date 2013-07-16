@@ -163,20 +163,6 @@ namespace citymap
 	    ~citymap_t();
 	};
 
-	//This structure handles the information related with a city (like the owner or the city name) as the citymap_t itself
-	struct city_info_t
-	{
-	    //ID for the city, should be unique
-	    long city_id;
-	    //Generic information
-	    std::string name;
-	    field_coordinate coord; //Position of the city on the map
-	    //citymap structure which implement the city
-	    citymap_t* citymap;
-
-	    city_info_t( long id , const std::string& city_name );
-	    city_info_t() = delete;
-	};
 
 	class city_agent;
 
@@ -194,20 +180,10 @@ namespace citymap
 	    city_agent* create_new_agent( city_info_t* city_info );
     public:
         city_agent* get_city_agent( long city_id );
+        long get_city_id( const std::string& name );
         city_manager( game_map::map_viewport_settings_t viewport );
         city_agent* create_new_city( const std::string& name , long size );
 	};
-
-    //A city agent is an object responsible for managing operation on a specific city
-    class city_agent
-    {
-        city_info_t* city;
-        city_manager* mng;
-    public:
-        city_agent( city_manager* manager , city_info_t* city_info );
-        bool set_city_coord( field_coordinate coord );
-        long get_city_id();
-    };
 }
 
 #endif

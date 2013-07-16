@@ -102,7 +102,7 @@ namespace game_map
 		field_coordinate find_random_field( const object_descriptor& type );
 	public:
 		void make_all_map_explored();
-		field_manager* create_a_city_at_random_coord( const string& name );
+		field_manager* create_a_city_at_random_coord( const string& name , citymap::city_agent* agent );
 	};
 
 	//Object reppresenting the graphical reppresentation of the field
@@ -149,6 +149,7 @@ namespace game_map
 		char symbol; // graphical symbol for this field
 		object_descriptor* visible_obj_descriptor; //The one which is visible on the map, correspond to the 'symbol' for the console UI
 		object_descriptor* create_new_obj_descriptor();
+		citymap::city_agent* city_agent;
 	public:
 		field_manager();
 		bool add_object(const object_descriptor* obj);
@@ -157,6 +158,7 @@ namespace game_map
 		obj_list_t& get_obj_list();
 		char get_field_symbol();
 		object_descriptor* get_visible_object();
+		void add_city_agent( citymap::city_agent* agent );
 	};
 }
 

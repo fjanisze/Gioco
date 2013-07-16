@@ -51,4 +51,34 @@ namespace map_common
 	};
 }
 
+namespace citymap
+{
+    class citymap_t;
+    class city_manager;
+    //This structure handles the information related with a city (like the owner or the city name) as the citymap_t itself
+	struct city_info_t
+	{
+	    //ID for the city, should be unique
+	    long city_id;
+	    //Generic information
+	    std::string name;
+	    map_common::field_coordinate coord; //Position of the city on the map
+	    //citymap structure which implement the city
+	    citymap_t* citymap;
+
+	    city_info_t( long id , const std::string& city_name );
+	    city_info_t() = delete;
+	};
+    //A city agent is an object responsible for managing operation on a specific city
+    class city_agent
+    {
+        city_info_t* city;
+        city_manager* mng;
+    public:
+        city_agent( city_manager* manager , city_info_t* city_info );
+        bool set_city_coord( map_common::field_coordinate coord );
+        long get_city_id();
+    };
+}
+
 #endif

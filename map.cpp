@@ -425,7 +425,7 @@ namespace game_map
 	}
 
 	//The next function create a city field in a specific point of the map
-	field_manager* gameplay_map::create_a_city_at_random_coord( const string& name )
+	field_manager* gameplay_map::create_a_city_at_random_coord( const string& name , citymap::city_agent* agent )
 	{
 		ELOG("gameplay_map::create_a_city_at_random_coord(): Creating \'", name  );
 		field_manager* field = nullptr;
@@ -434,6 +434,8 @@ namespace game_map
 		if( are_coord_valid( city_coord ) )
 		{
 			field = add_obj_to_field( city_coord , &terrain_city );
+			//Add the city agent to the field
+			field->add_city_agent( agent );
 		}
 		else
 		{
@@ -648,6 +650,7 @@ namespace game_map
 
 	field_manager::field_manager()
 	{
+	    city_agent = nullptr;
 		//Default object is of a 'land' type
 		object_descriptor* od =  create_new_obj_descriptor();
 		*od = base_land;
@@ -719,6 +722,11 @@ namespace game_map
 	char field_manager::get_field_symbol()
 	{
 		return symbol;
+	}
+
+	void field_manager::add_city_agent( citymap::city_agent* agent )
+	{
+	    city_agent = agent;
 	}
 
 }

@@ -64,11 +64,19 @@ namespace graphic_ui
         void write_info( const std::string& msg );
     };
 
+    //Possible type of view
+    enum type_of_view_t
+    {
+        game_map_view,
+        city_map_view
+    };
+
     //Manage the whole ui
     class game_ui : public console_manager
     {
         static game_ui* instance;
         game_map::game_map* map;
+        type_of_view_t current_view; //On the base of the current view different action are possible
     public:
         bool is_over_the_game_map( const sf::Event& event );
     private:
@@ -80,6 +88,8 @@ namespace graphic_ui
         void screen_refresh();
         void draw_gameplay_map();
         void mouse_moving_event( const sf::Event& event );
+        void mouse_press_event( const sf::Event& event );
+        void game_map_mouse_move( const sf::Event& event );
     public:
         sf::RenderWindow& create_render_window();
         static game_ui* get_instance();

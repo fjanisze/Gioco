@@ -144,12 +144,11 @@ namespace graphic_ui
 		//font
 		load_and_set_font();
 
-		//Populate the vertex map
-	//	map->create_vertex_map();
 		//Init the console
 		init_consoles( ui_config );
-        //Create the window
-   //     create_render_window();
+
+		//Default view
+		current_view = type_of_view_t::game_map_view;
     }
 
     game_ui::~game_ui()
@@ -227,32 +226,65 @@ namespace graphic_ui
             //The mouse is moving over the game window.
             mouse_moving_event( event );
             break;
+        case sf::Event::MouseButtonPressed:
+            mouse_press_event( event );
+            break;
         default:
             break;
         };
     }
 
+    //The user press one mouse button
+    void game_ui::mouse_press_event( const sf::Event& event )
+    {
+        if( current_view == type_of_view_t::game_map_view )
+        {
+            //the user press the button over the game map
+            //The only action allowed is to open the city map if any thus check if there's any city under this position.
+
+        }
+        else if( current_view == type_of_view_t::city_map_view )
+        {
+            //The user press the button over the city map
+        }
+    }
+
     //Manage the mouse moving event
     void game_ui::mouse_moving_event( const sf::Event& event )
     {
-        static std::stringstream message;
         //Check if the mouse is moving in the gameplay area or over some menu ecc..
         if( is_over_the_game_map( event ) )
         {
-            game_map::field_graphics_t* field = map->get_field_at_pos( event.mouseMove.x , event.mouseMove.y );
-
-            if( field != nullptr )
-            {;
-                //Chage the message
-                message.str("");//Clear
-                message << "Field name: "<<field->descriptor->name <<", ID: "<<field->field->field_id<<"\nMouse coord: "<<event.mouseMove.x<<","<<event.mouseMove.y<<std::endl;
-                write_info( message.str() );
-            }
-            else
+            //The proper action depends on the type of view.
+            if( current_view == type_of_view_t::game_map_view )
             {
-                write_info( "Unknow position" );
+                //The mouse is moving over the game map
+                game_map_mouse_move( event );
+            }
+            else if( current_view == type_of_view_t::city_map_view )
+            {
+                //The mouse is moving over the city map.
             }
         }
+    }
+
+    void game_ui::game_map_mouse_move( const sf::Event& event )
+    {
+        static std::stringstream message;
+        game_map::field_graphics_t* field = map->get_field_at_pos( event.mouseMove.x , event.mouseMove.y );
+
+        if( field != nullptr )
+        {
+            //Chage the message
+            message.str("");//Clear
+            message << "Field name: "<<field->descriptor->name <<", ID: "<<field->field->field_id<<"\nMouse coord: "<<event.mouseMove.x<<","<<event.mouseMove.y<<std::endl;
+            write_info( message.str() );
+        }
+        else
+        {
+            write_info( "Unknow position" );
+        }
+
         message.str("");
     }
 

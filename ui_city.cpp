@@ -59,8 +59,7 @@ namespace city_ui_manager
             }
             else
             {
-                LOG_ERR("city_ui::city_map_mouse_move(): Moving over an unknow field, unable to find the citymap_field_t");
-                ui_console->write_info("Unable to identify the field..");
+                ui_console->write_info("Moving over the menu.");
             }
         }
         else

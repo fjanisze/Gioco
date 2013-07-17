@@ -332,7 +332,6 @@ namespace citymap
      {
          if( x > viewport_settings.map_width || y > viewport_settings.map_height )
          {
-             LOG_ERR("citymap_t::get_field_at_pos(): Request for acces an area over the viewport, x:",x,",y:",y);
              return nullptr;
          }
          long column_nbr = x / field_width; //It may be also 0

@@ -31,7 +31,7 @@
 1374035243 source:d:\gioco\city_map.cpp
 	"city_map.hpp"
 
-1374033373 d:\gioco\city_map.hpp
+1374042146 d:\gioco\city_map.hpp
 	"logging/logger.hpp"
 	"map_common.hpp"
 	"mytypes.hpp"
@@ -42,9 +42,10 @@
 	<algorithm>
 	<mutex>
 
-1374031938 d:\gioco\map_common.hpp
+1374042146 d:\gioco\map_common.hpp
 	<string>
 	<SFML/Graphics.hpp>
+	"mytypes.hpp"
 
 1360059936 source:d:\gioco\events.cpp
 	"events.hpp"
@@ -458,7 +459,7 @@
 	"logging/logger.hpp"
 	"map.hpp"
 
-1374033674 d:\gioco\ui.hpp
+1374041901 d:\gioco\ui.hpp
 	"logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
@@ -467,6 +468,9 @@
 	<iostream>
 	"map.hpp"
 	"city_map.hpp"
+	"ui_city.hpp"
+	"ui_console.hpp"
+	"ui_common.hpp"
 
 1365233432 d:\sfml\sfml-2.0-windows-gcc-4.7-mingw-32bits\sfml-2.0\include\sfml\opengl.hpp
 	<SFML/Config.hpp>
@@ -478,6 +482,27 @@
 	<OpenGL/gl.h>
 	<OpenGL/glu.h>
 
-1374035148 source:d:\gioco\ui.cpp
+1374041720 source:d:\gioco\ui.cpp
 	"ui.hpp"
+
+1374042311 d:\gioco\ui_city.hpp
+	"logging/logger.hpp"
+	"map_common.hpp"
+	"ui_console.hpp"
+
+1374041925 d:\gioco\ui_console.hpp
+	"logging/logger.hpp"
+	<SFML/OpenGL.hpp>
+	<SFML/Graphics.hpp>
+	<SFML/Graphics/RenderWindow.hpp>
+	"ui_common.hpp"
+
+1374042365 d:\gioco\ui_common.hpp
+	"map_common.hpp"
+
+1374042325 source:d:\gioco\ui_city.cpp
+	"ui_city.hpp"
+
+1374042439 source:d:\gioco\ui_console.cpp
+	"ui_console.hpp"
 

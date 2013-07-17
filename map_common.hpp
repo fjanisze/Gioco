@@ -3,6 +3,7 @@
 
 #include <string>
 #include <SFML/Graphics.hpp>
+#include "mytypes.hpp"
 
 namespace game_map
 {
@@ -55,7 +56,50 @@ namespace citymap
 {
     class citymap_t;
     class city_manager;
-    class citymap_field_t;
+    //Possible type of field
+	typedef enum field_type_t
+	{
+	    grass_field, //An empty terrain with grass, is possible to built such a fields
+	    custom_field, //It mean that something was build here..
+	} field_type_t;
+
+	struct city_field_descriptor
+	{
+	    //Should be unique
+		mlong obj_id;
+		//Information about the field, name ecc.
+		std::string name,
+                desc;
+        //Describe the kind of terrain we are facing with
+        field_type_t field_type;
+	};
+
+    //Contains some information on the city
+	struct citymap_info_t
+	{
+	    int size;
+	    long amount_of_fields; //Which is just size * size
+
+	    //Utility constructors ecc
+	    citymap_info_t();
+	    void set_info( int map_size );
+	};
+
+	//City field
+	struct citymap_field_t
+	{
+	    //ID for the field
+	    mlong field_id;
+	    //Descriptor, with generic information on the field
+	    city_field_descriptor* descriptor;
+	    //Coordinate of the field
+	    map_common::field_coordinate coord;
+
+	    citymap_field_t();
+	    city_field_descriptor* new_descriptor() throw( std::bad_alloc );
+	    ~citymap_field_t();
+	};
+
     //This structure handles the information related with a city (like the owner or the city name) as the citymap_t itself
 	struct city_info_t
 	{

@@ -9,69 +9,12 @@
 #include <iostream>
 #include "map.hpp"
 #include "city_map.hpp"
+#include "ui_city.hpp"
+#include "ui_console.hpp"
+#include "ui_common.hpp"
 
 namespace graphic_ui
 {
-    //Structure which contain the setting for the UI
-    struct game_window_config_t
-    {
-        //If true, the the game runs on full screen
-        bool full_screen;
-        //Size of the whole game window.
-        long window_width,
-            window_height;
-
-        //Viewport configuration
-        game_map::map_viewport_settings_t viewport_setting;
-        //Font and text stuff
-        sf::Font font;
-
-        game_window_config_t();
-    };
-
-    //Console Window information
-    struct console_wnd_t
-    {
-        //Those values specify where the top left corner of the console is places
-        long x_offset,
-            y_offset;
-        //Size
-        long width,
-            height;
-        //Related vertex, to draw a background or something
-        sf::VertexArray vertex;
-        //Text entity related with this console
-        sf::Text text;
-
-        //Constructor and utility
-        console_wnd_t( long x_off , long y_off , long wnd_width, long wnd_height );
-        console_wnd_t();
-        void create( long x_off , long y_off , long wnd_width, long wnd_height );
-        void set_color( sf::Color color );
-    };
-
-    //This object is reponsible for the console management
-    class console_manager
-    {
-        //We assume that only two console are provided at the beginning
-        console_wnd_t main_console;
-        console_wnd_t info_console;
-        const sf::Font* font;
-    public:
-        console_manager();
-        short init_consoles( const game_window_config_t& window_config );
-        void draw_console( sf::RenderWindow& window );
-        //For writing operation
-        void write_info( const std::string& msg );
-    };
-
-    //Possible type of view
-    enum type_of_view_t
-    {
-        game_map_view,
-        city_map_view
-    };
-
     //Manage the whole ui
     class game_ui : public console_manager
     {
@@ -79,6 +22,7 @@ namespace graphic_ui
         game_map::game_map* map;
         type_of_view_t current_view; //On the base of the current view different action are possible
         citymap::city_agent* current_city;
+        city_ui_manager::city_ui* city_ui;
     public:
         bool is_over_the_game_map( const sf::Event& event );
     private:

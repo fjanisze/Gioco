@@ -78,52 +78,9 @@ namespace citymap
 {
 	using namespace map_common;
 
-	//Possible type of field
-	typedef enum field_type_t
-	{
-	    grass_field, //An empty terrain with grass, is possible to built such a fields
-	    custom_field, //It mean that something was build here..
-	} field_type_t;
-
-	struct city_field_descriptor
-	{
-	    //Should be unique
-		mlong obj_id;
-		//Information about the field, name ecc.
-		std::string name,
-                desc;
-        //Describe the kind of terrain we are facing with
-        field_type_t field_type;
-	};
-
 	//Admitted type for the field
 	extern const city_field_descriptor city_field_grass;
 
-	//Contains some information on the city
-	struct citymap_info_t
-	{
-	    int size;
-	    long amount_of_fields; //Which is just size * size
-
-	    //Utility constructors ecc
-	    citymap_info_t();
-	    void set_info( int map_size );
-	};
-
-	//City field
-	struct citymap_field_t
-	{
-	    //ID for the field
-	    mlong field_id;
-	    //Descriptor, with generic information on the field
-	    city_field_descriptor* descriptor;
-	    //Coordinate of the field
-	    field_coordinate coord;
-
-	    citymap_field_t();
-	    city_field_descriptor* new_descriptor() throw( std::bad_alloc );
-	    ~citymap_field_t();
-	};
 
     using namespace citymap_field_container;
 

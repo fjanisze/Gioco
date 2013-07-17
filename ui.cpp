@@ -284,6 +284,10 @@ namespace graphic_ui
                 city_map_mouse_move( event );
             }
         }
+        else
+        {
+            write_info("");
+        }
     }
 
     void game_ui::game_map_mouse_move( const sf::Event& event )

@@ -281,6 +281,7 @@ namespace graphic_ui
             else if( current_view == type_of_view_t::city_map_view )
             {
                 //The mouse is moving over the city map.
+                city_map_mouse_move( event );
             }
         }
     }
@@ -302,6 +303,34 @@ namespace graphic_ui
             write_info( "Unknow position" );
         }
 
+        message.str("");
+    }
+
+    using namespace std;
+
+    void game_ui::city_map_mouse_move( const sf::Event& event )
+    {
+        static std::stringstream message;
+        //current_city should not be nullptr.
+        if( current_city != nullptr )
+        {
+            //Check for the field and print the information
+            citymap::citymap_field_t* field = current_city->get_field_at_pos( event.mouseMove.x , event.mouseMove.y );
+            if( field != nullptr )
+            {
+                message << "Field name: "<<field->descriptor->name <<", ID: "<<field->field_id<<"\nMouse coord: "<<event.mouseMove.x<<","<<event.mouseMove.y<<std::endl;
+                write_info( message.str() );
+            }
+            else
+            {
+                LOG_ERR("game_ui::city_map_mouse_move(): Moving over an unknow field, unable to find the citymap_field_t");
+                write_info("Unable to identify the field..");
+            }
+        }
+        else
+        {
+            LOG_ERR("game_ui::city_map_mouse_move(): current_city is nullptr, this shouldn't happen");
+        }
         message.str("");
     }
 

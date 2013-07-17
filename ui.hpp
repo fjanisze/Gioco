@@ -8,6 +8,7 @@
 #include <cassert>
 #include <iostream>
 #include "map.hpp"
+#include "city_map.hpp"
 
 namespace graphic_ui
 {
@@ -92,6 +93,7 @@ namespace graphic_ui
         void mouse_moving_event( const sf::Event& event );
         void mouse_press_event( const sf::Event& event );
         void game_map_mouse_move( const sf::Event& event );
+        void city_map_mouse_move( const sf::Event& event );
     public:
         sf::RenderWindow& create_render_window();
         static game_ui* get_instance();

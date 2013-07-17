@@ -165,13 +165,30 @@ namespace citymap_field_container
         all_nodes.clear();
         return count;
     }
+
+    //Return the field at the specified position in the matrix
+    citymap::citymap_field_t* citymap_container::get_field( long row, long column )
+    {
+        citymap::node_t* node = first_node;
+        while( row > 0 )
+        {
+            node = node->adjacent_node[ citymap::ad_node::bottom ];
+            --row;
+        }
+        while( column > 0 )
+        {
+            node = node->adjacent_node[ citymap::ad_node::right ];
+            --column;
+        }
+        return node->field;
+    }
 }
 
 namespace citymap
 {
 
     //Default possible types for the field.
-	const city_field_descriptor city_field_grass = { 0 , "Grass", "Fresh green grass" , field_type_t::grass_field };
+	const city_field_descriptor city_field_grass = { 1 , "Grass", "Fresh green grass" , field_type_t::grass_field };
 
 
     citymap_info_t::citymap_info_t()
@@ -310,6 +327,20 @@ namespace citymap
          return true;
      }
 
+     //Seach between all the fields and return the one which belong to the coordinates
+     citymap_field_t* citymap_t::get_field_at_pos( long x , long y )
+     {
+         if( x > viewport_settings.map_width || y > viewport_settings.map_height )
+         {
+             LOG_ERR("citymap_t::get_field_at_pos(): Request for acces an area over the viewport, x:",x,",y:",y);
+             return nullptr;
+         }
+         long column_nbr = x / field_width; //It may be also 0
+         long row_nbr = y / field_height;
+         citymap::citymap_field_t* field = map.get_field( row_nbr , column_nbr );
+         return field;
+     }
+
     ////////////////////////////////////////////////////////////////////
     //
     //
@@ -388,7 +419,7 @@ namespace citymap
          switch( node->field->descriptor->field_type )
          {
          case field_type_t::grass_field:
-            //Set it red
+            //Set it green
             field_color = sf::Color::Green;
             break;
          default:
@@ -530,6 +561,11 @@ namespace citymap
     std::vector< sf::VertexArray* >* city_agent::get_vertex()
     {
         return city->citymap->get_city_vertex();
+    }
+
+    citymap_field_t* city_agent::get_field_at_pos( long x , long y )
+    {
+        return city->citymap->get_field_at_pos( x , y );
     }
 }
 

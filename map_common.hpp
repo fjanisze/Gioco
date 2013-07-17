@@ -55,6 +55,7 @@ namespace citymap
 {
     class citymap_t;
     class city_manager;
+    class citymap_field_t;
     //This structure handles the information related with a city (like the owner or the city name) as the citymap_t itself
 	struct city_info_t
 	{
@@ -79,6 +80,7 @@ namespace citymap
         bool set_city_coord( map_common::field_coordinate coord );
         long get_city_id();
         std::vector< sf::VertexArray* >* get_vertex();
+        citymap_field_t* get_field_at_pos( long x , long y );
     };
 }
 

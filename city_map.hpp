@@ -70,6 +70,7 @@ namespace citymap_field_container
         std::vector< node_t* >::iterator begin();
         std::vector< node_t* >::iterator end();
         typedef std::vector< node_t* >::iterator iterator;
+        citymap::citymap_field_t* get_field( long row, long column );
     };
 }
 
@@ -135,6 +136,7 @@ namespace citymap
 	    //Vertex information
 	    std::vector< sf::VertexArray* > vertex;
 	    sf::VertexArray* create_single_vertex( node_t* node );
+     protected:
 	    //Information needed for the field creation
 	    long field_width,
             field_height;
@@ -161,6 +163,7 @@ namespace citymap
         bool fill_empty_map();
 	public:
 	    citymap_t( int map_size , game_map::map_viewport_settings_t viewport  );
+	    citymap_field_t* get_field_at_pos( long x , long y );
 	    ~citymap_t();
 	};
 

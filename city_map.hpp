@@ -48,6 +48,9 @@ namespace citymap_field_container
 
         //The field contained in this node
         citymap::citymap_field_t* field;
+
+        //Graphic information for the field
+        std::vector< sf::VertexArray* > vertex;
     };
 
     //The container

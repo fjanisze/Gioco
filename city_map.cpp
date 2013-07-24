@@ -386,7 +386,7 @@ namespace citymap
                      break;
                  }
                  //Add the vertex
-                 vertex.push_back( node_vertex );
+                 node->vertex.push_back( node_vertex );
                  ++map_iter;
                  ++amount_of_vertex;
              }
@@ -437,20 +437,37 @@ namespace citymap
      {
          std::lock_guard< std::mutex > lock( mutex );
          LOG("citymap_graphic_t::clear_all_vertex(): Amount of vertex ", vertex.size() );
-         for( auto elem : vertex )
+         citymap_container::iterator map_iter = map->begin() , map_end = map->end();
+         while( map_iter != map_end )
          {
-             if( elem )
+             if( !(*map_iter)->vertex.empty() )
              {
-                delete elem;
+                 for( auto elem : (*map_iter)->vertex )
+                 {
+                     delete elem;
+                 }
+                 (*map_iter)->vertex.clear();
              }
+             ++map_iter;
          }
-         vertex.clear();
      }
 
      std::vector< sf::VertexArray* >* citymap_graphic_t::get_city_vertex()
      {
+         //Generate the full map and return the pointer
+         vertex.clear();
+         citymap_container::iterator map_iter = map->begin() , map_end = map->end();
+         while( map_iter != map_end )
+         {
+             for( auto elem : (*map_iter)->vertex )
+             {
+                 vertex.push_back( elem );
+             }
+             ++map_iter;
+         }
          return &vertex;
      }
+
 
     ////////////////////////////////////////////////////////////////////
     //

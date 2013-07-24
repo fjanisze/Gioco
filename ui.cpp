@@ -182,6 +182,10 @@ namespace graphic_ui
                 city_ui->set_cityagent( agent );
                 current_view = type_of_view_t::city_map_view;
             }
+            else
+            {
+                write_info("No action available!");
+            }
         }
     }
 

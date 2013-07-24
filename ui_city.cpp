@@ -69,4 +69,9 @@ namespace city_ui_manager
         message.str("");
     }
 
+    //This function draw a colored box over a field, is used when the player move the mouse over the map to highlight a specific field
+    //The function change the vertex information for the map.
+    void city_ui::draw_box_over_the_field( long row, long column )
+    {
+    }
 }

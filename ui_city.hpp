@@ -20,6 +20,7 @@ namespace city_ui_manager
         void set_console_manager( graphic_ui::console_manager* console );
         long handle_event( const sf::Event& event );
         void city_map_mouse_move( const sf::Event& event );
+        void draw_box_over_the_field( long row, long column );
     };
 }
 

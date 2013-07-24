@@ -59,7 +59,7 @@
 1373955087 source:d:\gioco\game.cpp
 	"game.hpp"
 
-1373952151 d:\gioco\game.hpp
+1374640884 d:\gioco\game.hpp
 	"logging/logger.hpp"
 	"mytypes.hpp"
 	"map.hpp"
@@ -455,7 +455,7 @@
 	"ui.hpp"
 	"city_map.hpp"
 
-1373956994 source:d:\gioco\map.cpp
+1374637782 source:d:\gioco\map.cpp
 	"logging/logger.hpp"
 	"map.hpp"
 

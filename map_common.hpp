@@ -11,11 +11,15 @@ namespace game_map
 	//On the base of those values the proper vertex are created.
 	struct map_viewport_settings_t
 	{
+	    //Offset from the left top corner of the window
+	    long map_x_offset,
+            map_y_offset;
 	    //Those values are in pixels
 	    long map_width,
             map_height;
         //Set to non valid values
-        map_viewport_settings_t() : map_width( -1 ) , map_height( -1 )
+        map_viewport_settings_t() : map_width( -1 ) , map_height( -1 ),
+                    map_x_offset( -1 ) , map_y_offset( -1 )
         {   }
 	};
 }

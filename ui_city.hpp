@@ -21,8 +21,9 @@ namespace city_ui_manager
         long field_width,
             field_height;
         sf::RenderWindow* window;
+        game_map::map_viewport_settings_t map_view_setting;
     public:
-        city_ui( sf::RenderWindow* rnd_window );
+        city_ui( sf::RenderWindow* rnd_window , game_map::map_viewport_settings_t map_setting );
         ~city_ui();
         void set_cityagent( citymap::city_agent* agent );
         void set_console_manager( graphic_ui::console_manager* console );

@@ -19,9 +19,11 @@ namespace graphic_ui
         //Default setting
         full_screen = false;
         //Window size in pixels.
-        window_height = 630;
+        window_height = 650;
         window_width = 800;
         //Game viewport
+        viewport_setting.map_x_offset = 0;
+        viewport_setting.map_y_offset = 20;
         viewport_setting.map_width = 600;
         viewport_setting.map_height = 600;
     }
@@ -71,31 +73,33 @@ namespace graphic_ui
     //Initializate the console window
     short console_manager::init_consoles( const game_window_config_t& window_config )
     {
-        //The initialization is done on the base of the window information.
-        long console_height  = window_config.window_height - window_config.viewport_setting.map_height ,
-            console_width = window_config.window_width;
+        long status_console_height = 20;
+        //Status console
+        status_console.create( 0 , 0 , window_config.window_width , status_console_height );
+        status_console.set_color( sf::Color( 255 , 100 , 20 ) );
         //Info Console
-        info_console.create( 0 , window_config.viewport_setting.map_height , console_width , console_height );
+        info_console.create( 0 , window_config.viewport_setting.map_height + status_console_height , window_config.window_width , 30 );
         info_console.set_color( sf::Color( 10 , 20 , 30 ) );
         //Main console
-        console_height = window_config.window_height - console_height;
-        console_width = window_config.window_width - window_config.viewport_setting.map_width;
-        main_console.create( window_config.viewport_setting.map_width , 0 , console_width , console_height );
+        main_console.create( window_config.viewport_setting.map_width , status_console_height , 200 , 600 );
         main_console.set_color( sf::Color( 20 , 30 , 40 ) );
 
         //Copy the font
         font = &window_config.font;
-        main_console.text.setFont( * font );
-        info_console.text.setFont( * font );
+        status_console.text.setFont( *font );
+        main_console.text.setFont( *font );
+        info_console.text.setFont( *font );
 
     }
 
     //Draw the console in the proper context
     void console_manager::draw_console( sf::RenderWindow& window )
     {
+        window.draw( status_console.vertex );
         window.draw( main_console.vertex );
         window.draw( info_console.vertex );
         //text
+        window.draw( status_console.text );
         window.draw( main_console.text );
         window.draw( info_console.text );
     }
@@ -105,5 +109,4 @@ namespace graphic_ui
     {
         info_console.text.setString( msg );
     }
-
 }

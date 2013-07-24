@@ -6,12 +6,13 @@
 namespace city_ui_manager
 {
     //Constructor
-    city_ui::city_ui( sf::RenderWindow* rnd_window )
+    city_ui::city_ui( sf::RenderWindow* rnd_window , game_map::map_viewport_settings_t map_setting)
     {
         LOG("city_ui::city_ui(): Creating the city_ui object");
         focus_box = new(std::nothrow) sf::VertexArray( sf::LinesStrip , 5 );
         assert( focus_box != nullptr );
         window = rnd_window;
+        map_view_setting = map_setting;
     }
 
     //Destructor
@@ -87,6 +88,10 @@ namespace city_ui_manager
     {
         x_pos -= ( x_pos % field_width );
         y_pos -= ( y_pos % field_height );
+
+        //add Offset
+        x_pos += map_view_setting.map_x_offset;
+        y_pos += map_view_setting.map_y_offset;
 
         (*focus_box)[0].position = sf::Vector2f( x_pos , y_pos );
         (*focus_box)[1].position = sf::Vector2f( x_pos + field_width , y_pos );

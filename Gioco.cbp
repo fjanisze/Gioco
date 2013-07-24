@@ -86,6 +86,8 @@
 		<Unit filename="ui.hpp" />
 		<Unit filename="ui_city.cpp" />
 		<Unit filename="ui_city.hpp" />
+		<Unit filename="ui_console.cpp" />
+		<Unit filename="ui_console.hpp" />
 		<Extensions>
 			<DoxyBlocks>
 				<comment_style block="0" line="0" />

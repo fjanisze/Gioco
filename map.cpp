@@ -473,7 +473,6 @@ namespace game_map
     }
 
     //Return true is the provided coordinate belong to this field
-    inline
     bool field_graphics_t::is_within_the_field( long x, long y )
     {
         //Check the x coord
@@ -524,8 +523,8 @@ namespace game_map
 	    assert( field_per_axis > 0 );
 	    long field_x_size = settings->map_width / field_per_axis;
 	    long field_y_size = settings->map_height / field_per_axis;
-	    long current_x_pos = 0,
-            current_y_pos = 0;
+	    long current_x_pos = settings->map_x_offset,
+            current_y_pos = settings->map_y_offset;
 
         try{
 

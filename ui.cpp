@@ -43,7 +43,7 @@ namespace graphic_ui
 		map->configure_viewport( ui_config.viewport_setting );
 
 		//Create the city_ui object
-		city_ui = new( std::nothrow ) city_ui_manager::city_ui( &window );
+		city_ui = new( std::nothrow ) city_ui_manager::city_ui( &window , ui_config.viewport_setting );
 		assert( city_ui != nullptr );
 
 		//Set the console manager

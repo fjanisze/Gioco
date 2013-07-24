@@ -37,6 +37,7 @@ namespace graphic_ui
     class console_manager
     {
         //We assume that only two console are provided at the beginning
+        console_wnd_t status_console; //Is the top bar.
         console_wnd_t main_console;
         console_wnd_t info_console;
         const sf::Font* font;

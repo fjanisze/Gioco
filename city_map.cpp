@@ -330,6 +330,10 @@ namespace citymap
      //Seach between all the fields and return the one which belong to the coordinates
      citymap_field_t* citymap_t::get_field_at_pos( long x , long y )
      {
+         //Remove the offset
+         x -= viewport_settings.map_x_offset;
+         y -= viewport_settings.map_y_offset;
+
          if( x > viewport_settings.map_width || y > viewport_settings.map_height )
          {
              return nullptr;
@@ -406,8 +410,8 @@ namespace citymap
          }
          //Go ahead with the vertex creation.
          field_coordinate coord = node->field->coord;
-         long field_off_x = field_width * coord.x ,
-            field_off_y = field_height * coord.y;
+         long field_off_x = field_width * coord.x + viewport_settings.map_x_offset ,
+            field_off_y = field_height * coord.y + viewport_settings.map_y_offset;
          //Fill the position info
          (*ver)[0].position = sf::Vector2f( field_off_x , field_off_y );
          (*ver)[1].position = sf::Vector2f( field_off_x + field_width, field_off_y );

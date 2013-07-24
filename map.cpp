@@ -424,7 +424,7 @@ namespace game_map
 	}
 
 	//The next function create a city field in a specific point of the map
-	field_manager* gameplay_map::create_a_city_at_random_coord( const string& name , citymap::city_agent* agent )
+	field_manager* gameplay_map::create_a_city_at_random_coord( const string& name , cities::city_agent* agent )
 	{
 		ELOG("gameplay_map::create_a_city_at_random_coord(): Creating \'", name  );
 		field_manager* field = nullptr;
@@ -722,12 +722,12 @@ namespace game_map
 		return symbol;
 	}
 
-	void field_manager::add_city_agent( citymap::city_agent* agent )
+	void field_manager::add_city_agent( cities::city_agent* agent )
 	{
 	    city_agent = agent;
 	}
 
-	citymap::city_agent* field_manager::get_city_agent()
+	cities::city_agent* field_manager::get_city_agent()
 	{
 	    return city_agent;
 	}

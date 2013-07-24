@@ -7,6 +7,7 @@
 #include "buildings.hpp"
 #include "events.hpp"
 #include "city_map.hpp"
+#include "cities.hpp"
 #include "ui.hpp"
 #include <typeinfo>
 #include <list>
@@ -70,7 +71,7 @@ namespace game_manager
 	    std::mutex mutex;
 		static game_manager* instance;
 		buildings::building_manager* buildings;
-		citymap::city_manager* city_manager;
+		cities::city_manager* city_manager;
 	public:
 		static game_manager* get_instance();
 		game_manager();

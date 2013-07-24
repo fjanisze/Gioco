@@ -59,7 +59,6 @@ namespace map_common
 namespace citymap
 {
     class citymap_t;
-    class city_manager;
     //Possible type of field
 	typedef enum field_type_t
 	{
@@ -103,8 +102,13 @@ namespace citymap
 	    city_field_descriptor* new_descriptor() throw( std::bad_alloc );
 	    ~citymap_field_t();
 	};
+}
 
-    //This structure handles the information related with a city (like the owner or the city name) as the citymap_t itself
+namespace cities
+{
+    using namespace citymap;
+    class city_manager;
+     //This structure handles the information related with a city (like the owner or the city name) as the citymap_t itself
 	struct city_info_t
 	{
 	    //ID for the city, should be unique

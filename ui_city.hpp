@@ -14,7 +14,7 @@ namespace city_ui_manager
 {
     class city_ui
     {
-        citymap::city_agent* city_agent;
+        cities::city_agent* city_agent;
         graphic_ui::console_manager* ui_console;
         sf::VertexArray* focus_box;
         void update_focus_box( long x_pos , long y_pos );
@@ -25,7 +25,7 @@ namespace city_ui_manager
     public:
         city_ui( sf::RenderWindow* rnd_window , game_map::map_viewport_settings_t map_setting );
         ~city_ui();
-        void set_cityagent( citymap::city_agent* agent );
+        void set_cityagent( cities::city_agent* agent );
         void set_console_manager( graphic_ui::console_manager* console );
         long handle_event( const sf::Event& event );
         void city_map_mouse_move( const sf::Event& event );

@@ -173,7 +173,7 @@ namespace graphic_ui
             }
             //the user press the button over the game map
             //The only action allowed is to open the city map if any thus check if there's any city under this position.
-            citymap::city_agent* agent = field->manager->get_city_agent();
+            cities::city_agent* agent = field->manager->get_city_agent();
             if( agent )
             {
                 //Ok.. Entering the city view.

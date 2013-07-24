@@ -78,8 +78,8 @@ namespace game_manager
 		get_the_game_map()->generate_random_map();
 
         //Create the cities in the game.
-		citymap::city_agent* roma_agent = city_manager->create_new_city( "Roma", 100 );
-		citymap::city_agent* milano_agent = city_manager->create_new_city( "Milano", 100 );
+		cities::city_agent* roma_agent = city_manager->create_new_city( "Roma", 100 );
+		cities::city_agent* milano_agent = city_manager->create_new_city( "Milano", 100 );
 
 		//Create the cities on the map
 		get_the_game_map()->create_a_city_at_random_coord( "Roma" , roma_agent );
@@ -94,7 +94,7 @@ namespace game_manager
         buildings = new(nothrow) buildings::building_manager;
         assert( buildings != nullptr );
         //City manager
-        city_manager = new citymap::city_manager( graphic_ui::game_ui::get_instance()->get_viewport_settings() );
+        city_manager = new cities::city_manager( graphic_ui::game_ui::get_instance()->get_viewport_settings() );
         assert( city_manager != nullptr );
 	}
 

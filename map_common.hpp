@@ -125,6 +125,7 @@ namespace citymap
         long get_city_id();
         std::vector< sf::VertexArray* >* get_vertex();
         citymap_field_t* get_field_at_pos( long x , long y );
+        city_info_t* get_city_info();
     };
 }
 

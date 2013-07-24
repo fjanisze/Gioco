@@ -583,6 +583,11 @@ namespace citymap
     {
         return city->citymap->get_field_at_pos( x , y );
     }
+
+    city_info_t* city_agent::get_city_info()
+    {
+        return city;
+    }
 }
 
 

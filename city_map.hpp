@@ -108,6 +108,8 @@ namespace citymap
         long create_vertex_map();
         void clear_all_vertex();
         std::vector< sf::VertexArray* >* get_city_vertex();
+        long get_field_width() { return field_width; }
+        long get_field_height() { return field_height; }
 	};
 
 

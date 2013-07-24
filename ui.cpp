@@ -248,8 +248,21 @@ namespace graphic_ui
             draw_current_city();
         }
         draw_console( window );
-
+        //Draw the status info.
+        print_status_info();
         window.display();
+    }
+
+    void game_ui::print_status_info()
+    {
+        if( current_view == type_of_view_t::game_map_view )
+        {
+            write_status( "Game map" );
+        }
+        else if( current_view == type_of_view_t::city_map_view )
+        {
+            write_status( current_city->get_city_info()->name );
+        }
     }
 
     //Draw the gameplay map

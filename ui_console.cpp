@@ -109,4 +109,12 @@ namespace graphic_ui
     {
         info_console.text.setString( msg );
     }
+
+    //Used to update the status console
+    void console_manager::write_status( const std::string& location )
+    {
+        std::stringstream str;
+        str << "View on: " << location;
+        status_console.text.setString( str.str() );
+    }
 }

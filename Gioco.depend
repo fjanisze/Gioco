@@ -459,7 +459,7 @@
 	"logging/logger.hpp"
 	"map.hpp"
 
-1374041901 d:\gioco\ui.hpp
+1374645469 d:\gioco\ui.hpp
 	"logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
@@ -482,7 +482,7 @@
 	<OpenGL/gl.h>
 	<OpenGL/glu.h>
 
-1374644220 source:d:\gioco\ui.cpp
+1374645511 source:d:\gioco\ui.cpp
 	"ui.hpp"
 
 1374644153 d:\gioco\ui_city.hpp
@@ -492,12 +492,14 @@
 	"city_map.hpp"
 	<cassert>
 
-1374641221 d:\gioco\ui_console.hpp
+1374645554 d:\gioco\ui_console.hpp
 	"logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
 	<SFML/Graphics/RenderWindow.hpp>
 	"ui_common.hpp"
+	<sstream>
+	<string>
 
 1374042365 d:\gioco\ui_common.hpp
 	"map_common.hpp"

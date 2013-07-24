@@ -9,6 +9,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "ui_common.hpp"
+#include <sstream>
+#include <string>
 
 namespace graphic_ui
 {
@@ -47,6 +49,7 @@ namespace graphic_ui
         void draw_console( sf::RenderWindow& window );
         //For writing operation
         void write_info( const std::string& msg );
+        void write_status( const std::string& location );
     };
 
 }

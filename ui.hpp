@@ -38,6 +38,7 @@ namespace graphic_ui
         void mouse_press_event( const sf::Event& event );
         void game_map_mouse_move( const sf::Event& event );
         void city_map_mouse_move( const sf::Event& event );
+        void print_status_info();
     public:
         sf::RenderWindow& create_render_window();
         static game_ui* get_instance();

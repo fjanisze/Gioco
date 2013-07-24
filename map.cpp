@@ -231,7 +231,6 @@ namespace game_map
 		}
 	}
 
-	inline
 	long gameplay_map::calculate_index( const field_coordinate& coord)
 	{
 		long index = coord.y * map_size + coord.x;

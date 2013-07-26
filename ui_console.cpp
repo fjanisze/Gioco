@@ -3,6 +3,41 @@
 
 #include "ui_console.hpp"
 
+namespace graphic_elements
+{
+
+    ui_button_t::ui_button_t() : vertex( sf::Quads , 4 ) , reference_id(-1)
+    {
+    }
+
+    void ui_button_t::create( long x_pos, long y_pos, long width, long height )
+    {
+        LOG("ui_button_t::create(): New button : x_pos:",x_pos,",y_pos:",y_pos,",width:",width,",height:",height);
+        vertex[0].position = sf::Vector2f( x_pos , y_pos );
+        vertex[1].position = sf::Vector2f( x_pos + width , y_pos );
+        vertex[2].position = sf::Vector2f( x_pos + width , y_pos + height );
+        vertex[3].position = sf::Vector2f( x_pos , y_pos + height );
+    }
+
+    void ui_button_t::set_text( const std::string& text , sf::Font font  )
+    {
+    }
+
+    void ui_button_t::set_appearence( const sf::Color& color )
+    {
+        vertex[0].color = color;
+        vertex[0].color = color;
+        vertex[0].color = color;
+        vertex[0].color = color;
+    }
+
+    sf::VertexArray& ui_button_t::get_vertex()
+    {
+        return vertex;
+    }
+
+}
+
 namespace graphic_ui
 {
 
@@ -66,6 +101,53 @@ namespace graphic_ui
         }
     }
 
+    //Return a console_point_t related with the specified point
+    console_point_t console_wnd_t::over_the_console( long x , long y)
+    {
+        console_point_t result;
+        if( x > x_offset && x < ( width + x_offset ) )
+        {
+            if( y > y_offset && y < ( height + y_offset ) )
+            {
+                //This point is over this console.
+                result.x_pos = x;
+                result.y_pos = y;
+                result.is_console_point = true;
+            }
+        }
+        return result;
+    }
+
+    void console_wnd_t::set_font( sf::Font fnt )
+    {
+        text.setFont( fnt );
+    }
+
+    sf::VertexArray& console_wnd_t::get_vertex()
+    {
+        return vertex;
+    }
+
+    sf::Text& console_wnd_t::get_text()
+    {
+        return text;
+    }
+
+    //Get from the array all the position of the buttons
+    void console_wnd_t::add_button_map( button_position_t* map , short amount_of_buttons )
+    {
+        ELOG("console_wnd_t::add_button_map(): Num of buttons:",amount_of_buttons,",map addr:",map);
+        for( short i = 0 ; i < amount_of_buttons ; i++ )
+        {
+            button_map.push_back( map[i] );
+        }
+    }
+
+    //The value 'index' is used to set the button position on the base of the button position map provided
+    void add_button( ui_button_t button , short index )
+    {
+    }
+
     console_manager::console_manager( )
     {
     }
@@ -73,6 +155,7 @@ namespace graphic_ui
     //Initializate the console window
     short console_manager::init_consoles( const game_window_config_t& window_config )
     {
+        LOG("console_manager::init_consoles(): Initializing all the consoles");
         long status_console_height = 20;
         //Status console
         status_console.create( 0 , 0 , window_config.window_width , status_console_height );
@@ -83,31 +166,33 @@ namespace graphic_ui
         //Main console
         main_console.create( window_config.viewport_setting.map_width , status_console_height , 200 , 600 );
         main_console.set_color( sf::Color( 20 , 30 , 40 ) );
+        main_console.add_button_map( add_button_map , 10 );
+
 
         //Copy the font
         font = &window_config.font;
-        status_console.text.setFont( *font );
-        main_console.text.setFont( *font );
-        info_console.text.setFont( *font );
+        status_console.set_font( *font );
+        main_console.set_font( *font );
+        info_console.set_font( *font );
 
     }
 
     //Draw the console in the proper context
     void console_manager::draw_console( sf::RenderWindow& window )
     {
-        window.draw( status_console.vertex );
-        window.draw( main_console.vertex );
-        window.draw( info_console.vertex );
+        window.draw( status_console.get_vertex() );
+        window.draw( main_console.get_vertex() );
+        window.draw( info_console.get_vertex() );
         //text
-        window.draw( status_console.text );
-        window.draw( main_console.text );
-        window.draw( info_console.text );
+        window.draw( status_console.get_text() );
+        window.draw( main_console.get_text() );
+        window.draw( info_console.get_text() );
     }
 
     //Write a message in the info console
     void console_manager::write_info( const std::string& msg )
     {
-        info_console.text.setString( msg );
+        info_console.get_text().setString( msg );
     }
 
     //Used to update the status console
@@ -115,12 +200,37 @@ namespace graphic_ui
     {
         std::stringstream str;
         str << "View on: " << location;
-        status_console.text.setString( str.str() );
+        status_console.get_text().setString( str.str() );
     }
 
     //The player just pushed the mouse button over a menu or status bar
     void console_manager::handle_console_click( long x_pos , long y_pos )
     {
-        LOG("console_manager::handle_console_click(): User click, x:",x_pos,",y:",y_pos );
+        ELOG("console_manager::handle_console_click(): User click, x:",x_pos,",y:",y_pos );
+        //Actually only clicks on the main console trigger some action
+        console_point_t point = main_console.over_the_console( x_pos , y_pos );
+        if( point.is_console_point )
+        {
+            std::cout<<"CLick\n";
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

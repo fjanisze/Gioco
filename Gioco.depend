@@ -485,7 +485,7 @@
 	<OpenGL/gl.h>
 	<OpenGL/glu.h>
 
-1374803738 source:d:\gioco\ui.cpp
+1374812721 source:d:\gioco\ui.cpp
 	"ui.hpp"
 
 1374648306 d:\gioco\ui_city.hpp
@@ -495,7 +495,7 @@
 	"city_map.hpp"
 	<cassert>
 
-1374811752 d:\gioco\ui_console.hpp
+1374817664 d:\gioco\ui_console.hpp
 	"logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>

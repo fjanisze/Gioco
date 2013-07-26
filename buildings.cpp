@@ -7,7 +7,7 @@
 
 namespace buildings
 {
-	const string building_types_str[] = 
+	const string building_types_str[] =
 	{
 		"APPARTMENT",
 		"OFFICE",
@@ -77,7 +77,7 @@ namespace buildings
 	int building_manager::read_building_file()
 	{
 		LOG("building_manager::read_building_file(): Building file ",BUILDING_FILENAME );
-	
+
 		int amount_of_buildings = 0 , line_counter = 1;
 		std::ifstream in_file( BUILDING_FILENAME );
 
@@ -94,7 +94,7 @@ namespace buildings
 					std::pair< short, string > instruction = std::move( get_the_instruction( pos , buffer ) );
 					if( skip_to_next_descriptor )
 					{
-						//If we are here, it means that for some reason this 
+						//If we are here, it means that for some reason this
 						//building descriptor should be skipped
 						if( instruction.first != new_instruction_index )
 						{
@@ -158,7 +158,7 @@ namespace buildings
 			//Go ahead
 			switch( instr.first )
 			{
-			case new_instruction_index: 
+			case new_instruction_index:
 				//Ok, on the base of the field type
 				current_instruction = new(nothrow) all_information_t; //Do not handle the exception here.
 				assert( current_instruction != nullptr );
@@ -305,5 +305,11 @@ namespace buildings
 		{
 			line = line.substr( 0 , pos );
 		}
+	}
+
+	//Return a vector with all the appartment available
+	std::vector< appartment_descriptor_t* >* building_manager::get_all_the_appartment()
+	{
+	    return &available_appartments;
 	}
 }

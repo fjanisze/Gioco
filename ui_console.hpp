@@ -50,6 +50,7 @@ namespace graphic_ui
         //For writing operation
         void write_info( const std::string& msg );
         void write_status( const std::string& location );
+        void handle_console_click( long x_pos , long y_pos );
     };
 
 }

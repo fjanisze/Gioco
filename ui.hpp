@@ -24,7 +24,7 @@ namespace graphic_ui
         cities::city_agent* current_city;
         city_ui_manager::city_ui* city_ui;
     public:
-        bool is_over_the_game_map( const sf::Event& event );
+        bool is_over_the_game_map( long x_pos , long y_pos );
     private:
         void load_and_set_font();
         game_window_config_t ui_config;

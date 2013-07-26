@@ -19,7 +19,7 @@ namespace buildings
 		appartment,
 		office,
 		error
-	} building_type_t; 
+	} building_type_t;
 
 	extern const string building_types_str[];
 
@@ -27,7 +27,7 @@ namespace buildings
 	struct building_descriptor_t
 	{
 		long obj_id;
-		
+
 		//Generic info
 		building_type_t type;
 
@@ -90,6 +90,35 @@ namespace buildings
 	public:
 		building_manager();
 		~building_manager();
+    public:
+        std::vector< appartment_descriptor_t* >* get_all_the_appartment();
+	};
+}
+
+namespace constructions
+{
+    //This is a construction object, which should be present on a field
+    struct construction_t
+    {
+        long obj_id;
+        //Type of construction
+        buildings::building_type_t type;
+        //Generic information, from the relative descriptor
+        std::string name,
+                    description;
+        //Unit information
+        long unit_size,
+            unit_capacity; //The total capacity of the building is unit_size * unit_capacity
+
+        //The price in the descriptor may be not valid anymore, perks can influence the price
+        mlong unit_price;
+    };
+
+    //This class manage the construction procedure for the cities
+	class construction_manager
+	{
+    public:
+
 	};
 }
 

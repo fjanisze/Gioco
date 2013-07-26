@@ -117,4 +117,10 @@ namespace graphic_ui
         str << "View on: " << location;
         status_console.text.setString( str.str() );
     }
+
+    //The player just pushed the mouse button over a menu or status bar
+    void console_manager::handle_console_click( long x_pos , long y_pos )
+    {
+        LOG("console_manager::handle_console_click(): User click, x:",x_pos,",y:",y_pos );
+    }
 }

@@ -163,7 +163,7 @@ namespace graphic_ui
     void game_ui::mouse_press_event( const sf::Event& event )
     {
         //Check if the mouse is moving in the gameplay area or over some menu ecc..
-        if( is_over_the_game_map( event ) )
+        if( is_over_the_game_map( event.mouseButton.x , event.mouseButton.y ) )
         {
             game_map::field_graphics_t* field = map->get_field_at_pos( event.mouseButton.x , event.mouseButton.y );
             if( field == nullptr )
@@ -187,13 +187,18 @@ namespace graphic_ui
                 write_info("No action available!");
             }
         }
+        else
+        {
+            //The click seems to happen over a menu of over a info bar
+            handle_console_click( event.mouseButton.x , event.mouseButton.y );
+        }
     }
 
     //Manage the mouse moving event
     void game_ui::mouse_moving_event( const sf::Event& event )
     {
         //Check if the mouse is moving in the gameplay area or over some menu ecc..
-        if( is_over_the_game_map( event ) )
+        if( is_over_the_game_map( event.mouseMove.x , event.mouseMove.y ) )
         {
             game_map_mouse_move( event );
         }
@@ -233,14 +238,18 @@ namespace graphic_ui
     }
 
     //This function returns true if the user is moving over the playable area
-    bool game_ui::is_over_the_game_map( const sf::Event& event )
+    bool game_ui::is_over_the_game_map( long x_pos , long y_pos )
     {
-        if( event.mouseMove.x > ui_config.viewport_setting.map_width  ||
-            event.mouseMove.y > ui_config.viewport_setting.map_height )
+        if( y_pos >= ui_config.viewport_setting.map_y_offset &&
+            y_pos <= ( ui_config.viewport_setting.map_y_offset + ui_config.viewport_setting.map_height ) )
         {
-            return false;
+            if( x_pos >= ui_config.viewport_setting.map_x_offset &&
+                x_pos <= ( ui_config.viewport_setting.map_x_offset + ui_config.viewport_setting.map_width ) )
+            {
+                return true;
+            }
         }
-        return true;
+        return false;
     }
 
     //Redraw the graphic elements.

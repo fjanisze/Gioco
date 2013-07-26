@@ -24,7 +24,7 @@ namespace city_ui_manager
     //Before using the city_ui the proper city agent need to be provided
     void city_ui::set_cityagent( cities::city_agent* agent )
     {
-        ELOG("city_ui::set_cityagent(): Setting new city agent :",agent);
+        ELOG("city_ui::set_cityagent(): Setting new city agent:",agent);
         city_agent = agent;
         field_width = city_agent->get_city_info()->citymap->get_field_width();
         field_height = city_agent->get_city_info()->citymap->get_field_height();

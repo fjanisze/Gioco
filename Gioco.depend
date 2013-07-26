@@ -58,10 +58,10 @@
 	<mutex>
 	<list>
 
-1374804242 source:d:\gioco\game.cpp
+1374822886 source:d:\gioco\game.cpp
 	"game.hpp"
 
-1374804191 d:\gioco\game.hpp
+1374820157 d:\gioco\game.hpp
 	"logging/logger.hpp"
 	"mytypes.hpp"
 	"map.hpp"
@@ -462,7 +462,7 @@
 	"logging/logger.hpp"
 	"map.hpp"
 
-1374812669 d:\gioco\ui.hpp
+1374825858 d:\gioco\ui.hpp
 	"logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
@@ -485,7 +485,7 @@
 	<OpenGL/gl.h>
 	<OpenGL/glu.h>
 
-1374812721 source:d:\gioco\ui.cpp
+1374826409 source:d:\gioco\ui.cpp
 	"ui.hpp"
 
 1374648306 d:\gioco\ui_city.hpp
@@ -495,14 +495,17 @@
 	"city_map.hpp"
 	<cassert>
 
-1374817664 d:\gioco\ui_console.hpp
+1374826735 d:\gioco\ui_console.hpp
 	"logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
 	<SFML/Graphics/RenderWindow.hpp>
 	"ui_common.hpp"
+	"buildings.hpp"
 	<sstream>
 	<string>
+	<map>
+	<mutex>
 
 1374042365 d:\gioco\ui_common.hpp
 	"map_common.hpp"
@@ -510,7 +513,7 @@
 1374811937 source:d:\gioco\ui_city.cpp
 	"ui_city.hpp"
 
-1374811835 source:d:\gioco\ui_console.cpp
+1374825908 source:d:\gioco\ui_console.cpp
 	"ui_console.hpp"
 
 1374648190 d:\gioco\cities.hpp

@@ -82,6 +82,7 @@ namespace game_manager
 		void create_test_scenario_1();
 		void init();
 		void handle_game();
+		buildings::building_manager* get_buildings();
 	};
 };
 

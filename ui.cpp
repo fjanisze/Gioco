@@ -35,6 +35,9 @@ namespace graphic_ui
     {
         LOG("game_ui::game_ui(): Window width: " , ui_config.window_width, ", height: ", ui_config.window_height, ", full screen: ", ui_config.full_screen, ". Creating the window" );
         is_the_window_running = false;
+        //font
+		load_and_set_font();
+
         //Create the proper instance, check if this is the only one
         assert( instance == nullptr );
         instance = this;
@@ -48,9 +51,6 @@ namespace graphic_ui
 
 		//Set the console manager
 		city_ui->set_console_manager( this );
-
-		//font
-		load_and_set_font();
 
 		//Init the console
 		init_consoles( ui_config );
@@ -66,9 +66,11 @@ namespace graphic_ui
     //Set the proper font.
     void game_ui::load_and_set_font()
     {
+        std::lock_guard< std::mutex > lock( mutex );
+        ELOG("game_ui::load_and_set_font(): Loading font consola.ttf");
         if( !ui_config.font.loadFromFile("consola.ttf") )
         {
-            LOG_WARN("game_ui::load_and_set_font(): Unable to load the selected font arial.ttf");
+            LOG_WARN("game_ui::load_and_set_font(): Unable to load the selected font consola.ttf");
         }
     }
 
@@ -106,6 +108,7 @@ namespace graphic_ui
     //Main loop handling the graphic interface
     void game_ui::main_loop()
     {
+        LOG("game_ui::main_loop(): Entering..");
         while( is_the_window_running )
         {
             sf::Event event;

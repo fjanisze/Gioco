@@ -9,8 +9,11 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "ui_common.hpp"
+#include "buildings.hpp"
 #include <sstream>
 #include <string>
+#include <map>
+#include <mutex>
 
 namespace graphic_elements
 {
@@ -29,7 +32,7 @@ namespace graphic_elements
         {
             reference_id = id;
         }
-        void get_id()
+        long get_id()
         {
             return reference_id;
         }
@@ -99,36 +102,40 @@ namespace graphic_ui
         long width,
             height;
         //Related vertex
-        sf::VertexArray vertex;
+        sf::VertexArray background_vertex;
+        std::vector< sf::VertexArray > vertex;
         //Text entity related with this console
         sf::Text text;
         //Position of all the buttons
         std::vector< button_position_t > button_map;
-        std::vector< ui_button_t > buttons; //Button on the console
-
+        std::map< long , graphic_elements::ui_button_t > buttons; //Button on the console
     public:
         //Constructor and utility
         console_wnd_t( long x_off , long y_off , long wnd_width, long wnd_height );
         console_wnd_t();
-
         void create( long x_off , long y_off , long wnd_width, long wnd_height );
         void set_color( sf::Color color );
         console_point_t over_the_console( long x , long y);
         void set_font( sf::Font fnt );
-        sf::VertexArray& get_vertex();
+        std::vector< sf::VertexArray >& get_vertex();
+        sf::VertexArray& get_background_vertex();
         sf::Text& get_text();
-        void add_button_map( button_position_t* map , short amount_of_buttons );
-        void add_button( ui_button_t button , short index );
+        void add_button_map( const button_position_t* map , short amount_of_buttons );
+        void add_button( graphic_elements::ui_button_t button , short index );
     };
 
     //This object is reponsible for the console management
     class console_manager
     {
+    protected:
+        std::mutex mutex;
+    private:
         //We assume that only two console are provided at the beginning
         console_wnd_t status_console; //Is the top bar.
         console_wnd_t main_console;
         console_wnd_t info_console;
         const sf::Font* font;
+        buildings::building_manager* building_mng;
     public:
         console_manager();
         short init_consoles( const graphic_ui::game_window_config_t& window_config );
@@ -137,6 +144,8 @@ namespace graphic_ui
         void write_info( const std::string& msg );
         void write_status( const std::string& location );
         void handle_console_click( long x_pos , long y_pos );
+        void set_building_manager( buildings::building_manager* mng );
+        void enter_main_manu();
     };
 
 }

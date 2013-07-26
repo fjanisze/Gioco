@@ -105,11 +105,18 @@ namespace game_manager
 	{
 	    LOG("game_manager::handle_game(): Starting");
 	    //User Interface object
-	    graphic_ui::game_ui* game_ui = graphic_ui::game_ui::get_instance();
+	    game_ui = graphic_ui::game_ui::get_instance();
+	    game_ui->set_building_manager( buildings );
 	    //Populate the map with all the vertex
 	    get_the_game_map()->create_vertex_map();
 	    game_ui->create_render_window();
 	    game_ui->main_loop();
+	}
+
+	//Return the 'building_manager' object
+	buildings::building_manager* game_manager::get_buildings()
+	{
+	    return buildings;
 	}
 }
 

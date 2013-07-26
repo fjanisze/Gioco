@@ -58,10 +58,10 @@
 	<mutex>
 	<list>
 
-1374822886 source:d:\gioco\game.cpp
+1374828231 source:d:\gioco\game.cpp
 	"game.hpp"
 
-1374820157 d:\gioco\game.hpp
+1374828231 d:\gioco\game.hpp
 	"logging/logger.hpp"
 	"mytypes.hpp"
 	"map.hpp"
@@ -485,7 +485,7 @@
 	<OpenGL/gl.h>
 	<OpenGL/glu.h>
 
-1374826409 source:d:\gioco\ui.cpp
+1374828231 source:d:\gioco\ui.cpp
 	"ui.hpp"
 
 1374648306 d:\gioco\ui_city.hpp
@@ -495,7 +495,7 @@
 	"city_map.hpp"
 	<cassert>
 
-1374826735 d:\gioco\ui_console.hpp
+1374828478 d:\gioco\ui_console.hpp
 	"logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>

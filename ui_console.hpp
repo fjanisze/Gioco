@@ -116,7 +116,7 @@ namespace graphic_ui
         void create( long x_off , long y_off , long wnd_width, long wnd_height );
         void set_color( sf::Color color );
         console_point_t over_the_console( long x , long y);
-        void set_font( sf::Font fnt );
+        void set_font( const sf::Font* fnt  );
         std::vector< sf::VertexArray >& get_vertex();
         sf::VertexArray& get_background_vertex();
         sf::Text& get_text();

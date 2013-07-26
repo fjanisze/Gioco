@@ -118,9 +118,9 @@ namespace graphic_ui
         return result;
     }
 
-    void console_wnd_t::set_font( sf::Font fnt )
+    void console_wnd_t::set_font( const sf::Font* fnt )
     {
-        text.setFont( fnt );
+        text.setFont( *fnt );
     }
 
     std::vector< sf::VertexArray >& console_wnd_t::get_vertex()
@@ -181,26 +181,26 @@ namespace graphic_ui
 
         //Copy the font
         font = &window_config.font;
-        status_console.set_font( *font );
-        main_console.set_font( *font );
-        info_console.set_font( *font );
+        status_console.set_font( font );
+        main_console.set_font( font );
+        info_console.set_font( font );
     }
 
     //Draw the console in the proper context
     void console_manager::draw_console( sf::RenderWindow& window )
     {
         //Draw
-    //    window.draw( status_console.get_background_vertex() );
-     //   window.draw( info_console.get_background_vertex() );
+        window.draw( status_console.get_background_vertex() );
+        window.draw( info_console.get_background_vertex() );
     //    std::vector< sf::VertexArray >& main_vertex = main_console.get_vertex();
     ////    for( auto elem : main_vertex )
      //   {
      //       window.draw( elem );
      //   }
         //text
-    //    window.draw( status_console.get_text() );
-    //    window.draw( main_console.get_text() );
-     //   window.draw( info_console.get_text() );
+        window.draw( status_console.get_text() );
+        window.draw( main_console.get_text() );
+        window.draw( info_console.get_text() );
     }
 
     //Write a message in the info console

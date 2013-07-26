@@ -80,10 +80,13 @@ namespace game_manager
         //Create the cities in the game.
 		cities::city_agent* roma_agent = city_manager->create_new_city( "Roma", 100 );
 		cities::city_agent* milano_agent = city_manager->create_new_city( "Milano", 100 );
+		cities::city_agent* torino_agent = city_manager->create_new_city( "Torino", 144 );
 
 		//Create the cities on the map
 		get_the_game_map()->create_a_city_at_random_coord( "Roma" , roma_agent );
 		get_the_game_map()->create_a_city_at_random_coord( "Milano" , milano_agent );
+		get_the_game_map()->create_a_city_at_random_coord( "Torino" , torino_agent );
+
 	}
 
 	void game_manager::init()
@@ -100,7 +103,6 @@ namespace game_manager
 
 	void game_manager::handle_game()
 	{
-        std::lock_guard< std::mutex > lock(mutex);
 	    LOG("game_manager::handle_game(): Starting");
 	    //User Interface object
 	    graphic_ui::game_ui* game_ui = graphic_ui::game_ui::get_instance();

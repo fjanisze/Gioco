@@ -212,7 +212,16 @@ namespace graphic_ui
         {
             //Chage the message
             message.str("");//Clear
-            message << "Field name: "<<field->descriptor->name <<", ID: "<<field->field->field_id<<"\nMouse coord: "<<event.mouseMove.x<<","<<event.mouseMove.y<<std::endl;
+            //The message is different in case of the mouse moving over a city
+            cities::city_agent* agent = field->manager->get_city_agent();
+            if( agent != nullptr )
+            {
+                message << "City: " << agent->get_city_info()->name << std::endl;
+            }
+            else
+            {
+                message << "Field name: "<<field->descriptor->name <<", ID: "<<field->field->field_id<<"\nMouse coord: "<<event.mouseMove.x<<","<<event.mouseMove.y<<std::endl;
+            }
             write_info( message.str() );
         }
         else

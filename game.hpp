@@ -72,6 +72,7 @@ namespace game_manager
 		static game_manager* instance;
 		buildings::building_manager* buildings;
 		cities::city_manager* city_manager;
+		graphic_ui::game_ui* game_ui;
 	public:
 		static game_manager* get_instance();
 		game_manager();

@@ -184,6 +184,8 @@ namespace graphic_ui
                 current_city = agent;
                 city_ui->set_cityagent( agent );
                 current_view = type_of_view_t::city_map_view;
+                //Create the only available menu
+                enter_main_manu();
             }
             else
             {

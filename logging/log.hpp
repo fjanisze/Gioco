@@ -87,13 +87,13 @@ namespace logging
 		switch( severity )
 		{
 			case severity_type::debug:
-				log_stream<<"<DEBUG> :";
+				log_stream<<"<DEBUG>~:";
 				break;
 			case severity_type::warning:
-				log_stream<<"<WARNING> :";
+				log_stream<<"<WARNING>~:";
 				break;
 			case severity_type::error:
-				log_stream<<"<ERROR> :";
+				log_stream<<"<ERROR>~:";
 				break;
 		};
 		print_impl( args... );

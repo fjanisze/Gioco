@@ -6,7 +6,7 @@
 1358956542 d:\gioco\logging\logger.hpp
 	"log.hpp"
 
-1360315221 d:\gioco\logging\log.hpp
+1375063868 d:\gioco\logging\log.hpp
 	<iostream>
 	<memory>
 	<string>
@@ -485,7 +485,7 @@
 	<OpenGL/gl.h>
 	<OpenGL/glu.h>
 
-1374828231 source:d:\gioco\ui.cpp
+1375156313 source:d:\gioco\ui.cpp
 	"ui.hpp"
 
 1374648306 d:\gioco\ui_city.hpp
@@ -495,7 +495,7 @@
 	"city_map.hpp"
 	<cassert>
 
-1374828478 d:\gioco\ui_console.hpp
+1375157392 d:\gioco\ui_console.hpp
 	"logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
@@ -513,7 +513,7 @@
 1374811937 source:d:\gioco\ui_city.cpp
 	"ui_city.hpp"
 
-1374825908 source:d:\gioco\ui_console.cpp
+1374828526 source:d:\gioco\ui_console.cpp
 	"ui_console.hpp"
 
 1374648190 d:\gioco\cities.hpp

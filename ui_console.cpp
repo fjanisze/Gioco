@@ -19,16 +19,34 @@ namespace graphic_elements
         vertex[3].position = sf::Vector2f( x_pos , y_pos + height );
     }
 
-    void ui_button_t::set_text( const std::string& text , sf::Font font  )
+    void ui_button_t::set_offset( long x_axis, long y_axis )
     {
+        for( short i = 0 ; i < 4 ; i++ )
+        {
+            vertex[ i ].position += sf::Vector2f( x_axis , y_axis );
+        }
+        button_text.setPosition( vertex[ 0 ].position );
+    }
+
+    void ui_button_t::set_text( const std::string& text , const sf::Font* font  )
+    {
+        button_text.setPosition( vertex[ 0 ].position );
+        button_text.setFont( *font );
+        button_text.setString( text.c_str() );
+        button_text.setCharacterSize( 12 );
+    }
+
+    sf::Text  ui_button_t::get_text()
+    {
+        return button_text;
     }
 
     void ui_button_t::set_appearence( const sf::Color& color )
     {
         vertex[0].color = color;
-        vertex[0].color = color;
-        vertex[0].color = color;
-        vertex[0].color = color;
+        vertex[1].color = color;
+        vertex[2].color = color;
+        vertex[3].color = color;
     }
 
     sf::VertexArray& ui_button_t::get_vertex()
@@ -152,9 +170,29 @@ namespace graphic_ui
     void console_wnd_t::add_button( graphic_elements::ui_button_t button , short index )
     {
         ELOG("console_wnd_t::add_button(): Adding button element, ID:",button.get_id());
+        //Set the proper offset
+        button.set_offset( x_offset , y_offset );
         buttons[ index ] = button;
         //Copy the vertex
         vertex.push_back( button.get_vertex() );
+    }
+
+    void console_wnd_t::draw( sf::RenderWindow& window )
+    {
+        //Draw the vertex
+        window.draw( background_vertex );
+        for( auto elem : vertex )
+        {
+            window.draw( elem );
+        }
+        //Draw the button text
+        for( auto elem : buttons )
+        {
+            window.draw( elem.second.get_vertex() );
+            window.draw( elem.second.get_text() );
+        }
+        //Draw text
+        window.draw( text );
     }
 
     console_manager::console_manager( ) : building_mng( nullptr )
@@ -189,18 +227,9 @@ namespace graphic_ui
     //Draw the console in the proper context
     void console_manager::draw_console( sf::RenderWindow& window )
     {
-        //Draw
-        window.draw( status_console.get_background_vertex() );
-        window.draw( info_console.get_background_vertex() );
-    //    std::vector< sf::VertexArray >& main_vertex = main_console.get_vertex();
-    ////    for( auto elem : main_vertex )
-     //   {
-     //       window.draw( elem );
-     //   }
-        //text
-        window.draw( status_console.get_text() );
-        window.draw( main_console.get_text() );
-        window.draw( info_console.get_text() );
+        status_console.draw( window );
+        info_console.draw( window );
+        main_console.draw( window);
     }
 
     //Write a message in the info console
@@ -256,7 +285,7 @@ namespace graphic_ui
             {
                 button.create( 0 , y_pos , 200 , 60 );
                 button.set_appearence( sf::Color::Black );
-                button.set_text( elem->descriptor.name , *font );
+                button.set_text( elem->descriptor.name , font );
                 button.set_id( button_id );
                 main_console.add_button( button , button_id );
                 ++button_id;

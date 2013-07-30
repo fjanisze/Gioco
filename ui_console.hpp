@@ -22,12 +22,15 @@ namespace graphic_elements
     {
         sf::VertexArray vertex; //Graphic appearence
         long reference_id;
+        sf::Text button_text;
     public:
         ui_button_t();
         void create( long x_pos, long y_pos, long width, long height );
-        void set_text( const std::string& text , sf::Font font );
+        void set_text( const std::string& text , const sf::Font* font );
+        sf::Text get_text();
         void set_appearence( const sf::Color& color );
         sf::VertexArray& get_vertex();
+        void set_offset( long x_axis, long y_axis );
         void set_id( long id )
         {
             reference_id = id;
@@ -122,6 +125,7 @@ namespace graphic_ui
         sf::Text& get_text();
         void add_button_map( const button_position_t* map , short amount_of_buttons );
         void add_button( graphic_elements::ui_button_t button , short index );
+        void draw( sf::RenderWindow& window );
     };
 
     //This object is reponsible for the console management

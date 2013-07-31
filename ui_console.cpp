@@ -54,6 +54,18 @@ namespace graphic_elements
         return vertex;
     }
 
+    //Return true if the point is on this button
+    bool ui_button_t::is_point_over_the_button( long x_pos , long y_pos )
+    {
+        if( ( x_pos >= vertex[0].position.x ) && ( x_pos <= vertex[1].position.x ) )
+        {
+            if( ( y_pos >= vertex[0].position.y ) && ( y_pos <= vertex[3].position.y ) )
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 namespace graphic_ui
@@ -131,6 +143,16 @@ namespace graphic_ui
                 result.x_pos = x;
                 result.y_pos = y;
                 result.is_console_point = true;
+                //Check if the click happened over a button
+                for( auto& elem : buttons )
+                {
+                    if( elem.second.is_point_over_the_button( x, y ) )
+                    {
+                        result.click_possible = true;
+                        result.button = &elem.second;
+                        break;
+                    }
+                }
             }
         }
         return result;
@@ -169,7 +191,8 @@ namespace graphic_ui
     //The value 'index' is used to set the button position on the base of the button position map provided
     void console_wnd_t::add_button( graphic_elements::ui_button_t button , short index )
     {
-        ELOG("console_wnd_t::add_button(): Adding button element, ID:",button.get_id());
+        std::string button_name = button.get_text().getString();
+        ELOG("console_wnd_t::add_button(): Adding button element, ID:",button.get_id() , ",name: ",button_name );
         //Set the proper offset
         button.set_offset( x_offset , y_offset );
         buttons[ index ] = button;
@@ -257,10 +280,29 @@ namespace graphic_ui
         ELOG("console_manager::handle_console_click(): User click, x:",x_pos,",y:",y_pos );
         //Actually only clicks on the main console trigger some action
         console_point_t point = main_console.over_the_console( x_pos , y_pos );
-        if( point.is_console_point )
+        if( point.is_console_point ) //Over the main console.
         {
-            std::cout<<"Click\n";
+            if( point.click_possible )
+            {
+                button_trigger_action( point.button );
+            }
         }
+    }
+
+    //This function is needed to trigger the proper action when a button is pressed
+    void console_manager::button_trigger_action( graphic_elements::ui_button_t* button )
+    {
+        ELOG("console_manager::button_trigger_action(): Pressed the button ID: " , button->get_id() );
+        switch( button->get_id() )
+        {
+        case COMMON_BACK_BUTTON:
+            break;
+        case COMMON_MAP_BUTTON:
+            break;
+        default:
+            LOG_WARN("console_manager::button_trigger_action(): Cannot trigger any action for the button ID: ",button->get_id() );
+            break;
+        };
     }
 
     void console_manager::set_building_manager( buildings::building_manager* mng )
@@ -307,20 +349,22 @@ namespace graphic_ui
     long console_manager::add_common_btn( console_wnd_t& console )
     {
         ELOG("console_manager::add_common_btn(): Entering");
-        long button_id = 0; //The ID for the common operation begin from 0
+
         graphic_elements::ui_button_t button;
         button.create( 0 , 0 , 100 , 60 );
         button.set_appearence( sf::Color::Blue );
         button.set_text( "Back" , font );
-        button.set_id( button_id );
-        console.add_button( button , button_id );
-        ++button_id;
+        button.set_id( COMMON_BACK_BUTTON );
+        console.add_button( button , COMMON_BACK_BUTTON); //Back button, ID: 0
+
+
         button.create( 100 , 0 , 100 , 60 );
         button.set_appearence( sf::Color::Blue );
         button.set_text( "MAP" , font );
-        button.set_id( button_id );
-        console.add_button( button , button_id );
-        ++button_id;
+        button.set_id( COMMON_MAP_BUTTON );
+        console.add_button( button , COMMON_MAP_BUTTON ); //MAP button, ID: 1
+
+
         return 60;
     }
 

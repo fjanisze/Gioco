@@ -15,6 +15,9 @@
 #include <map>
 #include <mutex>
 
+#define COMMON_BACK_BUTTON 0
+#define COMMON_MAP_BUTTON 1
+
 namespace graphic_elements
 {
     //Button entity, the user can click to trigger some action
@@ -39,6 +42,7 @@ namespace graphic_elements
         {
             return reference_id;
         }
+        bool is_point_over_the_button( long x_pos , long y_pos );
     };
 }
 
@@ -87,11 +91,13 @@ namespace graphic_ui
         bool is_console_point; //True it the point is over the console
         long x_pos, y_pos;
         bool click_possible; //Is true if is possible to click the point to trigger some action
-        long action_id; //Id related with the action triggered by the click
+        long action_id; //Id related with the action triggered by the click, for simplicity reason this is the button id
+        graphic_elements::ui_button_t* button;
         console_point_t() : is_console_point( false ) ,
                             x_pos( -1 ) , y_pos( -1 ),
                             click_possible( false ),
-                            action_id( -1 )
+                            action_id( -1 ),
+                            button( nullptr )
         {
         }
     };
@@ -153,6 +159,7 @@ namespace graphic_ui
         void add_building_construction_btn( console_wnd_t& console , long y_pos = 0  );
         long add_common_btn( console_wnd_t& console );
         void show_main_menu();
+        void button_trigger_action( graphic_elements::ui_button_t* button );
     };
 
 }

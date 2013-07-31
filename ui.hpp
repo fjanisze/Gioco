@@ -20,7 +20,6 @@ namespace graphic_ui
     {
         static game_ui* instance;
         game_map::game_map* map;
-        type_of_view_t current_view; //On the base of the current view different action are possible
         cities::city_agent* current_city;
         city_ui_manager::city_ui* city_ui;
     public:

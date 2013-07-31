@@ -462,7 +462,7 @@
 	"logging/logger.hpp"
 	"map.hpp"
 
-1375242103 d:\gioco\ui.hpp
+1375251637 d:\gioco\ui.hpp
 	"logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
@@ -495,7 +495,7 @@
 	"city_map.hpp"
 	<cassert>
 
-1375249527 d:\gioco\ui_console.hpp
+1375251637 d:\gioco\ui_console.hpp
 	"logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>

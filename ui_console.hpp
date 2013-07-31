@@ -139,6 +139,7 @@ namespace graphic_ui
     class console_manager
     {
     protected:
+        type_of_view_t current_view; //On the base of the current view different action are possible
         std::mutex mutex;
     private:
         //We assume that only two console are provided at the beginning

@@ -298,6 +298,11 @@ namespace graphic_ui
         case COMMON_BACK_BUTTON:
             break;
         case COMMON_MAP_BUTTON:
+            {
+                ELOG("console_manager::button_trigger_action(): Changing the view, to the main map.");
+                current_view = type_of_view_t::game_map_view;
+                show_main_menu();
+            }
             break;
         default:
             LOG_WARN("console_manager::button_trigger_action(): Cannot trigger any action for the button ID: ",button->get_id() );

@@ -48,12 +48,35 @@ namespace city_ui_manager
             city_map_mouse_move( event );
             break;
         case sf::Event::MouseButtonPressed:
-           // mouse_press_event( event );
+            mouse_press_event( event );
             break;
         default:
             break;
         };
         return 0;
+    }
+
+    //This function returns true if the user is moving over the playable area
+    bool city_ui::is_over_the_game_map( long x_pos , long y_pos )
+    {
+        if( y_pos >= map_view_setting.map_y_offset &&
+            y_pos <= ( map_view_setting.map_y_offset + map_view_setting.map_height ) )
+        {
+            if( x_pos >= map_view_setting.map_x_offset &&
+                x_pos <= ( map_view_setting.map_x_offset + map_view_setting.map_width ) )
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    void city_ui::mouse_press_event( const sf::Event& event )
+    {
+        if(! is_over_the_game_map( event.mouseButton.x , event.mouseButton.y ) )
+        {
+            ui_console->handle_console_click( event.mouseButton.x , event.mouseButton.y );
+        }
     }
 
     void city_ui::city_map_mouse_move( const sf::Event& event )
@@ -113,4 +136,26 @@ namespace city_ui_manager
             window->draw( *focus_box );
         }
     }
+
+    //When the user enter the city menu
+    void city_ui::enter_city_menu()
+    {
+        ELOG("city_ui::enter_city_menu(): Entering.");
+        ui_console->show_main_menu();
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

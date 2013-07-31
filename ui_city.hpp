@@ -30,6 +30,9 @@ namespace city_ui_manager
         long handle_event( const sf::Event& event );
         void city_map_mouse_move( const sf::Event& event );
         void draw_city_ui_elements();
+        void enter_city_menu();
+        void mouse_press_event( const sf::Event& event );
+        bool is_over_the_game_map( long x_pos , long y_pos );
     };
 }
 

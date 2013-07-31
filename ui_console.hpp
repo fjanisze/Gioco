@@ -126,6 +126,7 @@ namespace graphic_ui
         void add_button_map( const button_position_t* map , short amount_of_buttons );
         void add_button( graphic_elements::ui_button_t button , short index );
         void draw( sf::RenderWindow& window );
+        void remove_all_buttons();
     };
 
     //This object is reponsible for the console management
@@ -149,7 +150,9 @@ namespace graphic_ui
         void write_status( const std::string& location );
         void handle_console_click( long x_pos , long y_pos );
         void set_building_manager( buildings::building_manager* mng );
-        void enter_main_manu();
+        void add_building_construction_btn( console_wnd_t& console , long y_pos = 0  );
+        long add_common_btn( console_wnd_t& console );
+        void show_main_menu();
     };
 
 }

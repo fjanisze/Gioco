@@ -195,6 +195,11 @@ namespace graphic_ui
         window.draw( text );
     }
 
+    void console_wnd_t::remove_all_buttons()
+    {
+        buttons.clear();
+    }
+
     console_manager::console_manager( ) : building_mng( nullptr )
     {
     }
@@ -265,39 +270,67 @@ namespace graphic_ui
     }
 
     //Create the proper context for the main menu
-    void console_manager::enter_main_manu()
+    void console_manager::add_building_construction_btn( console_wnd_t& console , long y_pos )
     {
         if( building_mng == nullptr )
         {
-            LOG_WARN("console_manager::enter_main_manu(): Cannot execute, building_mng is still null");
+            LOG_WARN("console_manager::add_building_construction_btn(): Cannot execute, building_mng is still null");
             return;
         }
-        ELOG("console_wnd_t::enter_main_manu(): Entering main menu..");
+        ELOG("console_wnd_t::add_building_construction_btn(): Adding the construction buttons..");
         //As now, this menu just show the building which is possible to build
         graphic_elements::ui_button_t button;
         //One button for each building that can be built
         std::vector< buildings::appartment_descriptor_t* >* appartment = building_mng->get_all_the_appartment();
         if( appartment != nullptr )
         {
-            long y_pos = 0;
-            long button_id = 0;
+
+            long button_id = 1000; //From 1000 begins the ID for the consturction buttons.
             for( auto elem : (*appartment) )
             {
-                button.create( 0 , y_pos , 200 , 60 );
+                button.create( 0 , y_pos , 200 , 30 );
                 button.set_appearence( sf::Color::Black );
                 button.set_text( elem->descriptor.name , font );
                 button.set_id( button_id );
-                main_console.add_button( button , button_id );
+                console.add_button( button , button_id );
                 ++button_id;
-                y_pos += 60;
+                y_pos += 30;
             }
         }
         else
         {
-            LOG_WARN("console_manager::enter_main_manu(): No appartment available for the menu!");
+            LOG_WARN("console_manager::add_building_construction_btn(): No appartment available for the menu!");
         }
     }
 
+    //Add to the main menu some common buttons
+    long console_manager::add_common_btn( console_wnd_t& console )
+    {
+        ELOG("console_manager::add_common_btn(): Entering");
+        long button_id = 0; //The ID for the common operation begin from 0
+        graphic_elements::ui_button_t button;
+        button.create( 0 , 0 , 100 , 60 );
+        button.set_appearence( sf::Color::Blue );
+        button.set_text( "Back" , font );
+        button.set_id( button_id );
+        console.add_button( button , button_id );
+        ++button_id;
+        button.create( 100 , 0 , 100 , 60 );
+        button.set_appearence( sf::Color::Blue );
+        button.set_text( "MAP" , font );
+        button.set_id( button_id );
+        console.add_button( button , button_id );
+        ++button_id;
+        return 60;
+    }
+
+    //Prepare the main menu
+    void console_manager::show_main_menu()
+    {
+        ELOG("console_manager::show_main_menu(): Entering");
+        main_console.remove_all_buttons();
+        long last_offset = add_common_btn( main_console );
+    }
 }
 
 

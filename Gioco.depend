@@ -495,7 +495,7 @@
 	"city_map.hpp"
 	<cassert>
 
-1375251637 d:\gioco\ui_console.hpp
+1375253602 d:\gioco\ui_console.hpp
 	"logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
@@ -510,7 +510,7 @@
 1374042365 d:\gioco\ui_common.hpp
 	"map_common.hpp"
 
-1375245131 source:d:\gioco\ui_city.cpp
+1375253265 source:d:\gioco\ui_city.cpp
 	"ui_city.hpp"
 
 1375244589 source:d:\gioco\ui_console.cpp

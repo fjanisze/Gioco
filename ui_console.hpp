@@ -15,7 +15,7 @@
 #include <map>
 #include <mutex>
 
-#define COMMON_BACK_BUTTON 0
+#define COMMON_BUILD_BUTTON 0
 #define COMMON_MAP_BUTTON 1
 
 namespace graphic_elements
@@ -158,8 +158,10 @@ namespace graphic_ui
         void handle_console_click( long x_pos , long y_pos );
         void set_building_manager( buildings::building_manager* mng );
         void add_building_construction_btn( console_wnd_t& console , long y_pos = 0  );
-        long add_common_btn( console_wnd_t& console );
-        void show_main_menu();
+        long add_city_common_btn( console_wnd_t& console );
+        long add_map_common_btn( console_wnd_t& console );
+        void show_city_main_menu();
+        void show_map_main_menu();
         void button_trigger_action( graphic_elements::ui_button_t* button );
     };
 

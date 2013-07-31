@@ -196,8 +196,6 @@ namespace graphic_ui
         //Set the proper offset
         button.set_offset( x_offset , y_offset );
         buttons[ index ] = button;
-        //Copy the vertex
-        vertex.push_back( button.get_vertex() );
     }
 
     void console_wnd_t::draw( sf::RenderWindow& window )
@@ -295,13 +293,17 @@ namespace graphic_ui
         ELOG("console_manager::button_trigger_action(): Pressed the button ID: " , button->get_id() );
         switch( button->get_id() )
         {
-        case COMMON_BACK_BUTTON:
+        case COMMON_BUILD_BUTTON:
+            {
+                //Add the build buttons.
+                add_building_construction_btn( main_console , 90 );
+            }
             break;
         case COMMON_MAP_BUTTON:
             {
                 ELOG("console_manager::button_trigger_action(): Changing the view, to the main map.");
                 current_view = type_of_view_t::game_map_view;
-                show_main_menu();
+                show_map_main_menu();
             }
             break;
         default:
@@ -351,16 +353,16 @@ namespace graphic_ui
     }
 
     //Add to the main menu some common buttons
-    long console_manager::add_common_btn( console_wnd_t& console )
+    long console_manager::add_city_common_btn( console_wnd_t& console )
     {
-        ELOG("console_manager::add_common_btn(): Entering");
+        ELOG("console_manager::add_city_common_btn(): Entering");
 
         graphic_elements::ui_button_t button;
         button.create( 0 , 0 , 100 , 60 );
         button.set_appearence( sf::Color::Blue );
-        button.set_text( "Back" , font );
-        button.set_id( COMMON_BACK_BUTTON );
-        console.add_button( button , COMMON_BACK_BUTTON); //Back button, ID: 0
+        button.set_text( "Build" , font );
+        button.set_id( COMMON_BUILD_BUTTON );
+        console.add_button( button , COMMON_BUILD_BUTTON); //Back button, ID: 0
 
 
         button.create( 100 , 0 , 100 , 60 );
@@ -369,16 +371,30 @@ namespace graphic_ui
         button.set_id( COMMON_MAP_BUTTON );
         console.add_button( button , COMMON_MAP_BUTTON ); //MAP button, ID: 1
 
-
         return 60;
     }
 
-    //Prepare the main menu
-    void console_manager::show_main_menu()
+    //Add to the main menu the common buttons which are visible in the game map view.
+    long console_manager::add_map_common_btn( console_wnd_t& console )
     {
-        ELOG("console_manager::show_main_menu(): Entering");
+        //No button in the map view now.
+        return 0;
+    }
+
+    //Prepare the city menu
+    void console_manager::show_city_main_menu()
+    {
+        ELOG("console_manager::show_city_main_menu(): Entering");
         main_console.remove_all_buttons();
-        long last_offset = add_common_btn( main_console );
+        long last_offset = add_city_common_btn( main_console );
+    }
+
+    //Prepare the menu in the game map view.
+    void console_manager::show_map_main_menu()
+    {
+        ELOG("console_manager::show_map_main_menu(): Entering..");
+        main_console.remove_all_buttons();
+
     }
 }
 

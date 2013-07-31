@@ -141,7 +141,7 @@ namespace city_ui_manager
     void city_ui::enter_city_menu()
     {
         ELOG("city_ui::enter_city_menu(): Entering.");
-        ui_console->show_main_menu();
+        ui_console->show_city_main_menu();
     }
 }
 

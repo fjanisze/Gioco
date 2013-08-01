@@ -2,6 +2,7 @@
 #define LOGGING_LEVEL_2
 
 #include "ui_console.hpp"
+#include "game.hpp"
 
 namespace graphic_elements
 {
@@ -221,7 +222,7 @@ namespace graphic_ui
         buttons.clear();
     }
 
-    console_manager::console_manager( ) : building_mng( nullptr )
+    console_manager::console_manager( )
     {
     }
 
@@ -330,21 +331,11 @@ namespace graphic_ui
         }
     }
 
-    void console_manager::set_building_manager( buildings::building_manager* mng )
-    {
-        LOG("console_manager::set_building_manager(): Setting building manager, ADDR:",mng);
-        building_mng = mng;
-    }
-
     //Create the proper context for the main menu
     void console_manager::add_building_construction_btn( console_wnd_t& console , long y_pos )
     {
-        if( building_mng == nullptr )
-        {
-            LOG_WARN("console_manager::add_building_construction_btn(): Cannot execute, building_mng is still null");
-            return;
-        }
         ELOG("console_wnd_t::add_building_construction_btn(): Adding the construction buttons..");
+        buildings::building_manager* building_mng = game_manager::game_manager::get_instance()->get_buildings();
         //As now, this menu just show the building which is possible to build
         graphic_elements::ui_button_t button;
         //One button for each building that can be built

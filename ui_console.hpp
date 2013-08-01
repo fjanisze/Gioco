@@ -150,7 +150,6 @@ namespace graphic_ui
         console_wnd_t main_console;
         console_wnd_t info_console;
         const sf::Font* font;
-        buildings::building_manager* building_mng;
         bool handle_non_common_button( graphic_elements::ui_button_t* button  );
     public:
         console_manager();
@@ -160,7 +159,6 @@ namespace graphic_ui
         void write_info( const std::string& msg );
         void write_status( const std::string& location );
         void handle_console_click( long x_pos , long y_pos );
-        void set_building_manager( buildings::building_manager* mng );
         void add_building_construction_btn( console_wnd_t& console , long y_pos = 0  );
         long add_city_common_btn( console_wnd_t& console );
         long add_map_common_btn( console_wnd_t& console );

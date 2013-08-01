@@ -106,7 +106,6 @@ namespace game_manager
 	    LOG("game_manager::handle_game(): Starting");
 	    //User Interface object
 	    game_ui = graphic_ui::game_ui::get_instance();
-	    game_ui->set_building_manager( buildings );
 	    //Populate the map with all the vertex
 	    get_the_game_map()->create_vertex_map();
 	    game_ui->create_render_window();

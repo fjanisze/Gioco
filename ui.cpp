@@ -59,6 +59,12 @@ namespace graphic_ui
 		current_view = type_of_view_t::game_map_view;
     }
 
+    //Return the pointer to the city_ui
+    city_ui_manager::city_ui* game_ui::get_city_ui()
+    {
+        return city_ui;
+    }
+
     game_ui::~game_ui()
     {
     }

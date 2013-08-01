@@ -67,6 +67,26 @@ namespace graphic_elements
         }
         return false;
     }
+
+    void ui_button_t::set_id( long id )
+    {
+        reference_id = id;
+    }
+
+    long ui_button_t::get_id()
+    {
+        return reference_id;
+    }
+
+    void ui_button_t::set_action_id( long id )
+    {
+        action_id = id;
+    }
+
+    long ui_button_t::get_action_id()
+    {
+        return action_id;
+    }
 }
 
 namespace graphic_ui
@@ -327,8 +347,11 @@ namespace graphic_ui
         //Want the user build a new constuction?
         if( ( button_id > BUILDING_BUTTON_ID_BEGIN ) && ( button_id < BUILDING_BUTTON_ID_END ) )
         {
-
+            city_ui_manager::city_ui* city_ui = game_manager::game_manager::get_instance()->get_game_ui()->get_city_ui();
+            city_ui->handle_build_btn_click( button->get_action_id() );
+            return true;
         }
+        return false;
     }
 
     //Create the proper context for the main menu
@@ -350,6 +373,7 @@ namespace graphic_ui
                 button.set_appearence( sf::Color::Black );
                 button.set_text( elem->descriptor.name , font );
                 button.set_id( button_id );
+                button.set_action_id( elem->descriptor.obj_id );
                 console.add_button( button , button_id );
                 ++button_id;
                 y_pos += 30;

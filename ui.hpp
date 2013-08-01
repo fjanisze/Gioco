@@ -41,6 +41,7 @@ namespace graphic_ui
     public:
         sf::RenderWindow& create_render_window();
         static game_ui* get_instance();
+        city_ui_manager::city_ui* get_city_ui();
         void main_loop();
         game_map::map_viewport_settings_t get_viewport_settings();
         game_ui();

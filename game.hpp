@@ -83,6 +83,7 @@ namespace game_manager
 		void init();
 		void handle_game();
 		buildings::building_manager* get_buildings();
+		graphic_ui::game_ui* get_game_ui();
 	};
 };
 

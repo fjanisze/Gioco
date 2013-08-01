@@ -143,6 +143,12 @@ namespace city_ui_manager
         ELOG("city_ui::enter_city_menu(): Entering.");
         ui_console->show_city_main_menu();
     }
+
+    //This function is called when the user click on a button related with a building that may be built
+    void city_ui::handle_build_btn_click( long action_id )
+    {
+        ELOG("city_ui::handle_build_btn_click(): Action ID:",action_id,",city ID: ",city_agent->get_city_id());
+    }
 }
 
 

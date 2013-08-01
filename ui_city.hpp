@@ -33,6 +33,7 @@ namespace city_ui_manager
         void enter_city_menu();
         void mouse_press_event( const sf::Event& event );
         bool is_over_the_game_map( long x_pos , long y_pos );
+        void handle_build_btn_click( long action_id );
     };
 }
 

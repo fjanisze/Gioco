@@ -27,3 +27,17 @@
 
 	@building_price: 500000 #Money needed to build this building
 @end;
+
+
+@new_descriptor;
+	@type: APPARTMENT
+	@name: Grand Hop Appartment
+	@description: Big structure for many families
+	@construction_time: 44
+
+	@units: 45
+	@unit_capacity: 9 #so the total capacity is 28 for this building
+	@unit_base_price: 75500
+
+	@building_price: 2160000 #Money needed to build this building
+@end;

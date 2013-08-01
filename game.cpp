@@ -117,5 +117,10 @@ namespace game_manager
 	{
 	    return buildings;
 	}
+
+	graphic_ui::game_ui* game_manager::get_game_ui()
+	{
+	    return game_ui;
+	}
 }
 

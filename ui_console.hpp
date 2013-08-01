@@ -29,6 +29,7 @@ namespace graphic_elements
         sf::VertexArray vertex; //Graphic appearence
         long reference_id;
         sf::Text button_text;
+        long action_id; //A kind of code which can be used to identify which action need to be triggered.
     public:
         ui_button_t();
         void create( long x_pos, long y_pos, long width, long height );
@@ -37,14 +38,10 @@ namespace graphic_elements
         void set_appearence( const sf::Color& color );
         sf::VertexArray& get_vertex();
         void set_offset( long x_axis, long y_axis );
-        void set_id( long id )
-        {
-            reference_id = id;
-        }
-        long get_id()
-        {
-            return reference_id;
-        }
+        void set_id( long id );
+        long get_id();
+        void set_action_id( long id );
+        long get_action_id();
         bool is_point_over_the_button( long x_pos , long y_pos );
     };
 }

@@ -13,7 +13,7 @@
 namespace logging
 {
 
-	/* 
+	/*
 	 * log_policy for the logger
 	 */
 
@@ -61,7 +61,7 @@ namespace logging
 		std::stringstream log_stream;
 		log_policy* policy;
 		std::mutex write_mutex;
-		
+
 		//Core printing functionality
 		void print_impl();
 		template<typename First, typename...Rest>
@@ -112,7 +112,7 @@ namespace logging
 	{
 		std::string time_str;
 		time_t raw_time;
-		
+
 		time( & raw_time );
 		time_str = ctime( &raw_time );
 
@@ -130,7 +130,7 @@ namespace logging
 		header << log_line_number++ <<" < "<<get_time()<<" - ";
 
 		header.fill('0');
-		header <<clock()<<" > ~ ";
+		header <<clock()<<" >~";
 
 		return header.str();
 	}
@@ -147,7 +147,7 @@ namespace logging
 	void logger< log_policy >::print_impl(First parm1, Rest...parm)
 	{
 		log_stream<<parm1;
-		print_impl(parm...);	
+		print_impl(parm...);
 	}
 
 	template< typename log_policy >

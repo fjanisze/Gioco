@@ -18,6 +18,9 @@
 #define COMMON_BUILD_BUTTON 0
 #define COMMON_MAP_BUTTON 1
 
+#define BUILDING_BUTTON_ID_BEGIN 1000
+#define BUILDING_BUTTON_ID_END 1999
+
 namespace graphic_elements
 {
     //Button entity, the user can click to trigger some action
@@ -148,6 +151,7 @@ namespace graphic_ui
         console_wnd_t info_console;
         const sf::Font* font;
         buildings::building_manager* building_mng;
+        bool handle_non_common_button( graphic_elements::ui_button_t* button  );
     public:
         console_manager();
         short init_consoles( const graphic_ui::game_window_config_t& window_config );

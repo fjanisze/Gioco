@@ -307,9 +307,27 @@ namespace graphic_ui
             }
             break;
         default:
-            LOG_WARN("console_manager::button_trigger_action(): Cannot trigger any action for the button ID: ",button->get_id() );
+            {
+                //Check for non common buttons, like the button the construction.
+                if( !handle_non_common_button( button ) )
+                {
+                    LOG_WARN("console_manager::button_trigger_action(): Cannot trigger any action for the button ID: ",button->get_id() );
+                }
+            }
             break;
         };
+    }
+
+    //This function is used to handle a click of a non common button
+    bool console_manager::handle_non_common_button( graphic_elements::ui_button_t* button  )
+    {
+        long button_id = button->get_id();
+        ELOG("console_manager::handle_non_common_button(): Button ID: ", button_id );
+        //Want the user build a new constuction?
+        if( ( button_id > BUILDING_BUTTON_ID_BEGIN ) && ( button_id < BUILDING_BUTTON_ID_END ) )
+        {
+
+        }
     }
 
     void console_manager::set_building_manager( buildings::building_manager* mng )
@@ -334,7 +352,7 @@ namespace graphic_ui
         if( appartment != nullptr )
         {
 
-            long button_id = 1000; //From 1000 begins the ID for the consturction buttons.
+            long button_id = BUILDING_BUTTON_ID_BEGIN; //From 1000 begins the ID for the consturction buttons.
             for( auto elem : (*appartment) )
             {
                 button.create( 0 , y_pos , 200 , 30 );
@@ -394,7 +412,6 @@ namespace graphic_ui
     {
         ELOG("console_manager::show_map_main_menu(): Entering..");
         main_console.remove_all_buttons();
-
     }
 }
 

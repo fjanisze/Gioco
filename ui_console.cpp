@@ -345,7 +345,7 @@ namespace graphic_ui
         long button_id = button->get_id();
         ELOG("console_manager::handle_non_common_button(): Button ID: ", button_id );
         //Want the user build a new constuction?
-        if( ( button_id > BUILDING_BUTTON_ID_BEGIN ) && ( button_id < BUILDING_BUTTON_ID_END ) )
+        if( ( button_id >= BUILDING_BUTTON_ID_BEGIN ) && ( button_id < BUILDING_BUTTON_ID_END ) )
         {
             city_ui_manager::city_ui* city_ui = game_manager::game_manager::get_instance()->get_game_ui()->get_city_ui();
             city_ui->handle_build_btn_click( button->get_action_id() );

@@ -13,6 +13,7 @@ namespace city_ui_manager
         assert( focus_box != nullptr );
         window = rnd_window;
         map_view_setting = map_setting;
+        input_mode = city_ui_input_mode_t::view_mode;
     }
 
     //Destructor
@@ -71,11 +72,26 @@ namespace city_ui_manager
         return false;
     }
 
+    //Manage the mouse click when we are in the city view
     void city_ui::mouse_press_event( const sf::Event& event )
     {
         if(! is_over_the_game_map( event.mouseButton.x , event.mouseButton.y ) )
         {
             ui_console->handle_console_click( event.mouseButton.x , event.mouseButton.y );
+        }
+        else
+        {
+            if( input_mode == city_ui_input_mode_t::building_mode )
+            {
+                //If we are here, then the user want to build a construction on the map.
+                build_info.field = city_agent->get_field_at_pos( event.mouseMove.x , event.mouseMove.y );
+                //the building info structure should contain all the proper information now
+                if( handle_new_construction() )
+                {
+                    //Quit the construction mode
+                    input_mode = city_ui_input_mode_t::view_mode;
+                }
+            }
         }
     }
 
@@ -145,9 +161,20 @@ namespace city_ui_manager
     }
 
     //This function is called when the user click on a button related with a building that may be built
+    //This will trigger the capability check (is possible to build?) and some graphic changes.
     void city_ui::handle_build_btn_click( long action_id )
     {
-        ELOG("city_ui::handle_build_btn_click(): Action ID:",action_id,",city ID: ",city_agent->get_city_id());
+        ELOG( "city_ui::handle_build_btn_click(): Action ID:",action_id,",city ID: ",city_agent->get_city_id() );
+        //Set the building mode, now the user need to click on a proper field to trigger the construction
+        input_mode = city_ui_input_mode_t::building_mode;
+        build_info.building_id = action_id;
+    }
+
+    //This function is called when the user has chosen which building want to build and has clicked on the map for the place
+    bool city_ui::handle_new_construction()
+    {
+        ELOG("city_ui::handle_new_construction(): With building ID:",build_info.building_id,", field ID:",build_info.field->field_id );
+        return true;
     }
 }
 

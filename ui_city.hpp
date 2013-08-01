@@ -12,6 +12,19 @@
  */
 namespace city_ui_manager
 {
+    enum city_ui_input_mode_t
+    {
+        view_mode, //This is the standard view, when the player just move around the map or menu
+        building_mode //The user has clicked one build button and is willing to build something.
+    };
+
+    //Information on the field where the user want to build a construction
+    struct build_trigger_info_t
+    {
+        long building_id; //ID of the building
+        citymap::citymap_field_t* field; //Field on which the user wish to build the construction
+    };
+
     class city_ui
     {
         cities::city_agent* city_agent;
@@ -22,6 +35,9 @@ namespace city_ui_manager
             field_height;
         sf::RenderWindow* window;
         game_map::map_viewport_settings_t map_view_setting;
+        city_ui_input_mode_t input_mode;
+        build_trigger_info_t build_info;
+        bool handle_new_construction();
     public:
         city_ui( sf::RenderWindow* rnd_window , game_map::map_viewport_settings_t map_setting );
         ~city_ui();

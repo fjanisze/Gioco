@@ -322,7 +322,6 @@ namespace graphic_ui
             break;
         case COMMON_MAP_BUTTON:
             {
-                ELOG("console_manager::button_trigger_action(): Changing the view, to the main map.");
                 current_view = type_of_view_t::game_map_view;
                 game_manager::game_manager::get_instance()->get_game_ui()->get_city_ui()->set_std_view_mode();
                 show_map_main_menu();

@@ -196,7 +196,7 @@ namespace city_ui_manager
     //This function is called when the user has chosen which building want to build and has clicked on the map for the place
     bool city_ui::handle_new_construction()
     {
-        ELOG("city_ui::handle_new_construction(): With building ID:",build_info.building_id,", field ID:",build_info.field->field_id );
+        ELOG("city_ui::handle_new_construction(): With building ID:",build_info.building_id,", field ID:", build_info.field->field_id );
         return true;
     }
 

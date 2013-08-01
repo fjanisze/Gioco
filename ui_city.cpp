@@ -89,7 +89,8 @@ namespace city_ui_manager
                 if( handle_new_construction() )
                 {
                     //Quit the construction mode
-                    input_mode = city_ui_input_mode_t::view_mode;
+                    set_std_view_mode();
+                    update_focus_box( event.mouseButton.x , event.mouseButton.y );
                 }
             }
         }
@@ -98,6 +99,7 @@ namespace city_ui_manager
     void city_ui::city_map_mouse_move( const sf::Event& event )
     {
         static std::stringstream message;
+        static citymap::citymap_field_t* last_field = nullptr;
         //current_city should not be nullptr.
         if( city_agent != nullptr )
         {
@@ -107,8 +109,12 @@ namespace city_ui_manager
             {
                 message << "Field name: "<<field->descriptor->name <<", ID: "<<field->field_id<<"\nMouse coord: "<<event.mouseMove.x<<","<<event.mouseMove.y<<std::endl;
                 ui_console->write_info( message.str() );
-                //Update the focus box;
-                update_focus_box( event.mouseMove.x , event.mouseMove.y );
+                //Update the focus box, if the field is changed
+                if( last_field == nullptr || ( last_field->field_id != field->field_id ) )
+                {
+                    update_focus_box( event.mouseMove.x , event.mouseMove.y );
+                    last_field = field;
+                }
             }
             else
             {
@@ -132,16 +138,33 @@ namespace city_ui_manager
         x_pos += map_view_setting.map_x_offset;
         y_pos += map_view_setting.map_y_offset;
 
-        (*focus_box)[0].position = sf::Vector2f( x_pos , y_pos );
-        (*focus_box)[1].position = sf::Vector2f( x_pos + field_width , y_pos );
-        (*focus_box)[2].position = sf::Vector2f( x_pos + field_width , y_pos + field_height );
-        (*focus_box)[3].position = sf::Vector2f( x_pos , y_pos + field_height );
-        (*focus_box)[4].position = sf::Vector2f( x_pos , y_pos );
-        (*focus_box)[0].color = sf::Color::Red;
-        (*focus_box)[1].color = sf::Color::Red;
-        (*focus_box)[2].color = sf::Color::Red;
-        (*focus_box)[3].color = sf::Color::Red;
-        (*focus_box)[4].color = sf::Color::Red;
+        if( input_mode == city_ui_input_mode_t::view_mode )
+        {
+            (*focus_box) = sf::VertexArray( sf::LinesStrip , 5 );
+            (*focus_box)[0].position = sf::Vector2f( x_pos , y_pos );
+            (*focus_box)[1].position = sf::Vector2f( x_pos + field_width , y_pos );
+            (*focus_box)[2].position = sf::Vector2f( x_pos + field_width , y_pos + field_height );
+            (*focus_box)[3].position = sf::Vector2f( x_pos , y_pos + field_height );
+            (*focus_box)[4].position = sf::Vector2f( x_pos , y_pos );
+
+            for( short i = 0 ; i <= 4 ; i++ )
+            {
+                (*focus_box)[i].color = sf::Color::Red;
+            }
+        }
+        else if( input_mode == city_ui_input_mode_t::building_mode )
+        {
+            (*focus_box) = sf::VertexArray( sf::Quads , 4 );
+            (*focus_box)[0].position = sf::Vector2f( x_pos , y_pos );
+            (*focus_box)[1].position = sf::Vector2f( x_pos + field_width , y_pos );
+            (*focus_box)[2].position = sf::Vector2f( x_pos + field_width , y_pos + field_height );
+            (*focus_box)[3].position = sf::Vector2f( x_pos , y_pos + field_height );
+            //We should use the texture for the building here, but at this point no texture are available, so just use a color
+            for( short i = 0 ; i <= 4 ; i++ )
+            {
+                (*focus_box)[i].color = sf::Color::Black;
+            }
+        }
     }
 
     //Draw other elements like the focus box ecc
@@ -175,6 +198,19 @@ namespace city_ui_manager
     {
         ELOG("city_ui::handle_new_construction(): With building ID:",build_info.building_id,", field ID:",build_info.field->field_id );
         return true;
+    }
+
+    //The view mode is also the 'default' viewing mode
+    void city_ui::set_std_view_mode()
+    {
+        ELOG("city_ui::set_std_view_mode(): Setting the standard view mode");
+        input_mode = city_ui_input_mode_t::view_mode;
+    }
+
+    void city_ui::set_building_mode()
+    {
+        ELOG("city_ui::set_view_mode(): Setting the building mode");
+        input_mode = city_ui_input_mode_t::building_mode;
     }
 }
 

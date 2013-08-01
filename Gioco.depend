@@ -488,7 +488,7 @@
 1375329427 source:d:\gioco\ui.cpp
 	"ui.hpp"
 
-1375332040 d:\gioco\ui_city.hpp
+1375335904 d:\gioco\ui_city.hpp
 	"logging/logger.hpp"
 	"map_common.hpp"
 	"ui_console.hpp"
@@ -510,11 +510,12 @@
 1375327272 d:\gioco\ui_common.hpp
 	"map_common.hpp"
 
-1375329766 source:d:\gioco\ui_city.cpp
+1375335904 source:d:\gioco\ui_city.cpp
 	"ui_city.hpp"
 
-1375244589 source:d:\gioco\ui_console.cpp
+1375335933 source:d:\gioco\ui_console.cpp
 	"ui_console.hpp"
+	"game.hpp"
 
 1375327272 d:\gioco\cities.hpp
 	"city_map.hpp"

@@ -1,7 +1,7 @@
 #ifndef MAP_HPP
 #define MAP_HPP
 
-#include "mytypes.hpp"
+#include "../mytypes.hpp"
 #include "map_common.hpp"
 #include <map>
 #include <vector>

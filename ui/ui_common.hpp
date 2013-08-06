@@ -1,7 +1,7 @@
 #ifndef UI_COMMON_HPP_INCLUDED
 #define UI_COMMON_HPP_INCLUDED
 
-#include "../map_common.hpp"
+#include "../map/map_common.hpp"
 
 namespace graphic_ui
 {

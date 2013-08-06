@@ -3,10 +3,10 @@
 
 #include "logging/logger.hpp"
 #include "mytypes.hpp"
-#include "map.hpp"
+#include "map/map.hpp"
 #include "buildings.hpp"
 #include "events.hpp"
-#include "city_map.hpp"
+#include "map/city_map.hpp"
 #include "cities.hpp"
 #include "ui/ui.hpp"
 #include <typeinfo>

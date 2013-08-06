@@ -7,8 +7,8 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <cassert>
 #include <iostream>
-#include "../map.hpp"
-#include "../city_map.hpp"
+#include "../map/map.hpp"
+#include "../map/city_map.hpp"
 #include "ui_city.hpp"
 #include "ui_console.hpp"
 #include "ui_common.hpp"

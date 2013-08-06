@@ -3,8 +3,8 @@
 
 #include <string>
 #include <SFML/Graphics.hpp>
-#include "mytypes.hpp"
-#include "buildings.hpp"
+#include "../mytypes.hpp"
+#include "../buildings.hpp"
 
 namespace game_map
 {

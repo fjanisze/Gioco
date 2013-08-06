@@ -7,7 +7,7 @@
 
 #include "buildings.hpp"
 #include "ui/ui.hpp"
-#include "city_map.hpp"
+#include "map/city_map.hpp"
 
 
 void execution_thread_b(void*)

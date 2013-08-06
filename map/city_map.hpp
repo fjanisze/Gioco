@@ -2,9 +2,9 @@
 #ifndef CITYMAP_HPP
 #define CITYMAP_HPP
 
-#include "logging/logger.hpp"
+#include "../logging/logger.hpp"
 #include "map_common.hpp"
-#include "mytypes.hpp"
+#include "../mytypes.hpp"
 #include <string>
 #include <cassert>
 #include <SFML/Graphics.hpp>

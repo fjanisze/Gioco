@@ -1,11 +1,11 @@
 #ifndef CITIES_HPP
 #define CITIES_HPP
 
-#include "city_map.hpp"
+#include "map/city_map.hpp"
 #include "logging/logger.hpp"
 #include <SFML/Graphics.hpp>
-#include "map_common.hpp"
-#include "city_map.hpp"
+#include "map/map_common.hpp"
+#include "map/city_map.hpp"
 
 namespace cities
 {

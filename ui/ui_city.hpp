@@ -2,9 +2,9 @@
 #define UI_CITY_HPP_INCLUDED
 
 #include "../logging/logger.hpp"
-#include "../map_common.hpp"
+#include "../map/map_common.hpp"
 #include "ui_console.hpp"
-#include "../city_map.hpp"
+#include "../map/city_map.hpp"
 #include <cassert>
 
 /*

@@ -1,7 +1,7 @@
 #define LOGGING_LEVEL_1
 //#define LOGGING_LEVEL_2
 
-#include "logging/logger.hpp"
+#include "../logging/logger.hpp"
 #include "map.hpp"
 
 namespace game_objects

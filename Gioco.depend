@@ -29,7 +29,11 @@
 1375327272 source:d:\gioco\cities.cpp
 	"cities.hpp"
 
-1375327272 source:d:\gioco\city_map.cpp
+1375327272 d:\gioco\cities.hpp
+	"city_map.hpp"
+	"logging/logger.hpp"
+	<SFML/Graphics.hpp>
+	"map_common.hpp"
 	"city_map.hpp"
 
 1375327272 d:\gioco\city_map.hpp
@@ -48,57 +52,6 @@
 	<SFML/Graphics.hpp>
 	"mytypes.hpp"
 	"buildings.hpp"
-
-1360059936 source:d:\gioco\events.cpp
-	"events.hpp"
-
-1360753001 d:\gioco\events.hpp
-	"logging/logger.hpp"
-	<ctime>
-	<mutex>
-	<list>
-
-1375329580 source:d:\gioco\game.cpp
-	"game.hpp"
-
-1375329580 d:\gioco\game.hpp
-	"logging/logger.hpp"
-	"mytypes.hpp"
-	"map.hpp"
-	"buildings.hpp"
-	"events.hpp"
-	"city_map.hpp"
-	"cities.hpp"
-	"ui.hpp"
-	<typeinfo>
-	<list>
-	<iostream>
-	<limits>
-	<process.h>
-	<vector>
-	<exception>
-	<stdlib.h>
-	<string>
-	<ctime>
-	<cmath>
-	<windows.h>
-	<cassert>
-	<memory>
-	<map>
-	<locale>
-	<atomic>
-
-1375327272 d:\gioco\map.hpp
-	"mytypes.hpp"
-	"map_common.hpp"
-	<map>
-	<vector>
-	<string>
-	<list>
-	<algorithm>
-	<SFML/Graphics.hpp>
-	<cassert>
-	<mutex>
 
 1365233432 d:\sfml\sfml-2.0-windows-gcc-4.7-mingw-32bits\sfml-2.0\include\sfml\graphics.hpp
 	<SFML/Window.hpp>
@@ -434,43 +387,69 @@
 	<string>
 	<vector>
 
-1357663227 source:d:\gioco\logging\file.cpp
-	"file.hpp"
-
-1357652519 d:\gioco\logging\file.hpp
-	<iostream>
-	<thread>
-	<process.h>
-	"logger.hpp"
-
-1360318323 source:d:\gioco\logging\log.cpp
-	"log.hpp"
-	<cassert>
-
-1358956555 source:d:\gioco\logging\logger.cpp
-	"logger.hpp"
-
-1375327272 source:d:\gioco\main.cpp
-	"logging/logger.hpp"
-	"game.hpp"
-	<process.h>
-	"buildings.hpp"
-	"ui.hpp"
+1375327272 source:d:\gioco\city_map.cpp
 	"city_map.hpp"
 
-1375327272 source:d:\gioco\map.cpp
-	"logging/logger.hpp"
-	"map.hpp"
+1360059936 source:d:\gioco\events.cpp
+	"events.hpp"
 
-1375329393 d:\gioco\ui.hpp
+1360753001 d:\gioco\events.hpp
 	"logging/logger.hpp"
+	<ctime>
+	<mutex>
+	<list>
+
+1375329580 source:d:\gioco\game.cpp
+	"game.hpp"
+
+1375758436 d:\gioco\game.hpp
+	"logging/logger.hpp"
+	"mytypes.hpp"
+	"map.hpp"
+	"buildings.hpp"
+	"events.hpp"
+	"city_map.hpp"
+	"cities.hpp"
+	"ui/ui.hpp"
+	<typeinfo>
+	<list>
+	<iostream>
+	<limits>
+	<process.h>
+	<vector>
+	<exception>
+	<stdlib.h>
+	<string>
+	<ctime>
+	<cmath>
+	<windows.h>
+	<cassert>
+	<memory>
+	<map>
+	<locale>
+	<atomic>
+
+1375327272 d:\gioco\map.hpp
+	"mytypes.hpp"
+	"map_common.hpp"
+	<map>
+	<vector>
+	<string>
+	<list>
+	<algorithm>
+	<SFML/Graphics.hpp>
+	<cassert>
+	<mutex>
+
+1375758394 d:\gioco\ui\ui.hpp
+	"../logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
 	<SFML/Graphics/RenderWindow.hpp>
 	<cassert>
 	<iostream>
-	"map.hpp"
-	"city_map.hpp"
+	"../map.hpp"
+	"../city_map.hpp"
 	"ui_city.hpp"
 	"ui_console.hpp"
 	"ui_common.hpp"
@@ -485,42 +464,54 @@
 	<OpenGL/gl.h>
 	<OpenGL/glu.h>
 
-1375329427 source:d:\gioco\ui.cpp
-	"ui.hpp"
-
-1375335904 d:\gioco\ui_city.hpp
-	"logging/logger.hpp"
-	"map_common.hpp"
+1375758394 d:\gioco\ui\ui_city.hpp
+	"../logging/logger.hpp"
+	"../map_common.hpp"
 	"ui_console.hpp"
-	"city_map.hpp"
+	"../city_map.hpp"
 	<cassert>
 
-1375331272 d:\gioco\ui_console.hpp
-	"logging/logger.hpp"
+1375758394 d:\gioco\ui\ui_console.hpp
+	"../logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
 	<SFML/Graphics/RenderWindow.hpp>
 	"ui_common.hpp"
-	"buildings.hpp"
+	"../buildings.hpp"
 	<sstream>
 	<string>
 	<map>
 	<mutex>
 
-1375327272 d:\gioco\ui_common.hpp
-	"map_common.hpp"
+1375758454 d:\gioco\ui\ui_common.hpp
+	"../map_common.hpp"
 
-1375335904 source:d:\gioco\ui_city.cpp
+1360318323 source:d:\gioco\logging\log.cpp
+	"log.hpp"
+	<cassert>
+
+1358956555 source:d:\gioco\logging\logger.cpp
+	"logger.hpp"
+
+1375758465 source:d:\gioco\main.cpp
+	"logging/logger.hpp"
+	"game.hpp"
+	<process.h>
+	"buildings.hpp"
+	"ui/ui.hpp"
+	"city_map.hpp"
+
+1375327272 source:d:\gioco\map.cpp
+	"logging/logger.hpp"
+	"map.hpp"
+
+1375758394 source:d:\gioco\ui\ui.cpp
+	"ui.hpp"
+
+1375336393 source:d:\gioco\ui\ui_city.cpp
 	"ui_city.hpp"
 
-1375335933 source:d:\gioco\ui_console.cpp
+1375758475 source:d:\gioco\ui\ui_console.cpp
 	"ui_console.hpp"
-	"game.hpp"
-
-1375327272 d:\gioco\cities.hpp
-	"city_map.hpp"
-	"logging/logger.hpp"
-	<SFML/Graphics.hpp>
-	"map_common.hpp"
-	"city_map.hpp"
+	"../game.hpp"
 

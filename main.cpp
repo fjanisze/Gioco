@@ -6,7 +6,7 @@
 #include <process.h>
 
 #include "buildings.hpp"
-#include "ui.hpp"
+#include "ui/ui.hpp"
 #include "city_map.hpp"
 
 

@@ -4,12 +4,12 @@
 #ifndef UI_CONSOLE_HPP_INCLUDED
 #define UI_CONSOLE_HPP_INCLUDED
 
-#include "logging/logger.hpp"
+#include "../logging/logger.hpp"
 #include <SFML/OpenGL.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "ui_common.hpp"
-#include "buildings.hpp"
+#include "../buildings.hpp"
 #include <sstream>
 #include <string>
 #include <map>

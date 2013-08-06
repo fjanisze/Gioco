@@ -2,7 +2,7 @@
 #define LOGGING_LEVEL_2
 
 #include "ui_console.hpp"
-#include "game.hpp"
+#include "../game.hpp"
 
 namespace graphic_elements
 {

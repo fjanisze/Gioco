@@ -1,10 +1,10 @@
 #ifndef UI_CITY_HPP_INCLUDED
 #define UI_CITY_HPP_INCLUDED
 
-#include "logging/logger.hpp"
-#include "map_common.hpp"
+#include "../logging/logger.hpp"
+#include "../map_common.hpp"
 #include "ui_console.hpp"
-#include "city_map.hpp"
+#include "../city_map.hpp"
 #include <cassert>
 
 /*

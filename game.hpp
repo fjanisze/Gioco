@@ -8,7 +8,7 @@
 #include "events.hpp"
 #include "city_map.hpp"
 #include "cities.hpp"
-#include "ui.hpp"
+#include "ui/ui.hpp"
 #include <typeinfo>
 #include <list>
 #include <iostream>

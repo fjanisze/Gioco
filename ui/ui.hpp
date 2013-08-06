@@ -1,14 +1,14 @@
 #ifndef UI_HPP
 #define UI_HPP
 
-#include "logging/logger.hpp"
+#include "../logging/logger.hpp"
 #include <SFML/OpenGL.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <cassert>
 #include <iostream>
-#include "map.hpp"
-#include "city_map.hpp"
+#include "../map.hpp"
+#include "../city_map.hpp"
 #include "ui_city.hpp"
 #include "ui_console.hpp"
 #include "ui_common.hpp"

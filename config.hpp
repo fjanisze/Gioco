@@ -1,0 +1,2 @@
+
+//#define COMPILE_TEST_MDOE

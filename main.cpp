@@ -1,6 +1,7 @@
 #define LOGGING_LEVEL_1
 #define LOGGING_LEVEL_2
 
+#include "config.hpp"
 #include "logging/logger.hpp"
 #include "game.hpp"
 #include <process.h>
@@ -26,6 +27,7 @@ void graphical_ui_thread(void*)
 	LOG("void graphical_ui_thread(): Is quitting!");
 }
 
+#ifndef COMPILE_TEST_MDOE
 
 int main()
 {
@@ -45,3 +47,5 @@ int main()
 //	delete game_manager::game_manager::get_instance();
 	return 0;
 }
+
+#endif

@@ -33,7 +33,6 @@ namespace population
         family_status_t status;
         gender_t gender;
         short age;
-        population_unit_t* next;
 
         population_unit_t( long id );
     };
@@ -47,25 +46,53 @@ namespace population
         short amount_of_members; //Should be at least 1.
         population_unit_t* father; //When the family size is 0, only this field have a valid value
         population_unit_t* mather;
-        population_unit_t* kids;
         long get_next_id();
     public:
         family_t( long id );
+        ~family_t();
         short get_amount_of_members();
         long add_member( short age, family_status_t status, gender_t gender );
         long get_id();
     };
 
+    typedef std::map< long , family_t* > family_map_t;
     typedef std::map< long , family_t* >::iterator family_container_iter;
 
+    //A collection of families is a kind of aggregate which for example is used to track the families which live in a single building
+    //All the families need to be part of a collection
+    class family_collection_t
+    {
+        long collection_id;
+        family_map_t collection;
+    public:
+        family_collection_t( long id );
+        void add_family( family_t* family );
+        long get_population();
+    };
+
+    typedef std::map< long , family_collection_t* >::iterator family_coll_iter;
+
+    //Responsible for the population management.
     class population_manager
     {
-        std::map< long , family_t* > family_container;
+        family_map_t family_container;//All the families are in this container
         static long next_family_id;
+        static long next_collection_id;
         long get_next_family_id();
+        long get_next_coll_id();
+        //Collection data structures
+        std::map< long , family_collection_t* > family_collections;
+        long homeless_collection_id;
     public:
         family_t* create_family( );
         family_t* get_family( long id );
+    public: //Collections
+        long create_collection();
+        family_collection_t* get_collection( long id );
+
+    public: //Other
+        population_manager();
+        ~population_manager();
     };
 }
 

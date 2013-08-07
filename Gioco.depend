@@ -493,13 +493,13 @@
 1358956555 source:d:\gioco\logging\logger.cpp
 	"logger.hpp"
 
-1375758465 source:d:\gioco\main.cpp
+1375759113 source:d:\gioco\main.cpp
 	"logging/logger.hpp"
 	"game.hpp"
 	<process.h>
 	"buildings.hpp"
 	"ui/ui.hpp"
-	"city_map.hpp"
+	"map/city_map.hpp"
 
 1375327272 source:d:\gioco\map.cpp
 	"logging/logger.hpp"
@@ -543,4 +543,11 @@
 	<SFML/Graphics.hpp>
 	<cassert>
 	<mutex>
+
+1375327272 source:d:\gioco\map\city_map.cpp
+	"city_map.hpp"
+
+1375758953 source:d:\gioco\map\map.cpp
+	"../logging/logger.hpp"
+	"map.hpp"
 

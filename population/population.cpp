@@ -25,6 +25,22 @@ namespace population
         collection[ family->get_id() ] = family;
     }
 
+    //Search a family and remove them from the container.
+    //Return a pointer to the removed family
+    family_t* family_collection_t::remove_family( long family_id )
+    {
+        ELOG("family_collection_t::remove_family(): Requested to remove the family ID:", family_id);
+        family_t* verdict = nullptr;
+        family_container_iter iter = collection.find( family_id );
+        if( iter != collection.end() )
+        {
+            verdict = iter->second;
+            collection.erase( iter );
+            return verdict;
+        }
+        return verdict;
+    }
+
     //Return the amount of unit which are part of the collection
     long family_collection_t::get_population()
     {

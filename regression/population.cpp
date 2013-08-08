@@ -41,7 +41,7 @@ TEST_F( PopulationTests , FamilyBasicOperation )
 }
 
 //Adding family elements to a population collection
-TEST_F( PopulationTests , AddingHomelessFamilies )
+TEST_F( PopulationTests , AddingRemovingHomelessFamilies )
 {
     //Create some families
     population::family_t family1( 1 ) , family2( 2 ), family3( 3 );
@@ -66,6 +66,20 @@ TEST_F( PopulationTests , AddingHomelessFamilies )
     ASSERT_EQ( 5 , coll_ptr->get_population() );
     //Check the amount of families
     ASSERT_EQ( 3 , coll_ptr->get_amount_of_families() );
+
+    //Now remove the families
+    population::family_t* family1_ptr = coll_ptr->remove_family( family1.get_id() );
+    population::family_t* family2_ptr = coll_ptr->remove_family( family2.get_id() );
+    ASSERT_NE( nullptr , family1_ptr );
+    ASSERT_NE( nullptr , family2_ptr );
+
+    //Check if proper families were removed
+    ASSERT_EQ( &family1 , family1_ptr );
+    ASSERT_EQ( &family2 , family2_ptr );
+
+    //Check collection size
+    ASSERT_EQ( 1 , coll_ptr->get_population() );
+    ASSERT_EQ( 1 , coll_ptr->get_amount_of_families() );
 }
 
 

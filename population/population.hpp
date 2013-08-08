@@ -67,6 +67,7 @@ namespace population
     public:
         family_collection_t( long id );
         void add_family( family_t* family );
+        family_t* remove_family( long family_id );
         long get_population();
         long get_amount_of_families();
     };

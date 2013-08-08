@@ -99,6 +99,12 @@ namespace game_manager
         //City manager
         city_manager = new cities::city_manager( graphic_ui::game_ui::get_instance()->get_viewport_settings() );
         assert( city_manager != nullptr );
+        //Construction manager
+        contruction_manager = new(nothrow) constructions::construction_manager;
+        assert( contruction_manager != nullptr );
+        //Event manager
+        events = new(nothrow) events::event_manager;
+        assert( events != nullptr );
 	}
 
 	void game_manager::handle_game()
@@ -121,6 +127,16 @@ namespace game_manager
 	graphic_ui::game_ui* game_manager::get_game_ui()
 	{
 	    return game_ui;
+	}
+
+	constructions::construction_manager* game_manager::get_construction_manager()
+	{
+	    return contruction_manager;
+	}
+
+	events::event_manager* game_manager::get_event_manager()
+	{
+	    return events;
 	}
 }
 

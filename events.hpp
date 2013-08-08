@@ -1,8 +1,6 @@
 #define LOGGING_LEVEL_1
 #define LOGGING_LEVEL_2
 
-#define GAME_SPEED 20
-
 #ifndef EVENTS_HPP
 #define EVENTS_HPP
 
@@ -62,11 +60,11 @@ namespace events
 	public:
 		static event_manager* get_instance();
 		event_manager();
-		long register_event( event_entity* target_event ); 
+		long register_event( event_entity* target_event );
 		bool unregister_event( long event_id );
-		bool start_event_countdown( long event_id, timer_type* timer ,event_execution exec_type ); 
+		bool start_event_countdown( long event_id, timer_type* timer ,event_execution exec_type );
 	public:
-		void main_loop(); 
+		void main_loop();
 	};
 }
 

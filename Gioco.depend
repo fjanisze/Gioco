@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1375327272 source:d:\gioco\buildings.cpp
+1375942251 source:d:\gioco\buildings.cpp
 	"logging/logger.hpp"
 	"buildings.hpp"
 
@@ -16,8 +16,9 @@
 	<sstream>
 	<mutex>
 
-1375327272 d:\gioco\buildings.hpp
+1375943657 d:\gioco\buildings.hpp
 	"mytypes.hpp"
+	"events.hpp"
 	<string>
 	<fstream>
 	<utility>
@@ -390,19 +391,19 @@
 1375327272 source:d:\gioco\city_map.cpp
 	"city_map.hpp"
 
-1360059936 source:d:\gioco\events.cpp
+1375941609 source:d:\gioco\events.cpp
 	"events.hpp"
 
-1360753001 d:\gioco\events.hpp
+1375941575 d:\gioco\events.hpp
 	"logging/logger.hpp"
 	<ctime>
 	<mutex>
 	<list>
 
-1375329580 source:d:\gioco\game.cpp
+1375942447 source:d:\gioco\game.cpp
 	"game.hpp"
 
-1375759004 d:\gioco\game.hpp
+1375942399 d:\gioco\game.hpp
 	"logging/logger.hpp"
 	"mytypes.hpp"
 	"map/map.hpp"
@@ -516,7 +517,7 @@
 	"ui_console.hpp"
 	"../game.hpp"
 
-1375758953 d:\gioco\map\map_common.hpp
+1375936545 d:\gioco\map\map_common.hpp
 	<string>
 	<SFML/Graphics.hpp>
 	"../mytypes.hpp"
@@ -901,10 +902,13 @@
 
 1350650413 c:\cygwin\usr\include\process.h
 
-1375932002 source:d:\gioco\regression\main.cpp
+1375941719 source:d:\gioco\regression\main.cpp
 	"../config.hpp"
 	"../logging/logger.hpp"
 	"gtest.h"
+	<windows.h>
+	<process.h>
+	"../events.hpp"
 
 1375929479 d:\gtest\gtest-1.6.0\gtest-1.6.0\fused-src\gtest\gtest.h
 	<limits>
@@ -1041,10 +1045,10 @@
 1341010371 c:\mingw\include\assert.h
 	<_mingw.h>
 
-1375931539 source:d:\gioco\regression\population.cpp
+1375934062 source:d:\gioco\regression\population.cpp
 	"population.hpp"
 
-1375930802 d:\gioco\regression\population.hpp
+1375932002 d:\gioco\regression\population.hpp
 	"gtest.h"
 	"..\population\population.hpp"
 

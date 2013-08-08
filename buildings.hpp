@@ -2,6 +2,7 @@
 #define BUILDINGS_HPP
 
 #include "mytypes.hpp"
+#include "events.hpp"
 #include <string>
 #include <fstream>
 #include <utility>
@@ -114,9 +115,18 @@ namespace constructions
         mlong unit_price;
     };
 
+    //This is a support entity used
+    class under_construction_obj_t : public events::event_entity
+    {
+        construction_t* construction;
+    public:
+        int trigger_event( long event_id );
+    };
+
     //This class manage the construction procedure for the cities
 	class construction_manager
 	{
+	    std::map< long , under_construction_obj_t* > obj_under_construction;
     public:
 
 	};

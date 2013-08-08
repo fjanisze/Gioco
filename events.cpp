@@ -49,7 +49,7 @@ namespace events
 		}
 		std::lock_guard< std::mutex > lock( event_mutex );
 		long event_id = next_event_id++;
-		event_obj event; 
+		event_obj event;
 		event.event_pointer = target_event;
 		event.event_id = event_id;
 		events.push_back( event );
@@ -128,7 +128,7 @@ namespace events
 				}
 			}
 			event_mutex.unlock();
-			Sleep( 1000 / GAME_SPEED ); 
+			Sleep( 1000 );
 		}while( 1 );
 		LOG("event_manager::main_loop(): Quitting");
 	}

@@ -313,3 +313,48 @@ namespace buildings
 	    return &available_appartments;
 	}
 }
+
+namespace constructions
+{
+    ////////////////////////////////////////////////////////////////////
+    //
+    //
+    //	Follow the implementation for construction_t and construction_manager
+    //
+    //
+    ////////////////////////////////////////////////////////////////////
+
+    int under_construction_obj_t::trigger_event( long event_id )
+    {
+        ELOG("under_construction_obj_t::trigger_event(): Event ID: ",event_id,", for the obj ID:",construction->obj_id );
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

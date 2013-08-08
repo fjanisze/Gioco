@@ -36,6 +36,12 @@ namespace population
         return sum;
     }
 
+    //Return the amount of families in the collection
+    long family_collection_t::get_amount_of_families()
+    {
+        return collection.size();
+    }
+
     ////////////////////////////////////////////////////////////////////
     //
     //
@@ -85,11 +91,13 @@ namespace population
             status == family_status_t::is_father )
         {
             father = new_member( father );
+            ++amount_of_members;
             return father->unit_id;
         }
         else if( status == family_status_t::is_mather )
         {
             mather = new_member( mather );
+            ++amount_of_members;
             return mather->unit_id;
         }
         else
@@ -166,6 +174,12 @@ namespace population
             return iter->second;
         }
         return nullptr;
+    }
+
+    //Return a pointer to the default collection (homeless)
+    family_collection_t* population_manager::get_homeless_collection()
+    {
+        return family_collections.begin()->second;
     }
 
     //Look for a specific family and return a pointer to them

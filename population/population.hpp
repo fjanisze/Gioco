@@ -68,6 +68,7 @@ namespace population
         family_collection_t( long id );
         void add_family( family_t* family );
         long get_population();
+        long get_amount_of_families();
     };
 
     typedef std::map< long , family_collection_t* >::iterator family_coll_iter;
@@ -89,6 +90,7 @@ namespace population
     public: //Collections
         long create_collection();
         family_collection_t* get_collection( long id );
+        family_collection_t* get_homeless_collection();
 
     public: //Other
         population_manager();

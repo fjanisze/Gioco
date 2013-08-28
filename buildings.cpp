@@ -205,7 +205,7 @@ namespace buildings
 	//This function should be called when the 'end' tag if found in the building file
 	void building_manager::finalize_instruction()
 	{
-		LOG("building_manager::finalize_instruction(): Completing ");
+		ELOG("building_manager::finalize_instruction(): Completing ");
 		switch( current_instruction->general.type )
 		{
 		case building_type_t::appartment:
@@ -218,8 +218,8 @@ namespace buildings
 
 	void building_manager::add_new_appartment()
 	{
-		LOG("building_manager::add_new_appartment(): Adding \"",current_instruction->general.name,"\"");
 		appartment_descriptor_t* appartment = new appartment_descriptor_t;
+		assert( appartment != nullptr );
 
 		appartment->descriptor = current_instruction->general;
 		appartment->descriptor.obj_id = ++building_id;
@@ -227,6 +227,7 @@ namespace buildings
 		appartment->unit_capacity = current_instruction->unit_capacity;
 		appartment->unit_price = current_instruction->unit_price;
 
+        LOG("building_manager::add_new_appartment(): Adding appartment: \"",current_instruction->general.name,"\", ID:",appartment->descriptor.obj_id);
 		available_appartments.push_back( appartment );
 	}
 

@@ -1,2 +1,2 @@
 
-#define COMPILE_TEST_MDOE
+#define COMPILE_TEST_MODE 0

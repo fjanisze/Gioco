@@ -2,6 +2,8 @@
 #define LOGGING_LEVEL_2
 
 #include "ui_city.hpp"
+#include "../buildings.hpp"
+#include "../game.hpp"
 
 namespace city_ui_manager
 {
@@ -187,16 +189,20 @@ namespace city_ui_manager
     //This will trigger the capability check (is possible to build?) and some graphic changes.
     void city_ui::handle_build_btn_click( long action_id )
     {
-        ELOG( "city_ui::handle_build_btn_click(): Action ID:",action_id,",city ID: ",city_agent->get_city_id() );
+        ELOG( "city_ui::handle_build_btn_click(): The user want to build a building, Action ID:",action_id,",city ID: ",city_agent->get_city_id() );
         //Set the building mode, now the user need to click on a proper field to trigger the construction
-        input_mode = city_ui_input_mode_t::building_mode;
+        set_building_mode();
         build_info.building_id = action_id;
     }
 
     //This function is called when the user has chosen which building want to build and has clicked on the map for the place
     bool city_ui::handle_new_construction()
     {
-        ELOG("city_ui::handle_new_construction(): With building ID:",build_info.building_id,", field ID:", build_info.field->field_id );
+        ELOG("city_ui::handle_new_construction(): The user want to build a new building, building ID:",build_info.building_id,", field ID:", build_info.field->field_id );
+        //Get the construction manager and try to build the building
+        constructions::construction_manager* constr_mng = game_manager::game_manager::get_instance()->get_construction_manager();
+        assert( constr_mng != nullptr );
+
         return true;
     }
 

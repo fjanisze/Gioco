@@ -9,7 +9,7 @@
 #include <process.h>
 #include "../events.hpp"
 
-#ifdef COMPILE_TEST_MDOE
+#if COMPILE_TEST_MODE
 
 
 

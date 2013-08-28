@@ -8,6 +8,7 @@
 #include <utility>
 #include <cassert>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -128,7 +129,7 @@ namespace constructions
 	{
 	    std::map< long , under_construction_obj_t* > obj_under_construction;
     public:
-
+   //   bool is_the_construction_possible
 	};
 }
 

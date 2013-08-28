@@ -27,7 +27,7 @@ void graphical_ui_thread(void*)
 	LOG("void graphical_ui_thread(): Is quitting!");
 }
 
-#ifndef COMPILE_TEST_MDOE
+#if !COMPILE_TEST_MODE
 
 int main()
 {

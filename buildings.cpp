@@ -317,6 +317,8 @@ namespace buildings
 
 namespace constructions
 {
+
+    construction_handler_t construction_manager::construction_handler_id = 0;
     ////////////////////////////////////////////////////////////////////
     //
     //
@@ -328,6 +330,20 @@ namespace constructions
     int under_construction_obj_t::trigger_event( long event_id )
     {
         ELOG("under_construction_obj_t::trigger_event(): Event ID: ",event_id,", for the obj ID:",construction->obj_id );
+    }
+
+    //Return the next unique handler ID for the construction
+    construction_handler_t construction_manager::get_next_hnd_id()
+    {
+        return ++construction_handler_id;
+    }
+
+    //Start the construction of a certain building on a specific field
+    construction_handler_t construction_manager::start_construction( long building_id, long city_id, long field_id )
+    {
+        construction_handler_t handler = get_next_hnd_id();
+        LOG("construction_manager::start_construction(): New construction, building ID:",building_id,",City ID:",city_id,",Construction handler ID:",handler );
+        return handler;
     }
 }
 

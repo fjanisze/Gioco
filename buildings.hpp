@@ -124,12 +124,16 @@ namespace constructions
         int trigger_event( long event_id );
     };
 
+    typedef mlong construction_handler_t;
+
     //This class manage the construction procedure for the cities
 	class construction_manager
 	{
-	    std::map< long , under_construction_obj_t* > obj_under_construction;
+	    static construction_handler_t construction_handler_id;
+	    std::map< construction_handler_t , under_construction_obj_t* > obj_under_construction;
+	    construction_handler_t get_next_hnd_id();
     public:
-   //   bool is_the_construction_possible
+        construction_handler_t start_construction( long building_id, long city_id, long field_id );
 	};
 }
 

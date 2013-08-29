@@ -198,11 +198,12 @@ namespace city_ui_manager
     //This function is called when the user has chosen which building want to build and has clicked on the map for the place
     bool city_ui::handle_new_construction()
     {
-        ELOG("city_ui::handle_new_construction(): The user want to build a new building, building ID:",build_info.building_id,", field ID:", build_info.field->field_id );
+        ELOG("city_ui::handle_new_construction(): The user want to build a new building, building ID:",build_info.building_id,", field ID:", build_info.field->field_id,",city ID:",build_info.field->descriptor->obj_id );
         //Get the construction manager and try to build the building
         constructions::construction_manager* constr_mng = game_manager::game_manager::get_instance()->get_construction_manager();
         assert( constr_mng != nullptr );
-
+        //Trigger the construction
+        constructions::construction_handler_t handler = constr_mng->start_construction( build_info.building_id , city_agent->get_city_id() , build_info.field->field_id);
         return true;
     }
 

@@ -57,6 +57,11 @@ namespace map_common
 	};
 }
 
+namespace cities
+{
+    struct city_info_t;
+}
+
 namespace citymap
 {
     class citymap_t;

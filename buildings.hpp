@@ -121,6 +121,7 @@ namespace constructions
     {
         construction_t* construction;
     public:
+        under_construction_obj_t();
         int trigger_event( long event_id );
     };
 
@@ -132,9 +133,40 @@ namespace constructions
 	    static construction_handler_t construction_handler_id;
 	    std::map< construction_handler_t , under_construction_obj_t* > obj_under_construction;
 	    construction_handler_t get_next_hnd_id();
+	    under_construction_obj_t* new_under_construction_obj( long building_id );
     public:
         construction_handler_t start_construction( long building_id, long city_id, long field_id );
+        ~construction_manager();
 	};
 }
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

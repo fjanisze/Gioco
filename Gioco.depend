@@ -16,7 +16,7 @@
 	<sstream>
 	<mutex>
 
-1377756592 d:\gioco\buildings.hpp
+1377758778 d:\gioco\buildings.hpp
 	"mytypes.hpp"
 	"events.hpp"
 	<string>
@@ -511,8 +511,10 @@
 1375758394 source:d:\gioco\ui\ui.cpp
 	"ui.hpp"
 
-1375336393 source:d:\gioco\ui\ui_city.cpp
+1377757470 source:d:\gioco\ui\ui_city.cpp
 	"ui_city.hpp"
+	"../buildings.hpp"
+	"../game.hpp"
 
 1375758475 source:d:\gioco\ui\ui_console.cpp
 	"ui_console.hpp"

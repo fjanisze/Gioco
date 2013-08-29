@@ -362,7 +362,7 @@ namespace graphic_ui
         //As now, this menu just show the building which is possible to build
         graphic_elements::ui_button_t button;
         //One button for each building that can be built
-        std::vector< buildings::appartment_descriptor_t* >* appartment = building_mng->get_all_the_appartment();
+        std::vector< buildings::building_object_t* >* appartment = building_mng->get_all_buildings();
         if( appartment != nullptr )
         {
 

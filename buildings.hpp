@@ -44,16 +44,22 @@ namespace buildings
 		building_descriptor_t() = default;
 	};
 
-	struct appartment_descriptor_t
+	//Generic object used to describe a building/construction
+	struct building_object_t
 	{
-		building_descriptor_t descriptor;
+	    building_descriptor_t descriptor;
+	};
 
-		long units,
-		     unit_capacity;
+	//Implementation for an appartment
+	struct building_appartment_t : public building_object_t
+	{
+	    //Specific information for an appartment object
+	    long units;
+	    long unit_capacity;
+	    mlong unit_price;
 
-		mlong unit_price;
-
-		appartment_descriptor_t() = default;
+	    //Constructors and utility
+        building_appartment_t();
 	};
 
 	//Needed to collect all the information during the instruction parsing
@@ -75,7 +81,7 @@ namespace buildings
 	class building_manager
 	{
 		static long building_id;
-		std::vector< appartment_descriptor_t* > available_appartments;
+		std::vector< building_object_t* > available_constructions;
 	private:
 		all_information_t* current_instruction;
 		building_type_t get_proper_type( const string& cmd );
@@ -93,7 +99,7 @@ namespace buildings
 		building_manager();
 		~building_manager();
     public:
-        std::vector< appartment_descriptor_t* >* get_all_the_appartment();
+        std::vector< building_object_t* >* get_all_buildings();
 	};
 }
 

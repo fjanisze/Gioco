@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1377757370 source:d:\gioco\buildings.cpp
+1377760867 source:d:\gioco\buildings.cpp
 	"logging/logger.hpp"
 	"buildings.hpp"
 
@@ -16,7 +16,7 @@
 	<sstream>
 	<mutex>
 
-1377758778 d:\gioco\buildings.hpp
+1377760945 d:\gioco\buildings.hpp
 	"mytypes.hpp"
 	"events.hpp"
 	<string>
@@ -516,7 +516,7 @@
 	"../buildings.hpp"
 	"../game.hpp"
 
-1375758475 source:d:\gioco\ui\ui_console.cpp
+1377760822 source:d:\gioco\ui\ui_console.cpp
 	"ui_console.hpp"
 	"../game.hpp"
 

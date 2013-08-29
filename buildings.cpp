@@ -66,7 +66,7 @@ namespace buildings
 
 	building_manager::~building_manager()
 	{
-		for( auto elem : available_appartments )
+		for( auto elem : available_constructions )
 		{
 			delete elem;
 		}
@@ -218,7 +218,7 @@ namespace buildings
 
 	void building_manager::add_new_appartment()
 	{
-		appartment_descriptor_t* appartment = new appartment_descriptor_t;
+		building_appartment_t* appartment = new building_appartment_t;
 		assert( appartment != nullptr );
 
 		appartment->descriptor = current_instruction->general;
@@ -228,7 +228,7 @@ namespace buildings
 		appartment->unit_price = current_instruction->unit_price;
 
         LOG("building_manager::add_new_appartment(): Adding appartment: \"",current_instruction->general.name,"\", ID:",appartment->descriptor.obj_id);
-		available_appartments.push_back( appartment );
+		available_constructions.push_back( appartment );
 	}
 
 	//From the beginning and the end of the string
@@ -309,10 +309,22 @@ namespace buildings
 	}
 
 	//Return a vector with all the appartment available
-	std::vector< appartment_descriptor_t* >* building_manager::get_all_the_appartment()
+	std::vector< building_object_t* >* building_manager::get_all_buildings()
 	{
-	    return &available_appartments;
+	    return &available_constructions;
 	}
+
+    ////////////////////////////////////////////////////////////////////
+    //
+    //
+    //	Follow the implementation for building_appartment_t
+    //
+    //
+    ////////////////////////////////////////////////////////////////////
+
+    building_appartment_t::building_appartment_t() : units( 0 ) , unit_capacity( 0 ) , unit_price( 0 )
+    {
+    }
 }
 
 namespace constructions

@@ -94,14 +94,11 @@ namespace game_manager
         std::lock_guard< std::mutex > lock(mutex);
 	    LOG("game_manager::init(): Initialize the game..");
 	    //Read the building descriptor
-        buildings = new(nothrow) buildings::building_manager;
-        assert( buildings != nullptr );
+        construction_manager = new(nothrow) constructions::construction_manager;
+        assert( construction_manager != nullptr );
         //City manager
         city_manager = new cities::city_manager( graphic_ui::game_ui::get_instance()->get_viewport_settings() );
         assert( city_manager != nullptr );
-        //Construction manager
-        contruction_manager = new(nothrow) constructions::construction_manager;
-        assert( contruction_manager != nullptr );
         //Event manager
         events = new(nothrow) events::event_manager;
         assert( events != nullptr );
@@ -118,10 +115,10 @@ namespace game_manager
 	    game_ui->main_loop();
 	}
 
-	//Return the 'building_manager' object
-	buildings::building_manager* game_manager::get_buildings()
+	//Return the 'construction_manager' object
+	constructions::construction_manager* game_manager::get_buildings()
 	{
-	    return buildings;
+	    return construction_manager;
 	}
 
 	graphic_ui::game_ui* game_manager::get_game_ui()
@@ -131,7 +128,7 @@ namespace game_manager
 
 	constructions::construction_manager* game_manager::get_construction_manager()
 	{
-	    return contruction_manager;
+	    return construction_manager;
 	}
 
 	events::event_manager* game_manager::get_event_manager()

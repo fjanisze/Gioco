@@ -358,22 +358,26 @@ namespace graphic_ui
     void console_manager::add_building_construction_btn( console_wnd_t& console , long y_pos )
     {
         ELOG("console_wnd_t::add_building_construction_btn(): Adding the construction buttons..");
-        buildings::building_manager* building_mng = game_manager::game_manager::get_instance()->get_buildings();
+        constructions::construction_manager* constructions_mng = game_manager::game_manager::get_instance()->get_buildings();
         //As now, this menu just show the building which is possible to build
         graphic_elements::ui_button_t button;
         //One button for each building that can be built
-        std::vector< buildings::building_object_t* >* appartment = building_mng->get_all_buildings();
+        std::vector< constructions::construction_t* >* appartment = constructions_mng->get_all_construction();
         if( appartment != nullptr )
         {
-
+            if( appartment->empty() )
+            {
+                LOG_ERR("console_manager::add_building_construction_btn(): No construction available, this is wrong..");
+                return; //quit
+            }
             long button_id = BUILDING_BUTTON_ID_BEGIN; //From 1000 begins the ID for the consturction buttons.
             for( auto elem : (*appartment) )
             {
                 button.create( 0 , y_pos , 200 , 30 );
                 button.set_appearence( sf::Color::Black );
-                button.set_text( elem->descriptor.name , font );
+                button.set_text( elem->get_name() , font );
                 button.set_id( button_id );
-                button.set_action_id( elem->descriptor.obj_id );
+                button.set_action_id( elem->get_obj_id() );
                 console.add_button( button , button_id );
                 ++button_id;
                 y_pos += 30;

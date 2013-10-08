@@ -4,7 +4,6 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include "../mytypes.hpp"
-#include "../buildings.hpp"
 
 namespace game_map
 {
@@ -99,13 +98,15 @@ namespace citymap
 	{
 	    //ID for the field
 	    mlong field_id;
+
 	    //Descriptor, with generic information on the field
 	    city_field_descriptor* descriptor;
+
 	    //Coordinate of the field
 	    map_common::field_coordinate coord;
 
 	    //here are contained the information about the building (if any) available on this field.
-	    constructions::construction_t* construction;
+	//    constructions::construction_t* construction;
 
 	    citymap_field_t();
 	    city_field_descriptor* new_descriptor() throw( std::bad_alloc );

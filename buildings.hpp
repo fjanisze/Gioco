@@ -9,29 +9,30 @@
 #include <cassert>
 #include <vector>
 #include <map>
+#include "map\map_common.hpp"
 
 using namespace std;
 
 #define BUILDING_FILENAME "buildings.dat"
 
-namespace buildings
+namespace constructions
 {
-	typedef enum building_type_t
+	typedef enum construction_type_t
 	{
 		appartment,
 		office,
 		error
-	} building_type_t;
+	} construction_type_t;
 
 	extern const string building_types_str[];
 
-	//Include some common information about the building
-	struct building_descriptor_t
+	//Include some common information about the construction, used during the construction parsing.
+	struct construction_info
 	{
 		long obj_id;
 
 		//Generic info
-		building_type_t type;
+		construction_type_t type;
 
 		std::string name,
 			description;
@@ -41,31 +42,39 @@ namespace buildings
 
 		mlong price;
 
-		building_descriptor_t() = default;
+		construction_info() = default;
 	};
 
-	//Generic object used to describe a building/construction
-	struct building_object_t
-	{
-	    building_descriptor_t descriptor;
-	};
+    //This is a construction object, which should be present on a field
+    class construction_t
+    {
+    protected:
+        long obj_id;
+        //Type of construction
+        construction_type_t type;
+        //Generic information, from the relative descriptor
+        std::string name,
+                    description;
+        //Unit information
+        long unit_size,
+            unit_capacity; //The total capacity of the building is unit_size * unit_capacity
 
-	//Implementation for an appartment
-	struct building_appartment_t : public building_object_t
-	{
-	    //Specific information for an appartment object
-	    long units;
-	    long unit_capacity;
-	    mlong unit_price;
+        //The price in the descriptor may be not valid anymore, a perks can influence the price
+        mlong unit_price;
+    public:
+        construction_type_t get_construction_type();
+        long get_obj_id();
+        std::string get_name();
+        friend class construction_manager;
+    };
 
-	    //Constructors and utility
-        building_appartment_t();
-	};
+    typedef mlong construction_handler_t;
+
 
 	//Needed to collect all the information during the instruction parsing
 	struct all_information_t
 	{
-		building_descriptor_t general;
+		construction_info general;
 		long units,
 		     unit_capacity;
 
@@ -78,13 +87,14 @@ namespace buildings
 	extern const std::string allowed_instruction[];
 
 	//Handle the available buildings, reading them from the file ecc.
-	class building_manager
+	class construction_manager
 	{
+        static construction_handler_t construction_handler_id;
 		static long building_id;
-		std::vector< building_object_t* > available_constructions;
+		std::vector< construction_t* > available_constructions;
 	private:
 		all_information_t* current_instruction;
-		building_type_t get_proper_type( const string& cmd );
+		construction_type_t get_proper_type( const string& cmd );
 	private:
 		int read_building_file();
 		short continue_parsing( const std::string& line );
@@ -93,58 +103,22 @@ namespace buildings
 		void remove_spaces( string& line );
 		bool check_if_current_instr_is_valid();
 		void finalize_instruction();
-		void add_new_appartment();
+//		void add_new_appartment();
 		bool execute_instruction( std::pair< short, string >& instr );
+        construction_handler_t get_next_hnd_id();
+	//    under_construction_obj_t* new_under_construction_obj( long building_id );
+	    construction_t* create_new_construction( constructions::construction_t* building_obj );
 	public:
-		building_manager();
-		~building_manager();
+		construction_manager();
+		~construction_manager();
     public:
-        std::vector< building_object_t* >* get_all_buildings();
+        std::vector< construction_t* >* get_all_construction();
+        construction_t* get_building_obj( long obj_id );
+        construction_handler_t start_construction( long building_id, long city_id , citymap::citymap_field_t* field );
 	};
 }
 
-namespace constructions
-{
-    //This is a construction object, which should be present on a field
-    struct construction_t
-    {
-        long obj_id;
-        //Type of construction
-        buildings::building_type_t type;
-        //Generic information, from the relative descriptor
-        std::string name,
-                    description;
-        //Unit information
-        long unit_size,
-            unit_capacity; //The total capacity of the building is unit_size * unit_capacity
 
-        //The price in the descriptor may be not valid anymore, perks can influence the price
-        mlong unit_price;
-    };
-
-    //This is a support entity used
-    class under_construction_obj_t : public events::event_entity
-    {
-        construction_t* construction;
-    public:
-        under_construction_obj_t();
-        int trigger_event( long event_id );
-    };
-
-    typedef mlong construction_handler_t;
-
-    //This class manage the construction procedure for the cities
-	class construction_manager
-	{
-	    static construction_handler_t construction_handler_id;
-	    std::map< construction_handler_t , under_construction_obj_t* > obj_under_construction;
-	    construction_handler_t get_next_hnd_id();
-	    under_construction_obj_t* new_under_construction_obj( long building_id );
-    public:
-        construction_handler_t start_construction( long building_id, long city_id, long field_id );
-        ~construction_manager();
-	};
-}
 
 #endif
 

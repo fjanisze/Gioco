@@ -86,11 +86,12 @@ namespace city_ui_manager
             if( input_mode == city_ui_input_mode_t::building_mode )
             {
                 //If we are here, then the user want to build a construction on the map.
+                //Get the field on which the user want to start the construction
                 build_info.field = city_agent->get_field_at_pos( event.mouseMove.x , event.mouseMove.y );
                 //the building info structure should contain all the proper information now
                 if( handle_new_construction() )
                 {
-                    //Quit the construction mode
+                    //Quit the construction mode, the construction process started
                     set_std_view_mode();
                     update_focus_box( event.mouseButton.x , event.mouseButton.y );
                 }
@@ -98,6 +99,7 @@ namespace city_ui_manager
         }
     }
 
+    //This function is called when the mouse move event is triggered over the city map
     void city_ui::city_map_mouse_move( const sf::Event& event )
     {
         static std::stringstream message;
@@ -185,8 +187,7 @@ namespace city_ui_manager
         ui_console->show_city_main_menu();
     }
 
-    //This function is called when the user click on a button related with a building that may be built
-    //This will trigger the capability check (is possible to build?) and some graphic changes.
+    //This function is called when the user click on a button related with a building that may be built (from the menu)
     void city_ui::handle_build_btn_click( long action_id )
     {
         ELOG( "city_ui::handle_build_btn_click(): The user want to build a building, Action ID:",action_id,",city ID: ",city_agent->get_city_id() );
@@ -203,7 +204,8 @@ namespace city_ui_manager
         constructions::construction_manager* constr_mng = game_manager::game_manager::get_instance()->get_construction_manager();
         assert( constr_mng != nullptr );
         //Trigger the construction
-        constructions::construction_handler_t handler = constr_mng->start_construction( build_info.building_id , city_agent->get_city_id() , build_info.field->field_id);
+        constructions::construction_handler_t handler = constr_mng->start_construction( build_info.building_id , city_agent->get_city_id() , build_info.field );
+        LOG("city_ui::handle_new_construction(): Handler ID:",handler,", construction ID:",build_info.building_id);
         return true;
     }
 

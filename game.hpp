@@ -70,8 +70,7 @@ namespace game_manager
 	{
 	    std::mutex mutex;
 		static game_manager* instance;
-		buildings::building_manager* buildings;
-        constructions::construction_manager* contruction_manager;
+        constructions::construction_manager* construction_manager;
 		cities::city_manager* city_manager;
 		graphic_ui::game_ui* game_ui;
 		events::event_manager* events;
@@ -84,7 +83,7 @@ namespace game_manager
 		void create_test_scenario_1();
 		void init();
 		void handle_game();
-		buildings::building_manager* get_buildings();
+		constructions::construction_manager* get_buildings();
 		constructions::construction_manager* get_construction_manager();
 		graphic_ui::game_ui* get_game_ui();
 		events::event_manager* get_event_manager();

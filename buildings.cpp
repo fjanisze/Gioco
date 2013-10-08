@@ -5,7 +5,7 @@
 #include "logging/logger.hpp"
 #include "buildings.hpp"
 
-namespace buildings
+namespace constructions
 {
 	const string building_types_str[] =
 	{
@@ -51,20 +51,20 @@ namespace buildings
 //
 ////////////////////////////////////////////////////////////////////
 
-namespace buildings
+namespace constructions
 {
 	using namespace std;
 
-	long building_manager::building_id = 0;
+	long construction_manager::building_id = 0;
 
-	building_manager::building_manager()
+	construction_manager::construction_manager()
 	{
-		LOG("building_manager::building_manager(): Starting..");
+		LOG("construction_manager::construction_manager(): Starting..");
 		current_instruction = nullptr;
 		read_building_file();
 	}
 
-	building_manager::~building_manager()
+	construction_manager::~construction_manager()
 	{
 		for( auto elem : available_constructions )
 		{
@@ -74,9 +74,9 @@ namespace buildings
 
 	//The function read from the building file the list of buildings and create the appropriate
 	//data structure.
-	int building_manager::read_building_file()
+	int construction_manager::read_building_file()
 	{
-		LOG("building_manager::read_building_file(): Building file ",BUILDING_FILENAME );
+		LOG("construction_manager::read_building_file(): Building file ",BUILDING_FILENAME );
 
 		int amount_of_buildings = 0 , line_counter = 1;
 		std::ifstream in_file( BUILDING_FILENAME );
@@ -98,7 +98,7 @@ namespace buildings
 						//building descriptor should be skipped
 						if( instruction.first != new_instruction_index )
 						{
-							LOG_WARN("building_manager::read_building_file(): Skipping: ",buffer );
+							LOG_WARN("construction_manager::read_building_file(): Skipping: ",buffer );
 							continue; //Waiting the next 'begin' instruction
 						}
 						skip_to_next_descriptor = false;
@@ -108,7 +108,7 @@ namespace buildings
 					{
 						//Skip the whole building definition,
 						//This mean that skip everything until the instruction 'end'
-						LOG_ERR("building_manager::read_building_file(): Error at line ",line_counter," skipping the whole building definition");
+						LOG_ERR("construction_manager::read_building_file(): Error at line ",line_counter," skipping the whole building definition");
 						skip_to_next_descriptor = true;
 					}
 					else
@@ -123,34 +123,34 @@ namespace buildings
 		}
 		else
 		{
-			LOG_ERR("building_manager::read_building_file(): Unable to open the building file");
+			LOG_ERR("construction_manager::read_building_file(): Unable to open the building file");
 			return -1; //not goodd
 		}
 
 		return amount_of_buildings;
 	}
 
-	bool building_manager::check_if_current_instr_is_valid()
+	bool construction_manager::check_if_current_instr_is_valid()
 	{
 		return current_instruction != nullptr;
 	}
 
 	//Parse the fields and execute the operation, return true is the executing can proceed
-	bool building_manager::execute_instruction( std::pair< short, string >& instr )
+	bool construction_manager::execute_instruction( std::pair< short, string >& instr )
 	{
-		ELOG("building_manager::execute_instruction(): Executing instruction, index: ",instr.first,", parm: ",instr.second );
+		ELOG("construction_manager::execute_instruction(): Executing instruction, index: ",instr.first,", parm: ",instr.second );
 		bool next_field = true;
 		//Check if the 'new' instruction is the first coming
 		if( !check_if_current_instr_is_valid() && instr.first != new_instruction_index )
 		{
 			//This is not good, a 'new_descriptor' is missing
-			LOG_ERR("building_manager::execute_instruction(): A 'new_descriptor' instruction is expected first!");
+			LOG_ERR("construction_manager::execute_instruction(): A 'new_descriptor' instruction is expected first!");
 			next_field = false;
 		}
 		else if( check_if_current_instr_is_valid() && instr.first == new_instruction_index )
 		{
 			//Again a new instruction, skipping.
-			LOG_WARN("building_manager::execute_instruction(): A 'new_descriptor' was again identified.. Skipping");
+			LOG_WARN("construction_manager::execute_instruction(): A 'new_descriptor' was again identified.. Skipping");
 		}
 		else
 		{
@@ -193,7 +193,7 @@ namespace buildings
 				current_instruction = nullptr;
 				break;
 			default:
-				LOG_ERR("building_manager::execute_instruction(): Unknow index ", instr.first );
+				LOG_ERR("construction_manager::execute_instruction(): Unknow index ", instr.first );
 				delete current_instruction;
 				next_field = false;
 				break;
@@ -203,20 +203,20 @@ namespace buildings
 	}
 
 	//This function should be called when the 'end' tag if found in the building file
-	void building_manager::finalize_instruction()
+	void construction_manager::finalize_instruction()
 	{
-		ELOG("building_manager::finalize_instruction(): Completing ");
+		ELOG("construction_manager::finalize_instruction(): Completing, obj type:",current_instruction->general.type,", name: ",current_instruction->general->name );
 		switch( current_instruction->general.type )
 		{
-		case building_type_t::appartment:
-			add_new_appartment();
+		case construction_type_t::appartment:
+	//		add_new_appartment();
 			break;
-		case building_type_t::office:
+		case construction_type_t::office:
 			break;
 		};
 	}
 
-	void building_manager::add_new_appartment()
+/*	void construction_manager::add_new_appartment()
 	{
 		building_appartment_t* appartment = new building_appartment_t;
 		assert( appartment != nullptr );
@@ -227,12 +227,12 @@ namespace buildings
 		appartment->unit_capacity = current_instruction->unit_capacity;
 		appartment->unit_price = current_instruction->unit_price;
 
-        LOG("building_manager::add_new_appartment(): Adding appartment: \"",current_instruction->general.name,"\", ID:",appartment->descriptor.obj_id);
+        LOG("construction_manager::add_new_appartment(): Adding appartment: \"",current_instruction->general.name,"\", ID:",appartment->descriptor.obj_id);
 		available_constructions.push_back( appartment );
-	}
+	} */
 
 	//From the beginning and the end of the string
-	void building_manager::remove_spaces( string& line )
+	void construction_manager::remove_spaces( string& line )
 	{
 		while( line[0] == ' ' )
 		{
@@ -244,21 +244,21 @@ namespace buildings
 		}
 	}
 
-	building_type_t building_manager::get_proper_type( const string& cmd )
+	construction_type_t construction_manager::get_proper_type( const string& cmd )
 	{
 		for( short i = 0 ; !building_types_str[ i ].empty() ; i++ )
 		{
 			if( cmd.find( building_types_str[ i ] ) != string::npos )
-				return building_type_t( i );
+				return construction_type_t( i );
 		}
-		return building_type_t::error;
+		return construction_type_t::error;
 	}
 
 	//If the line contains valid instructions the function return the position where
 	//the instruction begin, otherwise npos
-	short building_manager::continue_parsing( const string& line )
+	short construction_manager::continue_parsing( const string& line )
 	{
-		ELOG("building_manager::continue_parsing(): Input line \"",line,"\"");
+		ELOG("construction_manager::continue_parsing(): Input line \"",line,"\"");
 		short pos = -1, line_size = line.size();
 		for( short i = 0 ; i < line_size ; i++)
 		{
@@ -273,14 +273,14 @@ namespace buildings
 
 	//Return the insturction index (as per the table)
 	//The function returns a pair, first contain the index number of the instruction, second the rest of the argument for the instruction
-	std::pair< short, string > building_manager::get_the_instruction( size_t pos, const string& line )
+	std::pair< short, string > construction_manager::get_the_instruction( size_t pos, const string& line )
 	{
 		short index = 0;
 		std::pair< short, string > return_value( -1 , "" );
 		size_t end_instr_pos = line.find_first_of( ":;" , pos + 1 );
 		if( end_instr_pos == string::npos )
 		{
-			LOG_ERR("building_manager::get_the_instruction(): Unknow format identified in: ",line );
+			LOG_ERR("construction_manager::get_the_instruction(): Unknow format identified in: ",line );
 			return std::move( return_value );
 		}
 		std::string instruction = line.substr( pos , end_instr_pos - pos );
@@ -294,12 +294,12 @@ namespace buildings
 			}
 			++index;
 		}
-		LOG_ERR("building_manager::get_the_instruction(): Unknow instruction (",instruction,") in: ",line );
+		LOG_ERR("construction_manager::get_the_instruction(): Unknow instruction (",instruction,") in: ",line );
 		return std::move( return_value );
 	}
 
 	//Remove the comments from the line
-	void building_manager::remove_comments( string& line )
+	void construction_manager::remove_comments( string& line )
 	{
 		size_t pos = line.find_first_of("#");
 		if( pos != string::npos )
@@ -309,43 +309,41 @@ namespace buildings
 	}
 
 	//Return a vector with all the appartment available
-	std::vector< building_object_t* >* building_manager::get_all_buildings()
+	std::vector< construction_t* >* construction_manager::get_all_construction()
 	{
 	    return &available_constructions;
 	}
 
-    ////////////////////////////////////////////////////////////////////
-    //
-    //
-    //	Follow the implementation for building_appartment_t
-    //
-    //
-    ////////////////////////////////////////////////////////////////////
-
-    building_appartment_t::building_appartment_t() : units( 0 ) , unit_capacity( 0 ) , unit_price( 0 )
+	//Return the pointer for a specific building object or nullptr
+    construction_t* construction_manager::get_building_obj( long obj_id )
     {
+        construction_t* obj = nullptr;
+        for( auto elem : available_constructions )
+        {
+            if( elem->get_obj_id() == obj_id )
+            {
+                return elem;
+            }
+        }
+        LOG_WARN("construction_manager::get_building_obj(): Building with ID:",obj_id,", not found!");
+        return nullptr;
     }
-}
-
-namespace constructions
-{
 
     construction_handler_t construction_manager::construction_handler_id = 0;
-    ////////////////////////////////////////////////////////////////////
-    //
-    //
-    //	Follow the implementation for construction_t and construction_manager
-    //
-    //
-    ////////////////////////////////////////////////////////////////////
 
-    under_construction_obj_t::under_construction_obj_t() : construction( nullptr )
+    construction_type_t construction_t::get_construction_type()
     {
+        return type;
     }
 
-    int under_construction_obj_t::trigger_event( long event_id )
+    long construction_t::get_obj_id()
     {
-        ELOG("under_construction_obj_t::trigger_event(): Event ID: ",event_id,", for the obj ID:",construction->obj_id,", The construction should be completed." );
+        return obj_id;
+    }
+
+    std::string construction_t::get_name()
+    {
+        return name;
     }
 
     //Return the next unique handler ID for the construction
@@ -355,28 +353,13 @@ namespace constructions
     }
 
     //Start the construction of a certain building on a specific field
-    construction_handler_t construction_manager::start_construction( long building_id, long city_id, long field_id )
+    construction_handler_t construction_manager::start_construction( long building_id, long city_id, citymap::citymap_field_t* field )
     {
         construction_handler_t handler = get_next_hnd_id();
-        LOG("construction_manager::start_construction(): New construction, Building ID:",building_id,",City ID:",city_id,",Construction handler ID:",handler );
+        LOG("construction_manager::start_construction(): New construction, Building ID:",building_id,",City ID:",city_id,", field ID:", field->field_id ,", Handler ID:",handler );
         return handler;
     }
 
-    //Create the temporary object which rappresent an under construction building
-    under_construction_obj_t* construction_manager::new_under_construction_obj( long building_id )
-    {
-        ELOG("construction_manager::new_under_construction_obj(): New construction, building ID:",building_id );
-        under_construction_obj_t* cnstr_obj = new under_construction_obj_t;
-        assert( cnstr_obj != nullptr );
-    }
-
-    construction_manager::~construction_manager()
-    {
-        for( auto elem : obj_under_construction )
-        {
-            delete elem.second;
-        }
-    }
 }
 
 

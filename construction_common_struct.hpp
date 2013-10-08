@@ -56,6 +56,45 @@ namespace constructions
         std::string get_name();
         friend class construction_manager;
     };
+
+    //This construction is still ongoing
+    class construction_ongoing : public construction_t
+    {
+    public:
+        construction_ongoing();
+    };
+
+    //Appartment
+    class construction_appartment : public construction_t
+    {
+    public:
+        construction_appartment();
+    };
+
+    //Office
+    class construction_office : public construction_t
+    {
+    public:
+            construction_office();
+    };
 }
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

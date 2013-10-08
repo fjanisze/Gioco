@@ -518,7 +518,7 @@
 	"../buildings.hpp"
 	"../game.hpp"
 
-1377760822 source:d:\gioco\ui\ui_console.cpp
+1381219251 source:d:\gioco\ui\ui_console.cpp
 	"ui_console.hpp"
 	"../game.hpp"
 
@@ -1057,7 +1057,7 @@
 	"gtest.h"
 	"..\population\population.hpp"
 
-1381233046 d:\gioco\construction_common_struct.hpp
+1381233470 d:\gioco\construction_common_struct.hpp
 	"mytypes.hpp"
 	<string>
 

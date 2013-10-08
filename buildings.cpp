@@ -331,6 +331,29 @@ namespace constructions
 
     construction_handler_t construction_manager::construction_handler_id = 0;
 
+
+    //Return the next unique handler ID for the construction
+    construction_handler_t construction_manager::get_next_hnd_id()
+    {
+        return ++construction_handler_id;
+    }
+
+    //Start the construction of a certain building on a specific field
+    construction_handler_t construction_manager::start_construction( long building_id, long city_id, citymap::citymap_field_t* field )
+    {
+        construction_handler_t handler = get_next_hnd_id();
+        LOG("construction_manager::start_construction(): New construction, Building ID:",building_id,",City ID:",city_id,", field ID:", field->field_id ,", Handler ID:",handler );
+        return handler;
+    }
+
+    ////////////////////////////////////////////////////////////////////
+    //
+    //
+    //	Follow the implementation for construction_t and the derivated class
+    //
+    //
+    ////////////////////////////////////////////////////////////////////
+
     construction_type_t construction_t::get_construction_type()
     {
         return type;
@@ -346,18 +369,19 @@ namespace constructions
         return name;
     }
 
-    //Return the next unique handler ID for the construction
-    construction_handler_t construction_manager::get_next_hnd_id()
+    construction_ongoing::construction_ongoing()
     {
-        return ++construction_handler_id;
+        LOG("construction_ongoing::construction_ongoing(): New construction begin, obj ID:", get_obj_id() );
     }
 
-    //Start the construction of a certain building on a specific field
-    construction_handler_t construction_manager::start_construction( long building_id, long city_id, citymap::citymap_field_t* field )
+    construction_appartment::construction_appartment()
     {
-        construction_handler_t handler = get_next_hnd_id();
-        LOG("construction_manager::start_construction(): New construction, Building ID:",building_id,",City ID:",city_id,", field ID:", field->field_id ,", Handler ID:",handler );
-        return handler;
+        LOG("construction_appartment::construction_appartment(): New appartment ready, obj ID:", get_obj_id() );
+    }
+
+    construction_office::construction_office()
+    {
+        LOG("construction_office::construction_office(): New office ready, obj ID:", get_obj_id() );
     }
 
 }

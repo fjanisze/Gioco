@@ -4,6 +4,7 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include "../mytypes.hpp"
+#include "../construction_common_struct.hpp"
 
 namespace game_map
 {
@@ -106,7 +107,7 @@ namespace citymap
 	    map_common::field_coordinate coord;
 
 	    //here are contained the information about the building (if any) available on this field.
-	//    constructions::construction_t* construction;
+	    constructions::construction_t* construction;
 
 	    citymap_field_t();
 	    city_field_descriptor* new_descriptor() throw( std::bad_alloc );

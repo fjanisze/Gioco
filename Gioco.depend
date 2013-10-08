@@ -16,7 +16,7 @@
 	<sstream>
 	<mutex>
 
-1381219048 d:\gioco\buildings.hpp
+1381232962 d:\gioco\buildings.hpp
 	"mytypes.hpp"
 	"events.hpp"
 	<string>
@@ -26,6 +26,7 @@
 	<vector>
 	<map>
 	"map\map_common.hpp"
+	"construction_common_struct.hpp"
 
 1375327272 d:\gioco\mytypes.hpp
 
@@ -521,10 +522,11 @@
 	"ui_console.hpp"
 	"../game.hpp"
 
-1381218698 d:\gioco\map\map_common.hpp
+1381232983 d:\gioco\map\map_common.hpp
 	<string>
 	<SFML/Graphics.hpp>
 	"../mytypes.hpp"
+	"../construction_common_struct.hpp"
 
 1375758953 d:\gioco\map\city_map.hpp
 	"../logging/logger.hpp"
@@ -1054,4 +1056,8 @@
 1375932002 d:\gioco\regression\population.hpp
 	"gtest.h"
 	"..\population\population.hpp"
+
+1381233046 d:\gioco\construction_common_struct.hpp
+	"mytypes.hpp"
+	<string>
 

@@ -201,12 +201,8 @@ namespace city_ui_manager
     {
         ELOG("city_ui::handle_new_construction(): The user want to build a new building, building ID:",build_info.building_id,", field ID:", build_info.field->field_id,",city ID:",build_info.field->descriptor->obj_id );
         //Get the construction manager and try to build the building
-        constructions::construction_manager* constr_mng = game_manager::game_manager::get_instance()->get_construction_manager();
-        assert( constr_mng != nullptr );
-        //Trigger the construction
-        constructions::construction_handler_t handler = constr_mng->start_construction( build_info.building_id , city_agent->get_city_id() , build_info.field );
-        LOG("city_ui::handle_new_construction(): Handler ID:",handler,", construction ID:",build_info.building_id);
-        return true;
+        bool verdict = game_manager::game_manager::get_instance()->user_want_start_construction( build_info.building_id , city_agent->get_city_id() , build_info.field->field_id );
+        return verdict;
     }
 
     //The view mode is also the 'default' viewing mode

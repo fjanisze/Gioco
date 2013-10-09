@@ -143,7 +143,6 @@ namespace game_map
 	};
 
 	//field_manager is responsible to managing the objects that lead on a field
-
 	class field_manager
 	{
 		obj_list_t obj_list; //List of objects present on this field

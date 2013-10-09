@@ -355,11 +355,13 @@ namespace constructions
         return ++construction_handler_id;
     }
 
-    //Start the construction of a certain building on a specific field
+    //Start the construction of a certain building on a specific field.
+    //From the construction_manager point of view this is the starting point for the whole procedure
     construction_handler_t construction_manager::start_construction( long building_id, long city_id, citymap::citymap_field_t* field )
     {
         construction_handler_t handler = get_next_hnd_id();
         LOG("construction_manager::start_construction(): New construction, Building ID:",building_id,",City ID:",city_id,", field ID:", field->field_id ,", Handler ID:",handler );
+
         return handler;
     }
 

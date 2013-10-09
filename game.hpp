@@ -87,6 +87,9 @@ namespace game_manager
 		constructions::construction_manager* get_construction_manager();
 		graphic_ui::game_ui* get_game_ui();
 		events::event_manager* get_event_manager();
+    public://Operations that the user is allowed to perform
+        bool user_want_start_construction( long construction_id, long city_id, long field_id );
+
 	};
 };
 

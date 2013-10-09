@@ -135,5 +135,42 @@ namespace game_manager
 	{
 	    return events;
 	}
+
+	////////////////////////////////////////////////////////////////////
+    //
+    //
+    //	Follow the implementation for specific 'use case'
+    //
+    //
+    ////////////////////////////////////////////////////////////////////
+
+    //The user want to start a new construction
+    bool game_manager::user_want_start_construction( long construction_id, long city_id, long field_id )
+    {
+        LOG("game_manager::user_want_start_construction(): Construction ID:",construction_id,",city ID:",city_id,",field ID:",field_id);
+        bool verdict = false; //The operation succeeded?
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

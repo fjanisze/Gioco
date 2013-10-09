@@ -111,7 +111,13 @@ namespace city_ui_manager
             citymap::citymap_field_t* field = city_agent->get_field_at_pos( event.mouseMove.x , event.mouseMove.y );
             if( field != nullptr )
             {
-                message << "Field name: "<<field->descriptor->name <<", ID: "<<field->field_id<<"\nMouse coord: "<<event.mouseMove.x<<","<<event.mouseMove.y<<std::endl;
+                message << "Field name: "<<field->descriptor->name <<", ID: "<<field->field_id<<std::endl;
+                //Is there any construction on the field?
+                if( field->construction != nullptr )
+                {
+                    //Print something about the construction.
+                    message<<",construction: "<<field->construction->get_name()<<", with ID:"<<field->construction->get_obj_id()<<std::endl;
+                }
                 ui_console->write_info( message.str() );
                 //Update the focus box, if the field is changed
                 if( last_field == nullptr || ( last_field->field_id != field->field_id ) )

@@ -75,7 +75,7 @@ namespace citymap
 	struct city_field_descriptor
 	{
 	    //Should be unique
-		mlong obj_id;
+		long obj_id;
 		//Information about the field, name ecc.
 		std::string name,
                 desc;
@@ -98,7 +98,7 @@ namespace citymap
 	struct citymap_field_t
 	{
 	    //ID for the field
-	    mlong field_id;
+	    long field_id;
 
 	    //Descriptor, with generic information on the field
 	    city_field_descriptor* descriptor;
@@ -146,6 +146,7 @@ namespace cities
         std::vector< sf::VertexArray* >* get_vertex();
         citymap_field_t* get_field_at_pos( long x , long y );
         city_info_t* get_city_info();
+        citymap_t* get_city_map();
     };
 }
 

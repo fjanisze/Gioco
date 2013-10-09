@@ -57,13 +57,13 @@ namespace constructions
 		void add_new_apartment();
 		bool execute_instruction( std::pair< short, string >& instr );
         construction_handler_t get_next_hnd_id();
-	    construction_t* create_new_construction( constructions::construction_t* building_obj );
+	    construction_t* create_new_construction( construction_t* construction_source );
 	public:
 		construction_manager();
 		~construction_manager();
     public:
         std::vector< construction_t* >* get_all_construction();
-        construction_t* get_building_obj( long obj_id );
+        construction_t* get_construction_obj( long obj_id );
         construction_handler_t start_construction( long building_id, long city_id , citymap::citymap_field_t* field );
 	};
 }

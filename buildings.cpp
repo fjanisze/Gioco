@@ -331,18 +331,30 @@ namespace constructions
 	    return &available_constructions;
 	}
 
-	//Return the pointer for a specific building object or nullptr
-    construction_t* construction_manager::get_building_obj( long obj_id )
+	//Create a copy of an existing construction_t, this copy can be placed on a field.
+	construction_t* construction_manager::create_new_construction( construction_t* construction_source )
+	{
+	    ELOG("construction_manager::create_new_construction(): Source construction ID:",construction_source->get_obj_id() );
+	    construction_t* new_obj = new construction_t( construction_source, get_new_building_id() );
+	    assert( new_obj != nullptr );
+	    ELOG("construction_manager::create_new_construction(): Construction ID:",new_obj->get_obj_id(),",is a copy of the Construction ID:",construction_source->get_obj_id() );
+	    return new_obj;
+	}
+
+	//Return the pointer for a specific building object or nullptr.
+    construction_t* construction_manager::get_construction_obj( long obj_id )
     {
+        ELOG("construction_manager::get_construction_obj(): Construction ID:",obj_id);
         construction_t* obj = nullptr;
         for( auto elem : available_constructions )
         {
             if( elem->get_obj_id() == obj_id )
             {
-                return elem;
+                //Make a copy and return the construction object
+                return create_new_construction( elem );
             }
         }
-        LOG_WARN("construction_manager::get_building_obj(): Building with ID:",obj_id,", not found!");
+        LOG_WARN("construction_manager::get_construction_obj(): Building with ID:",obj_id,", not found!");
         return nullptr;
     }
 
@@ -372,6 +384,18 @@ namespace constructions
     //
     //
     ////////////////////////////////////////////////////////////////////
+
+    //Make a copy of the object, but with a new ID.
+    construction_t::construction_t( const construction_t* source, long new_obj_id )
+    {
+        obj_id = new_obj_id; //Two objects are not allowed to share the same ID.
+        type = source->type;
+        name = source->name;
+        description = source->description;
+        amount_of_unit = source->amount_of_unit;
+        unit_capacity = source->unit_capacity;
+        unit_price = source->unit_price;
+    }
 
     construction_type_t construction_t::get_construction_type()
     {

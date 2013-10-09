@@ -51,6 +51,9 @@ namespace constructions
         //The price in the descriptor may be not valid anymore, a perks can influence the price
         mlong unit_price;
     public:
+        construction_t() = default;
+        construction_t( const construction_t* source , long new_obj_id );
+    public:
         construction_type_t get_construction_type();
         void init( long id, const std::string& construction_name, const std::string& construction_desc,
                 long construction_amount_of_unit, long construction_unit_capacity, long construction_unit_price );
@@ -62,6 +65,7 @@ namespace constructions
     //This construction is still ongoing
     class construction_ongoing : public construction_t
     {
+        //Actually this is not used, we assume that the construction is completed immediately
     public:
         construction_ongoing();
     };

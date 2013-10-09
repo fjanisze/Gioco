@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1381303514 source:d:\gioco\buildings.cpp
+1381318579 source:d:\gioco\buildings.cpp
 	"logging/logger.hpp"
 	"buildings.hpp"
 
@@ -16,7 +16,7 @@
 	<sstream>
 	<mutex>
 
-1381300164 d:\gioco\buildings.hpp
+1381317360 d:\gioco\buildings.hpp
 	"mytypes.hpp"
 	"events.hpp"
 	<string>
@@ -30,7 +30,7 @@
 
 1375327272 d:\gioco\mytypes.hpp
 
-1375327272 source:d:\gioco\cities.cpp
+1381318269 source:d:\gioco\cities.cpp
 	"cities.hpp"
 
 1375759018 d:\gioco\cities.hpp
@@ -403,7 +403,7 @@
 	<mutex>
 	<list>
 
-1381307619 source:d:\gioco\game.cpp
+1381318388 source:d:\gioco\game.cpp
 	"game.hpp"
 
 1381307305 d:\gioco\game.hpp
@@ -513,7 +513,7 @@
 1375758394 source:d:\gioco\ui\ui.cpp
 	"ui.hpp"
 
-1380889133 source:d:\gioco\ui\ui_city.cpp
+1381318873 source:d:\gioco\ui\ui_city.cpp
 	"ui_city.hpp"
 	"../buildings.hpp"
 	"../game.hpp"
@@ -522,13 +522,13 @@
 	"ui_console.hpp"
 	"../game.hpp"
 
-1381232983 d:\gioco\map\map_common.hpp
+1381318112 d:\gioco\map\map_common.hpp
 	<string>
 	<SFML/Graphics.hpp>
 	"../mytypes.hpp"
 	"../construction_common_struct.hpp"
 
-1375758953 d:\gioco\map\city_map.hpp
+1381317874 d:\gioco\map\city_map.hpp
 	"../logging/logger.hpp"
 	"map_common.hpp"
 	"../mytypes.hpp"
@@ -539,7 +539,7 @@
 	<algorithm>
 	<mutex>
 
-1381303514 d:\gioco\map\map.hpp
+1381308918 d:\gioco\map\map.hpp
 	"../mytypes.hpp"
 	"map_common.hpp"
 	<map>
@@ -551,7 +551,7 @@
 	<cassert>
 	<mutex>
 
-1377757222 source:d:\gioco\map\city_map.cpp
+1381318491 source:d:\gioco\map\city_map.cpp
 	"city_map.hpp"
 
 1375758953 source:d:\gioco\map\map.cpp
@@ -1057,7 +1057,7 @@
 	"gtest.h"
 	"..\population\population.hpp"
 
-1381300214 d:\gioco\construction_common_struct.hpp
+1381317760 d:\gioco\construction_common_struct.hpp
 	"mytypes.hpp"
 	<string>
 

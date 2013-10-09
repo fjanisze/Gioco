@@ -100,6 +100,19 @@ namespace cities
         return result;
     }
 
+    //Return the city_agent for a specific city
+    city_agent* city_manager::get_city_agent( long city_id )
+    {
+        for( auto elem : agents )
+        {
+            if( elem->get_city_id() == city_id )
+            {
+                return elem;
+            }
+        }
+        return nullptr;
+    }
+
 
     city_agent::city_agent( city_manager* manager , city_info_t* city_info ) : mng( manager ), city( city_info )
     {
@@ -124,5 +137,10 @@ namespace cities
     city_info_t* city_agent::get_city_info()
     {
         return city;
+    }
+
+    citymap_t* city_agent::get_city_map()
+    {
+        return city->citymap;
     }
 }

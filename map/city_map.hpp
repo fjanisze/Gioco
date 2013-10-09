@@ -74,6 +74,7 @@ namespace citymap_field_container
         std::vector< node_t* >::iterator end();
         typedef std::vector< node_t* >::iterator iterator;
         citymap::citymap_field_t* get_field( long row, long column );
+        citymap::citymap_field_t* get_field( long field_id );
     };
 }
 
@@ -113,7 +114,7 @@ namespace citymap
 	};
 
 
-    //handle a city object
+    //handle the map for a specific city
 	class citymap_t : public citymap_graphic_t
 	{
 	    citymap_field_container::citymap_container map;
@@ -126,7 +127,9 @@ namespace citymap
 	public:
 	    citymap_t( int map_size , game_map::map_viewport_settings_t viewport  );
 	    citymap_field_t* get_field_at_pos( long x , long y );
+	    citymap_field_t* get_field( long field_id );
 	    ~citymap_t();
+	    constructions::construction_t* set_construction( long field_id , constructions::construction_t* new_construction );
 	};
 
 };

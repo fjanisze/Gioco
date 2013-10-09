@@ -148,7 +148,30 @@ namespace game_manager
     bool game_manager::user_want_start_construction( long construction_id, long city_id, long field_id )
     {
         LOG("game_manager::user_want_start_construction(): Construction ID:",construction_id,",city ID:",city_id,",field ID:",field_id);
-        bool verdict = false; //The operation succeeded?
+        //Get the building.
+        constructions::construction_t* constr_obj = construction_manager->get_construction_obj( construction_id );
+        if( constr_obj == nullptr )
+        {
+            LOG_ERR("game_manager::user_want_start_construction(): Unable to retrieve the constrution with ID:", construction_id );
+            return false;
+        }
+        //Get the city
+        cities::city_agent* city_agent = city_manager->get_city_agent( city_id );
+        if( city_agent == nullptr )
+        {
+            LOG_ERR("game_manager::user_want_start_construction(): Unable to retrieve the city agent for the city with ID:", city_id );
+            return false;
+        }
+        citymap::citymap_t* citymap = city_agent->get_city_map();
+        if( citymap == nullptr )
+        {
+            LOG_ERR("game_manager::user_want_start_construction(): Unable to retrieve the citymap for the city with ID:", city_id );
+            return false;
+        }
+        //Ok now we have all the object ready to be used.
+        //The construction process is pretty simple, the construction_t is just added on the field if no other constructions are present
+        citymap->set_construction( field_id, constr_obj );
+        return true;
     }
 }
 

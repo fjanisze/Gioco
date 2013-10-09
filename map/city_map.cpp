@@ -182,6 +182,19 @@ namespace citymap_field_container
         }
         return node->field;
     }
+
+    //Return the field with the specified ID
+    citymap::citymap_field_t* citymap_container::get_field( long field_id )
+    {
+        for( auto elem : all_nodes )
+        {
+            if( elem->field->field_id == field_id )
+            {
+                return elem->field;
+            }
+        }
+        return nullptr;
+    }
 }
 
 namespace citymap
@@ -342,6 +355,33 @@ namespace citymap
          long row_nbr = y / field_height;
          citymap::citymap_field_t* field = map.get_field( row_nbr , column_nbr );
          return field;
+     }
+
+     //Return the field with the specified ID
+     citymap_field_t* citymap_t::get_field( long field_id )
+     {
+         return map.get_field( field_id );
+     }
+
+     //Set a new construction on the specified field, if a construction already exist is overwritten and the old construction is returned
+     constructions::construction_t* citymap_t::set_construction( long field_id , constructions::construction_t* new_construction  )
+     {
+         ELOG("citymap_t::set_construction(): field ID:",field_id,",construction ID:",new_construction->get_obj_id());
+         citymap_field_t* field = map.get_field( field_id );
+         if( field == nullptr )
+         {
+             LOG_ERR("citymap_t::set_construction(): Unable to retrieve the field with ID:",field_id );
+             return nullptr;
+         }
+         //Go ahead and set the construction on the field
+         constructions::construction_t* old_construction = nullptr;
+         if( field->construction != nullptr )
+         {
+             LOG("citymap_t::set_construction(): On the field id present the construction with ID:",field->construction->get_obj_id());
+             old_construction = field->construction;
+         }
+         field->construction = new_construction;
+         return old_construction;
      }
 
     ////////////////////////////////////////////////////////////////////

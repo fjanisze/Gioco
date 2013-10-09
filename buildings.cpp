@@ -1,5 +1,5 @@
 #define LOGGING_LEVEL_1
-//#define LOGGING_LEVEL_2
+#define LOGGING_LEVEL_2
 
 
 #include "logging/logger.hpp"
@@ -9,7 +9,7 @@ namespace constructions
 {
 	const string building_types_str[] =
 	{
-		"APPARTMENT",
+		"APARTMENT",
 		"OFFICE",
 		""
 	};
@@ -70,6 +70,12 @@ namespace constructions
 		{
 			delete elem;
 		}
+	}
+
+	//Return a new building ID
+	long construction_manager::get_new_building_id()
+	{
+	    return ++building_id;
 	}
 
 	//The function read from the building file the list of buildings and create the appropriate
@@ -205,31 +211,42 @@ namespace constructions
 	//This function should be called when the 'end' tag if found in the building file
 	void construction_manager::finalize_instruction()
 	{
-		ELOG("construction_manager::finalize_instruction(): Completing, obj type:",current_instruction->general.type,", name: ",current_instruction->general->name );
+		ELOG("construction_manager::finalize_instruction(): Completing, obj type:",current_instruction->general.type,", name: ",current_instruction->general.name );
 		switch( current_instruction->general.type )
 		{
-		case construction_type_t::appartment:
-	//		add_new_appartment();
+		case construction_type_t::apartment:
+			add_new_apartment();
 			break;
 		case construction_type_t::office:
 			break;
 		};
 	}
 
-/*	void construction_manager::add_new_appartment()
+	//Initialize properly all the information for the construction
+    void construction_t::init( long id, const std::string& construction_name, const std::string& construction_desc,
+                long construction_amount_of_unit, long construction_unit_capacity, long construction_unit_price )
+    {
+        ELOG("construction_t::init(): Obj ID:",id,",name: ",construction_name,", amnt of unit:",construction_amount_of_unit,",unit capa:",construction_unit_capacity,",unit price:",construction_unit_price);
+        obj_id = id;
+        name = construction_name;
+        description = construction_desc;
+        amount_of_unit = construction_amount_of_unit;
+        unit_capacity = construction_unit_capacity;
+        unit_price = construction_unit_price;
+    }
+
+    //Add a new apartment to the container of available constructions
+	void construction_manager::add_new_apartment()
 	{
-		building_appartment_t* appartment = new building_appartment_t;
-		assert( appartment != nullptr );
+		construction_apartment* apartment = new construction_apartment;
+		assert( apartment != nullptr );
 
-		appartment->descriptor = current_instruction->general;
-		appartment->descriptor.obj_id = ++building_id;
-		appartment->units = current_instruction->units;
-		appartment->unit_capacity = current_instruction->unit_capacity;
-		appartment->unit_price = current_instruction->unit_price;
+        apartment->init( get_new_building_id() , current_instruction->general.name , current_instruction->general.description,
+        current_instruction->units , current_instruction->unit_capacity, current_instruction->unit_price );
 
-        LOG("construction_manager::add_new_appartment(): Adding appartment: \"",current_instruction->general.name,"\", ID:",appartment->descriptor.obj_id);
-		available_constructions.push_back( appartment );
-	} */
+        LOG("construction_manager::add_new_apartment(): Adding apartment: \"",current_instruction->general.name,"\", ID:",apartment->get_obj_id() );
+		available_constructions.push_back( apartment );
+	}
 
 	//From the beginning and the end of the string
 	void construction_manager::remove_spaces( string& line )
@@ -308,7 +325,7 @@ namespace constructions
 		}
 	}
 
-	//Return a vector with all the appartment available
+	//Return a vector with all the apartment available
 	std::vector< construction_t* >* construction_manager::get_all_construction()
 	{
 	    return &available_constructions;
@@ -371,17 +388,14 @@ namespace constructions
 
     construction_ongoing::construction_ongoing()
     {
-        LOG("construction_ongoing::construction_ongoing(): New construction begin, obj ID:", get_obj_id() );
     }
 
-    construction_appartment::construction_appartment()
+    construction_apartment::construction_apartment()
     {
-        LOG("construction_appartment::construction_appartment(): New appartment ready, obj ID:", get_obj_id() );
     }
 
     construction_office::construction_office()
     {
-        LOG("construction_office::construction_office(): New office ready, obj ID:", get_obj_id() );
     }
 
 }

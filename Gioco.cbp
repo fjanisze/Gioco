@@ -71,6 +71,7 @@
 		<Unit filename="cities.cpp" />
 		<Unit filename="cities.hpp" />
 		<Unit filename="config.hpp" />
+		<Unit filename="construction_common_struct.hpp" />
 		<Unit filename="events.cpp" />
 		<Unit filename="events.hpp" />
 		<Unit filename="game.cpp" />

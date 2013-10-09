@@ -3,9 +3,9 @@
 #
 
 @new_descriptor;
-	@type: APPARTMENT
+	@type: APARTMENT
 	@name: Bingo Appartment
-	@description: Small appartments for small wallets
+	@description: Small apartments for small wallets
 	@construction_time: 15
 
 	@units: 4
@@ -16,8 +16,8 @@
 @end;
 
 @new_descriptor;
-	@type: APPARTMENT
-	@name: Bongo Appartment
+	@type: APARTMENT
+	@name: Bongo Apartment
 	@description: Is always better than take a rest under a bridge!
 	@construction_time: 22
 
@@ -30,8 +30,8 @@
 
 
 @new_descriptor;
-	@type: APPARTMENT
-	@name: Grand Hop Appartment
+	@type: APARTMENT
+	@name: Grand Hop Apartment
 	@description: Big structure for many families
 	@construction_time: 44
 

@@ -8,7 +8,7 @@ namespace constructions
 {
     typedef enum construction_type_t
 	{
-		appartment,
+		apartment,
 		office,
 		error
 	} construction_type_t;
@@ -45,13 +45,15 @@ namespace constructions
         std::string name,
                     description;
         //Unit information
-        long unit_size,
+        long amount_of_unit,
             unit_capacity; //The total capacity of the building is unit_size * unit_capacity
 
         //The price in the descriptor may be not valid anymore, a perks can influence the price
         mlong unit_price;
     public:
         construction_type_t get_construction_type();
+        void init( long id, const std::string& construction_name, const std::string& construction_desc,
+                long construction_amount_of_unit, long construction_unit_capacity, long construction_unit_price );
         long get_obj_id();
         std::string get_name();
         friend class construction_manager;
@@ -64,11 +66,11 @@ namespace constructions
         construction_ongoing();
     };
 
-    //Appartment
-    class construction_appartment : public construction_t
+    //apartment
+    class construction_apartment : public construction_t
     {
     public:
-        construction_appartment();
+        construction_apartment();
     };
 
     //Office

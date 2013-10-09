@@ -46,6 +46,7 @@ namespace constructions
 		all_information_t* current_instruction;
 		construction_type_t get_proper_type( const string& cmd );
 	private:
+	    long get_new_building_id();
 		int read_building_file();
 		short continue_parsing( const std::string& line );
 		std::pair< short, string > get_the_instruction( size_t pos, const std::string& line );
@@ -53,10 +54,9 @@ namespace constructions
 		void remove_spaces( string& line );
 		bool check_if_current_instr_is_valid();
 		void finalize_instruction();
-//		void add_new_appartment();
+		void add_new_apartment();
 		bool execute_instruction( std::pair< short, string >& instr );
         construction_handler_t get_next_hnd_id();
-	//    under_construction_obj_t* new_under_construction_obj( long building_id );
 	    construction_t* create_new_construction( constructions::construction_t* building_obj );
 	public:
 		construction_manager();

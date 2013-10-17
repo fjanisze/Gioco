@@ -65,10 +65,10 @@ namespace city_ui_manager
     {
         ELOG("city_ui::is_over_the_game_map(): x:",x_pos,",y:",y_pos);
         if( y_pos >= game_canvas.canvas_y_offset &&
-            y_pos <= ( game_canvas.canvas_y_offset + game_canvas.canvas_height ) )
+            y_pos < ( game_canvas.canvas_y_offset + game_canvas.canvas_height ) )
         {
             if( x_pos >= game_canvas.canvas_x_offset &&
-                x_pos <= ( game_canvas.canvas_x_offset + game_canvas.canvas_width ) )
+                x_pos < ( game_canvas.canvas_x_offset + game_canvas.canvas_width ) )
             {
                 ELOG("city_ui::is_over_the_game_map(): The point is over the game map.");
                 return true;
@@ -91,7 +91,7 @@ namespace city_ui_manager
             {
                 //If we are here, then the user want to build a construction on the map.
                 //Get the field on which the user want to start the construction
-                build_info.field = city_agent->get_field_at_pos( event.mouseMove.x , event.mouseMove.y );
+                build_info.field = city_agent->get_field_at_pos( event.mouseButton.x , event.mouseButton.y );
                 ELOG("city_ui::mouse_press_event(): We are in building mode, handling the construction request, field ID:",build_info.field->field_id );
                 //the building info structure should contain all the proper information now
                 if( handle_new_construction() )
@@ -110,8 +110,8 @@ namespace city_ui_manager
         static std::stringstream message;
         static citymap::citymap_field_t* last_field = nullptr;
         //Remove the offset to have coherent data.
-        long x = event.mouseMove.x - game_canvas.canvas_x_offset,
-            y = event.mouseMove.y - game_canvas.canvas_y_offset;
+        long x = event.mouseMove.x ,
+            y = event.mouseMove.y;
         //current_city should not be nullptr.
         if( city_agent != nullptr )
         {
@@ -145,12 +145,8 @@ namespace city_ui_manager
     //Check the position of the mouse and update the focus box
     void city_ui::update_focus_box( long x_pos , long y_pos )
     {
-        x_pos -= ( x_pos % field_width );
-        y_pos -= ( y_pos % field_height );
-
-        //add Offset
-        x_pos += game_canvas.canvas_x_offset;
-        y_pos += game_canvas.canvas_y_offset;
+        x_pos -= ( ( x_pos - game_canvas.canvas_x_offset ) % field_width );
+        y_pos -= ( ( y_pos - game_canvas.canvas_y_offset ) % field_height );
 
         if( input_mode == city_ui_input_mode_t::view_mode )
         {

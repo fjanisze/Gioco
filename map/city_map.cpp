@@ -343,12 +343,17 @@ namespace citymap
      //Seach between all the fields and return the one which belong to the coordinates
      citymap_field_t* citymap_t::get_field_at_pos( long x , long y )
      {
-         if( x > game_canvas_setting.canvas_width || y > game_canvas_setting.canvas_height )
+         if( x >= ( game_canvas_setting.canvas_width + game_canvas_setting.canvas_x_offset ) ||
+             y >= ( game_canvas_setting.canvas_height + game_canvas_setting.canvas_y_offset ) )
          {
              return nullptr;
          }
-         long column_nbr = x / field_width; //It may be also 0
-         long row_nbr = y / field_height;
+         if( x < game_canvas_setting.canvas_x_offset || y < game_canvas_setting.canvas_y_offset )
+         {
+             return nullptr;
+         }
+         long column_nbr = ( x - game_canvas_setting.canvas_x_offset) / field_width; //It may be also 0
+         long row_nbr = ( y - game_canvas_setting.canvas_y_offset ) / field_height;
          citymap::citymap_field_t* field = map.get_field( row_nbr , column_nbr );
          return field;
      }
@@ -466,9 +471,9 @@ namespace citymap
          };
          //Set the color
          (*ver)[0].color = field_color;
-         (*ver)[1].color = field_color;
+         //(*ver)[1].color = field_color;
          (*ver)[2].color = field_color;
-         (*ver)[3].color = field_color;
+         //(*ver)[3].color = field_color;
          return ver;
      }
 

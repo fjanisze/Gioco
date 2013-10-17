@@ -513,7 +513,7 @@
 1381999599 source:d:\gioco\ui\ui.cpp
 	"ui.hpp"
 
-1382000333 source:d:\gioco\ui\ui_city.cpp
+1382008058 source:d:\gioco\ui\ui_city.cpp
 	"ui_city.hpp"
 	"../buildings.hpp"
 	"../game.hpp"
@@ -551,10 +551,10 @@
 	<cassert>
 	<mutex>
 
-1381999363 source:d:\gioco\map\city_map.cpp
+1382009043 source:d:\gioco\map\city_map.cpp
 	"city_map.hpp"
 
-1381999567 source:d:\gioco\map\map.cpp
+1382008248 source:d:\gioco\map\map.cpp
 	"../logging/logger.hpp"
 	"map.hpp"
 

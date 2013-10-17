@@ -591,7 +591,7 @@ namespace game_map
 	    //Different color/texture depending on the field type
 	    map_common::object_descriptor* obj = field->field->manager->get_visible_object();
 
-        for( short i = 0 ; i < 4 ; i++  )
+        for( short i = 0 ; i < 4 ; i ++  )
         {
             vertex[ i ].color = obj->color;
         }

@@ -97,7 +97,7 @@ namespace game_manager
         construction_manager = new(nothrow) constructions::construction_manager;
         assert( construction_manager != nullptr );
         //City manager
-        city_manager = new cities::city_manager( graphic_ui::game_ui::get_instance()->get_viewport_settings() );
+        city_manager = new cities::city_manager( graphic_ui::game_ui::get_instance()->get_game_canvas_settings() );
         assert( city_manager != nullptr );
         //Event manager
         events = new(nothrow) events::event_manager;
@@ -157,6 +157,7 @@ namespace game_manager
         }
         //Get the city
         cities::city_agent* city_agent = city_manager->get_city_agent( city_id );
+        ELOG("game_manager::user_want_start_construction(): City name: ",city_agent->get_city_info()->name );
         if( city_agent == nullptr )
         {
             LOG_ERR("game_manager::user_want_start_construction(): Unable to retrieve the city agent for the city with ID:", city_id );

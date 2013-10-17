@@ -20,14 +20,14 @@ namespace cities
 	    //Each city have its own city_agent
 	    std::vector< city_agent* > agents;
 	    //The viewport settings are needed for the city map creation
-	    game_map::map_viewport_settings_t viewport_settings;
+	    game_map::game_canvas_settings_t map_canvas_setting;
 	    long get_next_city_id();
 	    city_info_t* find_city_info( long city_id );
 	    city_agent* create_new_agent( city_info_t* city_info );
     public:
         city_agent* get_city_agent( long city_id );
         long get_city_id( const std::string& name );
-        city_manager( game_map::map_viewport_settings_t viewport );
+        city_manager( game_map::game_canvas_settings_t canvas_setting );
         city_agent* create_new_city( const std::string& name , long size );
 	};
 }

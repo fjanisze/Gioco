@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1381318579 source:d:\gioco\buildings.cpp
+1381319301 source:d:\gioco\buildings.cpp
 	"logging/logger.hpp"
 	"buildings.hpp"
 
@@ -30,10 +30,10 @@
 
 1375327272 d:\gioco\mytypes.hpp
 
-1381318269 source:d:\gioco\cities.cpp
+1381998960 source:d:\gioco\cities.cpp
 	"cities.hpp"
 
-1375759018 d:\gioco\cities.hpp
+1381998936 d:\gioco\cities.hpp
 	"map/city_map.hpp"
 	"logging/logger.hpp"
 	<SFML/Graphics.hpp>
@@ -403,7 +403,7 @@
 	<mutex>
 	<list>
 
-1381318388 source:d:\gioco\game.cpp
+1381999250 source:d:\gioco\game.cpp
 	"game.hpp"
 
 1381307305 d:\gioco\game.hpp
@@ -445,7 +445,7 @@
 	<cassert>
 	<mutex>
 
-1375759051 d:\gioco\ui\ui.hpp
+1381997515 d:\gioco\ui\ui.hpp
 	"../logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
@@ -468,7 +468,7 @@
 	<OpenGL/gl.h>
 	<OpenGL/glu.h>
 
-1375759091 d:\gioco\ui\ui_city.hpp
+1382004818 d:\gioco\ui\ui_city.hpp
 	"../logging/logger.hpp"
 	"../map/map_common.hpp"
 	"ui_console.hpp"
@@ -487,7 +487,7 @@
 	<map>
 	<mutex>
 
-1375759083 d:\gioco\ui\ui_common.hpp
+1381997252 d:\gioco\ui\ui_common.hpp
 	"../map/map_common.hpp"
 
 1360321923 source:d:\gioco\logging\log.cpp
@@ -510,25 +510,25 @@
 	"logging/logger.hpp"
 	"map.hpp"
 
-1375758394 source:d:\gioco\ui\ui.cpp
+1381999599 source:d:\gioco\ui\ui.cpp
 	"ui.hpp"
 
-1381318873 source:d:\gioco\ui\ui_city.cpp
+1382000333 source:d:\gioco\ui\ui_city.cpp
 	"ui_city.hpp"
 	"../buildings.hpp"
 	"../game.hpp"
 
-1381219251 source:d:\gioco\ui\ui_console.cpp
+1381999834 source:d:\gioco\ui\ui_console.cpp
 	"ui_console.hpp"
 	"../game.hpp"
 
-1381318112 d:\gioco\map\map_common.hpp
+1381997246 d:\gioco\map\map_common.hpp
 	<string>
 	<SFML/Graphics.hpp>
 	"../mytypes.hpp"
 	"../construction_common_struct.hpp"
 
-1381317874 d:\gioco\map\city_map.hpp
+1381999343 d:\gioco\map\city_map.hpp
 	"../logging/logger.hpp"
 	"map_common.hpp"
 	"../mytypes.hpp"
@@ -539,7 +539,7 @@
 	<algorithm>
 	<mutex>
 
-1381308918 d:\gioco\map\map.hpp
+1381999495 d:\gioco\map\map.hpp
 	"../mytypes.hpp"
 	"map_common.hpp"
 	<map>
@@ -551,10 +551,10 @@
 	<cassert>
 	<mutex>
 
-1381318491 source:d:\gioco\map\city_map.cpp
+1381999363 source:d:\gioco\map\city_map.cpp
 	"city_map.hpp"
 
-1375758953 source:d:\gioco\map\map.cpp
+1381999567 source:d:\gioco\map\map.cpp
 	"../logging/logger.hpp"
 	"map.hpp"
 

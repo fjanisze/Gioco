@@ -26,9 +26,9 @@ namespace graphic_ui
     }
 
 
-    game_map::map_viewport_settings_t game_ui::get_viewport_settings()
+    game_map::game_canvas_settings_t game_ui::get_game_canvas_settings()
     {
-        return ui_config.viewport_setting;
+        return ui_config.map_canvas_setting;
     }
 
     game_ui::game_ui()
@@ -43,10 +43,10 @@ namespace graphic_ui
         instance = this;
         //Create the viewport
 		map = game_map::game_map::get_instance();
-		map->configure_viewport( ui_config.viewport_setting );
+		map->configure_game_canvas( ui_config.map_canvas_setting );
 
 		//Create the city_ui object
-		city_ui = new( std::nothrow ) city_ui_manager::city_ui( &window , ui_config.viewport_setting );
+		city_ui = new( std::nothrow ) city_ui_manager::city_ui( &window , ui_config.map_canvas_setting );
 		assert( city_ui != nullptr );
 
 		//Set the console manager
@@ -250,11 +250,11 @@ namespace graphic_ui
     //This function returns true if the user is moving over the playable area
     bool game_ui::is_over_the_game_map( long x_pos , long y_pos )
     {
-        if( y_pos >= ui_config.viewport_setting.map_y_offset &&
-            y_pos <= ( ui_config.viewport_setting.map_y_offset + ui_config.viewport_setting.map_height ) )
+        if( y_pos >= ui_config.map_canvas_setting.canvas_y_offset &&
+            y_pos <= ( ui_config.map_canvas_setting.canvas_y_offset + ui_config.map_canvas_setting.canvas_height ) )
         {
-            if( x_pos >= ui_config.viewport_setting.map_x_offset &&
-                x_pos <= ( ui_config.viewport_setting.map_x_offset + ui_config.viewport_setting.map_width ) )
+            if( x_pos >= ui_config.map_canvas_setting.canvas_x_offset &&
+                x_pos <= ( ui_config.map_canvas_setting.canvas_x_offset + ui_config.map_canvas_setting.canvas_width ) )
             {
                 return true;
             }

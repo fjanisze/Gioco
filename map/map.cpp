@@ -498,16 +498,16 @@ namespace game_map
     }
 
     //Need to be called in order to configure properly the map
-    bool game_map::configure_viewport( const map_viewport_settings_t& conf )
+    bool game_map::configure_game_canvas( const game_canvas_settings_t& conf )
     try{
-        LOG("game_map::configure_viewport(): Width: ",conf.map_width, ", Height: ",conf.map_height );
+        LOG("game_map::configure_game_canvas(): Width: ",conf.canvas_width, ", Height: ",conf.canvas_height );
         //Make a local copy
-        settings = new map_viewport_settings_t;
-        *settings = conf;
+        game_canvas = new game_canvas_settings_t;
+        *game_canvas = conf;
         return true;
     }catch( std::exception& xa )
     {
-        LOG_ERR("game_map::configure_viewport(): Exception catched, aborting ");
+        LOG_ERR("game_map::configure_game_canvas(): Exception catched, aborting ");
         return false;
     }
 
@@ -521,10 +521,10 @@ namespace game_map
 	    //Prepare the needed calculation constraint
 	    long field_per_axis = std::sqrt( map.size() );
 	    assert( field_per_axis > 0 );
-	    long field_x_size = settings->map_width / field_per_axis;
-	    long field_y_size = settings->map_height / field_per_axis;
-	    long current_x_pos = settings->map_x_offset,
-            current_y_pos = settings->map_y_offset;
+	    long field_x_size = game_canvas->canvas_width / field_per_axis;
+	    long field_y_size = game_canvas->canvas_height / field_per_axis;
+	    long current_x_pos = game_canvas->canvas_x_offset,
+            current_y_pos = game_canvas->canvas_y_offset;
 
         try{
 
@@ -576,7 +576,7 @@ namespace game_map
         //update the current position
         tmp_x += size_x;
         //Moving down of one fow?
-	    if( tmp_x >= settings->map_width )
+	    if( tmp_x >= game_canvas->canvas_width )
         {
             tmp_x = 0;
             tmp_y = cur_y + size_y;
@@ -599,14 +599,14 @@ namespace game_map
 
 	game_map::game_map()
 	{
-	    settings = nullptr;
+	    game_canvas = nullptr;
 	}
 
 	game_map::~game_map()
 	{
-	    if( settings )
+	    if( game_canvas )
         {
-            delete settings;
+            delete game_canvas;
         }
 	}
 

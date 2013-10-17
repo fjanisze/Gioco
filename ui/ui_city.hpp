@@ -34,12 +34,12 @@ namespace city_ui_manager
         long field_width,
             field_height;
         sf::RenderWindow* window;
-        game_map::map_viewport_settings_t map_view_setting;
+        game_map::game_canvas_settings_t game_canvas;
         city_ui_input_mode_t input_mode;
         build_trigger_info_t build_info;
         bool handle_new_construction();
     public:
-        city_ui( sf::RenderWindow* rnd_window , game_map::map_viewport_settings_t map_setting );
+        city_ui( sf::RenderWindow* rnd_window , game_map::game_canvas_settings_t game_canvas_setting );
         ~city_ui();
         void set_cityagent( cities::city_agent* agent );
         void set_console_manager( graphic_ui::console_manager* console );

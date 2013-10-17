@@ -108,10 +108,10 @@ namespace graphic_ui
         window_height = 650;
         window_width = 800;
         //Game viewport
-        viewport_setting.map_x_offset = 0;
-        viewport_setting.map_y_offset = 20;
-        viewport_setting.map_width = 600;
-        viewport_setting.map_height = 600;
+        map_canvas_setting.canvas_x_offset = 0;
+        map_canvas_setting.canvas_y_offset = 20;
+        map_canvas_setting.canvas_width = 600;
+        map_canvas_setting.canvas_height = 600;
     }
 
     console_wnd_t::console_wnd_t( long x_off , long y_off , long wnd_width, long wnd_height )
@@ -256,10 +256,10 @@ namespace graphic_ui
         status_console.create( 0 , 0 , window_config.window_width , status_console_height );
         status_console.set_color( sf::Color( 255 , 100 , 20 ) );
         //Info Console
-        info_console.create( 0 , window_config.viewport_setting.map_height + status_console_height , window_config.window_width , 30 );
+        info_console.create( 0 , window_config.map_canvas_setting.canvas_height + status_console_height , window_config.window_width , 30 );
         info_console.set_color( sf::Color( 10 , 20 , 30 ) );
         //Main console
-        main_console.create( window_config.viewport_setting.map_width , status_console_height , 200 , 600 );
+        main_console.create( window_config.map_canvas_setting.canvas_width , status_console_height , 200 , 600 );
         main_console.set_color( sf::Color( 20 , 30 , 40 ) );
         //Create the buttons for the main console.
         main_console.add_button_map( main_menu_button_position , 10 );

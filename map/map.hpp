@@ -127,13 +127,13 @@ namespace game_map
 	class game_map : public gameplay_map
 	{
 	    static game_map* instance;
-	    map_viewport_settings_t* settings;
+	    game_canvas_settings_t* game_canvas;
 	    std::vector< field_graphics_t* > g_map; //g_ stand for graphic
     public:
         static game_map* get_instance();
         game_map();
         ~game_map();
-        bool configure_viewport( const map_viewport_settings_t& conf );
+        bool configure_game_canvas( const game_canvas_settings_t& conf );
         void set_proper_vertex_position( sf::VertexArray* vertex , long& cur_x, long& cur_y , long size_x , long size_y );
         void set_vertex_texture( field_graphics_t* field );
         long create_vertex_map();

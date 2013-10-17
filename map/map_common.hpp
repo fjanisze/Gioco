@@ -8,19 +8,19 @@
 
 namespace game_map
 {
-    //This is the structure which needs to be used to configure the graphic apparence for the map
+    //This is the structure which needs to be used to configure the graphic apparence for the game canvas
 	//On the base of those values the proper vertex are created.
-	struct map_viewport_settings_t
+	struct game_canvas_settings_t
 	{
 	    //Offset from the left top corner of the window
-	    long map_x_offset,
-            map_y_offset;
+	    long canvas_x_offset,
+            canvas_y_offset;
 	    //Those values are in pixels
-	    long map_width,
-            map_height;
+	    long canvas_width,
+            canvas_height;
         //Set to non valid values
-        map_viewport_settings_t() : map_width( -1 ) , map_height( -1 ),
-                    map_x_offset( -1 ) , map_y_offset( -1 )
+        game_canvas_settings_t() : canvas_width( -1 ) , canvas_height( -1 ),
+                    canvas_x_offset( -1 ) , canvas_y_offset( -1 )
         {   }
 	};
 }

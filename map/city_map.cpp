@@ -242,7 +242,7 @@ namespace citymap
     //
     ////////////////////////////////////////////////////////////////////
 
-    citymap_t::citymap_t( int map_size , game_map::map_viewport_settings_t viewport ) : next_field_id( 1 )
+    citymap_t::citymap_t( int map_size , game_map::game_canvas_settings_t canvas_setting ) : next_field_id( 1 )
     {
         LOG("citymap_t::citymap_t(): Creating a new citymap container ");
         assert( map_size > 0 );
@@ -258,7 +258,7 @@ namespace citymap
             assert( fill_empty_map() );
             //Provide the pointer to the graphic manager class
             set_citymap_container( &map  );
-            set_viewport_settings( viewport );
+            set_game_canvas_settings( canvas_setting );
             //Create the map
             create_vertex_map();
         }
@@ -343,11 +343,7 @@ namespace citymap
      //Seach between all the fields and return the one which belong to the coordinates
      citymap_field_t* citymap_t::get_field_at_pos( long x , long y )
      {
-         //Remove the offset
-         x -= viewport_settings.map_x_offset;
-         y -= viewport_settings.map_y_offset;
-
-         if( x > viewport_settings.map_width || y > viewport_settings.map_height )
+         if( x > game_canvas_setting.canvas_width || y > game_canvas_setting.canvas_height )
          {
              return nullptr;
          }
@@ -366,7 +362,7 @@ namespace citymap
      //Set a new construction on the specified field, if a construction already exist is overwritten and the old construction is returned
      constructions::construction_t* citymap_t::set_construction( long field_id , constructions::construction_t* new_construction  )
      {
-         ELOG("citymap_t::set_construction(): field ID:",field_id,",construction ID:",new_construction->get_obj_id());
+         ELOG("citymap_t::set_construction(): Field ID:",field_id,",construction ID:",new_construction->get_obj_id());
          citymap_field_t* field = map.get_field( field_id );
          if( field == nullptr )
          {
@@ -392,9 +388,9 @@ namespace citymap
     //
     ////////////////////////////////////////////////////////////////////
 
-    void citymap_graphic_t::set_viewport_settings( game_map::map_viewport_settings_t viewport )
+    void citymap_graphic_t::set_game_canvas_settings( game_map::game_canvas_settings_t canvas_setting )
     {
-        viewport_settings = viewport;
+        game_canvas_setting = canvas_setting;
     }
 
     citymap_container* citymap_graphic_t::set_citymap_container( citymap_container* city_map )
@@ -412,8 +408,8 @@ namespace citymap
          if( !map->empty() )
          {
              //Set the field sizes
-             field_width = viewport_settings.map_width / std::sqrt( map->get_size() ),
-             field_height = viewport_settings.map_height / std::sqrt( map->get_size() );
+             field_width = game_canvas_setting.canvas_width / std::sqrt( map->get_size() ),
+             field_height = game_canvas_setting.canvas_height / std::sqrt( map->get_size() );
              LOG("citymap_graphic_t::create_vertex_map(): Field size in pixel: ",field_width, ",", field_height );
              //To create the map the function need to collect from each field the information on the object present on them.
              //Actually the mapping is pretty simple, depending on the object type in the description, a different color is picked.
@@ -450,8 +446,8 @@ namespace citymap
          }
          //Go ahead with the vertex creation.
          field_coordinate coord = node->field->coord;
-         long field_off_x = field_width * coord.x + viewport_settings.map_x_offset ,
-            field_off_y = field_height * coord.y + viewport_settings.map_y_offset;
+         long field_off_x = field_width * coord.x + game_canvas_setting.canvas_x_offset ,
+            field_off_y = field_height * coord.y + game_canvas_setting.canvas_y_offset;
          //Fill the position info
          (*ver)[0].position = sf::Vector2f( field_off_x , field_off_y );
          (*ver)[1].position = sf::Vector2f( field_off_x + field_width, field_off_y );

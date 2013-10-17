@@ -102,10 +102,10 @@ namespace citymap
 	    long field_width,
             field_height;
 	    //Viewport information
-	    game_map::map_viewport_settings_t viewport_settings;
+	    game_map::game_canvas_settings_t game_canvas_setting;
     public:
         citymap_container* set_citymap_container( citymap_container* city_map );
-        void set_viewport_settings( game_map::map_viewport_settings_t viewport );
+        void set_game_canvas_settings( game_map::game_canvas_settings_t canvas_setting );
         long create_vertex_map();
         void clear_all_vertex();
         std::vector< sf::VertexArray* >* get_city_vertex();
@@ -125,7 +125,7 @@ namespace citymap
 	    citymap_field_t* create_citymap_field( field_type_t type );
         bool fill_empty_map();
 	public:
-	    citymap_t( int map_size , game_map::map_viewport_settings_t viewport  );
+	    citymap_t( int map_size , game_map::game_canvas_settings_t game_canvas  );
 	    citymap_field_t* get_field_at_pos( long x , long y );
 	    citymap_field_t* get_field( long field_id );
 	    ~citymap_t();

@@ -15,7 +15,7 @@ namespace graphic_ui
             window_height;
 
         //Viewport configuration
-        game_map::map_viewport_settings_t viewport_setting;
+        game_map::game_canvas_settings_t map_canvas_setting;
         //Font and text stuff
         sf::Font font;
 

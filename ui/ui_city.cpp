@@ -8,13 +8,14 @@
 namespace city_ui_manager
 {
     //Constructor
-    city_ui::city_ui( sf::RenderWindow* rnd_window , game_map::map_viewport_settings_t map_setting)
+    city_ui::city_ui( sf::RenderWindow* rnd_window , game_map::game_canvas_settings_t game_canvas_setting )
     {
         LOG("city_ui::city_ui(): Creating the city_ui object");
         focus_box = new(std::nothrow) sf::VertexArray( sf::LinesStrip , 5 );
         assert( focus_box != nullptr );
         window = rnd_window;
-        map_view_setting = map_setting;
+        LOG("city_ui::city_ui(): canvas: X size:",game_canvas_setting.canvas_width,",Y size: ",game_canvas_setting.canvas_height,",X offset: ",game_canvas_setting.canvas_x_offset,", Y offset: ",game_canvas_setting.canvas_y_offset);
+        game_canvas = game_canvas_setting;
         input_mode = city_ui_input_mode_t::view_mode;
     }
 
@@ -62,12 +63,14 @@ namespace city_ui_manager
     //This function returns true if the user is moving over the playable area
     bool city_ui::is_over_the_game_map( long x_pos , long y_pos )
     {
-        if( y_pos >= map_view_setting.map_y_offset &&
-            y_pos <= ( map_view_setting.map_y_offset + map_view_setting.map_height ) )
+        ELOG("city_ui::is_over_the_game_map(): x:",x_pos,",y:",y_pos);
+        if( y_pos >= game_canvas.canvas_y_offset &&
+            y_pos <= ( game_canvas.canvas_y_offset + game_canvas.canvas_height ) )
         {
-            if( x_pos >= map_view_setting.map_x_offset &&
-                x_pos <= ( map_view_setting.map_x_offset + map_view_setting.map_width ) )
+            if( x_pos >= game_canvas.canvas_x_offset &&
+                x_pos <= ( game_canvas.canvas_x_offset + game_canvas.canvas_width ) )
             {
+                ELOG("city_ui::is_over_the_game_map(): The point is over the game map.");
                 return true;
             }
         }
@@ -77,6 +80,7 @@ namespace city_ui_manager
     //Manage the mouse click when we are in the city view
     void city_ui::mouse_press_event( const sf::Event& event )
     {
+        ELOG("city_ui::mouse_press_event(): Mouse button pressed, x:",event.mouseButton.x,",y:",event.mouseButton.y);
         if(! is_over_the_game_map( event.mouseButton.x , event.mouseButton.y ) )
         {
             ui_console->handle_console_click( event.mouseButton.x , event.mouseButton.y );
@@ -88,6 +92,7 @@ namespace city_ui_manager
                 //If we are here, then the user want to build a construction on the map.
                 //Get the field on which the user want to start the construction
                 build_info.field = city_agent->get_field_at_pos( event.mouseMove.x , event.mouseMove.y );
+                ELOG("city_ui::mouse_press_event(): We are in building mode, handling the construction request, field ID:",build_info.field->field_id );
                 //the building info structure should contain all the proper information now
                 if( handle_new_construction() )
                 {
@@ -104,27 +109,26 @@ namespace city_ui_manager
     {
         static std::stringstream message;
         static citymap::citymap_field_t* last_field = nullptr;
+        //Remove the offset to have coherent data.
+        long x = event.mouseMove.x - game_canvas.canvas_x_offset,
+            y = event.mouseMove.y - game_canvas.canvas_y_offset;
         //current_city should not be nullptr.
         if( city_agent != nullptr )
         {
             //Check for the field and print the information
-            citymap::citymap_field_t* field = city_agent->get_field_at_pos( event.mouseMove.x , event.mouseMove.y );
+            citymap::citymap_field_t* field = city_agent->get_field_at_pos( x , y );
             if( field != nullptr )
             {
-                message << "Field name: "<<field->descriptor->name <<", ID: "<<field->field_id<<std::endl;
+                message << "Field name: "<<field->descriptor->name <<", ID: "<<field->field_id<<",Coord x:"<<event.mouseMove.x<<",y:"<<event.mouseMove.y<<std::endl;
                 //Is there any construction on the field?
                 if( field->construction != nullptr )
                 {
                     //Print something about the construction.
-                    message<<",construction: "<<field->construction->get_name()<<", with ID:"<<field->construction->get_obj_id()<<std::endl;
+                    message<<"Construction: "<<field->construction->get_name()<<", with ID:"<<field->construction->get_obj_id()<<std::endl;
                 }
                 ui_console->write_info( message.str() );
-                //Update the focus box, if the field is changed
-                if( last_field == nullptr || ( last_field->field_id != field->field_id ) )
-                {
-                    update_focus_box( event.mouseMove.x , event.mouseMove.y );
-                    last_field = field;
-                }
+                //Update the focus box
+                update_focus_box( event.mouseMove.x , event.mouseMove.y );
             }
             else
             {
@@ -145,8 +149,8 @@ namespace city_ui_manager
         y_pos -= ( y_pos % field_height );
 
         //add Offset
-        x_pos += map_view_setting.map_x_offset;
-        y_pos += map_view_setting.map_y_offset;
+        x_pos += game_canvas.canvas_x_offset;
+        y_pos += game_canvas.canvas_y_offset;
 
         if( input_mode == city_ui_input_mode_t::view_mode )
         {

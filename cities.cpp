@@ -22,7 +22,7 @@ namespace cities
     }
 
     //Constructor for city_manager
-    city_manager::city_manager( game_map::map_viewport_settings_t viewport ) : viewport_settings( viewport )
+    city_manager::city_manager( game_map::game_canvas_settings_t canvas_setting ) : map_canvas_setting( canvas_setting )
     {
         LOG("city_manager::city_manager(): Creating the object.");
     }
@@ -41,7 +41,7 @@ namespace cities
         city_info_t* new_city = new(std::nothrow) city_info_t( city_id , name );
         assert( new_city != nullptr );
         //Going ahead with the resource creation
-        new_city->citymap = new(std::nothrow) citymap_t( size, viewport_settings );
+        new_city->citymap = new(std::nothrow) citymap_t( size, map_canvas_setting );
         assert( new_city->citymap != nullptr );
         //Add to the container
         city_container.push_back( new_city );

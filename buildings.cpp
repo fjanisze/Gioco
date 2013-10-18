@@ -89,7 +89,7 @@ namespace constructions
 	{
 		LOG("construction_manager::read_building_file(): Building file ",BUILDING_FILENAME );
 
-		int amount_of_buildings = 0 , line_counter = 1;
+		int line_counter = 1;
 		std::ifstream in_file( BUILDING_FILENAME );
 
 		if( in_file )
@@ -138,7 +138,7 @@ namespace constructions
 			return -1; //not goodd
 		}
 
-		return amount_of_buildings;
+		return available_constructions.size();
 	}
 
 	bool construction_manager::check_if_current_instr_is_valid()

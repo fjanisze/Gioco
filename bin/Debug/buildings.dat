@@ -1,0 +1,43 @@
+#
+# This file contain a set of building descriptor
+#
+
+@new_descriptor;
+	@type: APARTMENT
+	@name: Bingo Appartment
+	@description: Small apartments for small wallets
+	@construction_time: 15
+
+	@units: 4
+	@unit_capacity: 7 #so the total capacity is 28 for this building
+	@unit_base_price: 70000
+
+	@building_price: 250000 #Money needed to build this building
+@end;
+
+@new_descriptor;
+	@type: APARTMENT
+	@name: Bongo Apartment
+	@description: Is always better than take a rest under a bridge!
+	@construction_time: 22
+
+	@units: 8
+	@unit_capacity: 9 #so the total capacity is 28 for this building
+	@unit_base_price: 90000
+
+	@building_price: 500000 #Money needed to build this building
+@end;
+
+
+@new_descriptor;
+	@type: APARTMENT
+	@name: Grand Hop Apartment
+	@description: Big structure for many families
+	@construction_time: 44
+
+	@units: 45
+	@unit_capacity: 9 #so the total capacity is 405 for this building
+	@unit_base_price: 75500
+
+	@building_price: 2160000 #Money needed to build this building
+@end;

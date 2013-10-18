@@ -196,6 +196,20 @@ namespace citymap_field_container
         return nullptr;
     }
 
+
+     //Return the field_graphic_info* for the given field ID
+     field_graphic_info* citymap_container::get_field_graphic_info( long field_id )
+     {
+         for( auto* node : all_nodes )
+         {
+             if( node->field->field_id == field_id )
+             {
+                 return &node->graphic_info;
+             }
+         }
+         return nullptr;
+     }
+
     //Set a texture for the specific field.
     citymap::citymap_field_t* set_cityfield_texture( long field_id , sf::Texture texture )
     {
@@ -388,6 +402,17 @@ namespace citymap
              old_construction = field->construction;
          }
          field->construction = new_construction;
+         //Change the graphic appearence of the field:
+         field_graphic_info* field_graphic = map.get_field_graphic_info( field_id );
+         if( field_graphic == nullptr )
+         {
+             LOG_ERR("citymap_t::set_construction(): Unable to retrieve the graphic info for the field ID:",field_id );
+         }
+         else
+         {
+             ELOG("citymap_t::set_construction(): Changing the field ID:",field_id,", color to blue");
+             set_field_color( field_graphic, sf::Color::Blue );
+         }
          return old_construction;
      }
 
@@ -513,6 +538,18 @@ namespace citymap
             for( auto* vertex : (*begin)->graphic_info.vertex )
             {
                 window.draw( *vertex );
+            }
+        }
+    }
+
+    //Set the color of a field (when no texture are used )
+    void citymap_graphic_t::set_field_color( field_graphic_info* field_graphic, sf::Color new_color )
+    {
+        for( auto* vertex_array : field_graphic->vertex )
+        {
+            for( short i = 0 ; i < 4 ; i++ )
+            {
+                (*vertex_array)[ i ].color = new_color;
             }
         }
     }

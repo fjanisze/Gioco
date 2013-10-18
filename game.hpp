@@ -82,6 +82,7 @@ namespace game_manager
 		game_map::game_map* get_the_game_map();
 		void create_test_scenario_1();
 		void init();
+		void stop();
 		void handle_game();
 		constructions::construction_manager* get_buildings();
 		constructions::construction_manager* get_construction_manager();

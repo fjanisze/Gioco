@@ -104,6 +104,16 @@ namespace game_manager
         assert( events != nullptr );
 	}
 
+	void game_manager::stop()
+	{
+	    LOG("game_manager::stop(): Cleaning, the first step before the termination.");
+	    delete construction_manager;
+	    delete city_manager;
+	    delete game_ui;
+	    delete events;
+	    LOG("game_manager::stop(): Everything clean, goodbye!");
+	}
+
 	void game_manager::handle_game()
 	{
 	    LOG("game_manager::handle_game(): Starting");
@@ -113,6 +123,8 @@ namespace game_manager
 	    get_the_game_map()->create_vertex_map();
 	    game_ui->create_render_window();
 	    game_ui->main_loop();
+	    LOG("game_manager::handle_game(): Out of the mail loop.");
+	    stop();
 	}
 
 	//Return the 'construction_manager' object

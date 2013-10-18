@@ -37,6 +37,9 @@ namespace citymap_field_container
         std::vector< sf::VertexArray* > vertex;
         //Texture for this field
         sf::Texture* texture;
+
+        field_graphic_info() : texture( nullptr )
+        {      }
     };
 
     //Each node is connected with at least four other adiacent nodes
@@ -84,7 +87,7 @@ namespace citymap_field_container
         typedef std::vector< node_t* >::iterator iterator;
         citymap::citymap_field_t* get_field( long row, long column );
         citymap::citymap_field_t* get_field( long field_id );
-        citymap::citymap_field_t* set_cityfield_texture( long field_id , sf::Texture texture );
+        field_graphic_info* get_field_graphic_info( long field_id );
     };
 }
 
@@ -113,6 +116,7 @@ namespace citymap
             field_height;
 	    //Viewport information
 	    game_map::game_canvas_settings_t game_canvas_setting;
+	    void set_field_color( field_graphic_info* field_graphic, sf::Color new_color );
     public:
         citymap_container* set_citymap_container( citymap_container* city_map );
         void set_game_canvas_settings( game_map::game_canvas_settings_t canvas_setting );

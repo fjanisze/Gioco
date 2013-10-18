@@ -61,7 +61,12 @@ namespace constructions
 	{
 		LOG("construction_manager::construction_manager(): Starting..");
 		current_instruction = nullptr;
-		read_building_file();
+		long amount_of_buildings = read_building_file();
+		LOG("construction_manager::construction_manager(): Amount of available buildings: ", amount_of_buildings );
+		if( amount_of_buildings == 0 )
+        {
+            LOG_ERR("onstruction_manager::construction_manager(): No construction available!");
+        }
 	}
 
 	construction_manager::~construction_manager()
@@ -91,7 +96,7 @@ namespace constructions
 		{
 			std::string buffer;
 			bool skip_to_next_descriptor = false;
-			while( !std::getline( in_file , buffer ).eof() )
+			while( std::getline( in_file , buffer ) )
 			{
 				//got a new line, start parsing if contain instructions
 				short pos;

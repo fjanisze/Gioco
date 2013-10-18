@@ -74,13 +74,13 @@ namespace game_manager
 		LOG("game_manager::create_test_scenario_1(): Creating a test scenario");
 
         //Generate the random map.
-		get_the_game_map()->create_new_map( 50 );
+		get_the_game_map()->create_new_map( 100 );
 		get_the_game_map()->generate_random_map();
 
         //Create the cities in the game.
 		cities::city_agent* roma_agent = city_manager->create_new_city( "Roma", 100 );
-		cities::city_agent* milano_agent = city_manager->create_new_city( "Milano", 100 );
-		cities::city_agent* torino_agent = city_manager->create_new_city( "Torino", 144 );
+		cities::city_agent* milano_agent = city_manager->create_new_city( "Milano", 225 );
+		cities::city_agent* torino_agent = city_manager->create_new_city( "Torino", 225 );
 
 		//Create the cities on the map
 		get_the_game_map()->create_a_city_at_random_coord( "Roma" , roma_agent );

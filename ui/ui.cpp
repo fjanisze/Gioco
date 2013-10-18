@@ -306,11 +306,7 @@ namespace graphic_ui
     //Draw the current city
     void game_ui::draw_current_city()
     {
-        std::vector< sf::VertexArray* >* vertex = current_city->get_vertex();
-        for( auto &elem : *vertex )
-        {
-            window.draw( *elem );
-        }
+        current_city->get_city_map()->draw_the_map( window );
         city_ui->draw_city_ui_elements();
     }
 }

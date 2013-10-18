@@ -124,11 +124,6 @@ namespace cities
         return city->city_id;
     }
 
-    std::vector< sf::VertexArray* >* city_agent::get_vertex()
-    {
-        return city->citymap->get_city_vertex();
-    }
-
     citymap_field_t* city_agent::get_field_at_pos( long x , long y )
     {
         return city->citymap->get_field_at_pos( x , y );

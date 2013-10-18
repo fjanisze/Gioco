@@ -30,7 +30,7 @@
 
 1375327272 d:\gioco\mytypes.hpp
 
-1381998960 source:d:\gioco\cities.cpp
+1382077232 source:d:\gioco\cities.cpp
 	"cities.hpp"
 
 1381998936 d:\gioco\cities.hpp
@@ -510,10 +510,10 @@
 	"logging/logger.hpp"
 	"map.hpp"
 
-1381999599 source:d:\gioco\ui\ui.cpp
+1382077204 source:d:\gioco\ui\ui.cpp
 	"ui.hpp"
 
-1382008058 source:d:\gioco\ui\ui_city.cpp
+1382009212 source:d:\gioco\ui\ui_city.cpp
 	"ui_city.hpp"
 	"../buildings.hpp"
 	"../game.hpp"
@@ -522,13 +522,13 @@
 	"ui_console.hpp"
 	"../game.hpp"
 
-1381997246 d:\gioco\map\map_common.hpp
+1382077241 d:\gioco\map\map_common.hpp
 	<string>
 	<SFML/Graphics.hpp>
 	"../mytypes.hpp"
 	"../construction_common_struct.hpp"
 
-1381999343 d:\gioco\map\city_map.hpp
+1382077204 d:\gioco\map\city_map.hpp
 	"../logging/logger.hpp"
 	"map_common.hpp"
 	"../mytypes.hpp"
@@ -551,7 +551,7 @@
 	<cassert>
 	<mutex>
 
-1382009043 source:d:\gioco\map\city_map.cpp
+1382076842 source:d:\gioco\map\city_map.cpp
 	"city_map.hpp"
 
 1382008248 source:d:\gioco\map\map.cpp

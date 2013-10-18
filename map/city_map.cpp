@@ -195,6 +195,12 @@ namespace citymap_field_container
         }
         return nullptr;
     }
+
+    //Set a texture for the specific field.
+    citymap::citymap_field_t* set_cityfield_texture( long field_id , sf::Texture texture )
+    {
+
+    }
 }
 
 namespace citymap
@@ -431,7 +437,7 @@ namespace citymap
                      break;
                  }
                  //Add the vertex
-                 node->vertex.push_back( node_vertex );
+                 node->graphic_info.vertex.push_back( node_vertex );
                  ++map_iter;
                  ++amount_of_vertex;
              }
@@ -471,9 +477,9 @@ namespace citymap
          };
          //Set the color
          (*ver)[0].color = field_color;
-         //(*ver)[1].color = field_color;
+         (*ver)[1].color = field_color;
          (*ver)[2].color = field_color;
-         //(*ver)[3].color = field_color;
+         (*ver)[3].color = field_color;
          return ver;
      }
 
@@ -485,33 +491,31 @@ namespace citymap
          citymap_container::iterator map_iter = map->begin() , map_end = map->end();
          while( map_iter != map_end )
          {
-             if( !(*map_iter)->vertex.empty() )
+             if( !(*map_iter)->graphic_info.vertex.empty() )
              {
-                 for( auto elem : (*map_iter)->vertex )
+                 for( auto elem : (*map_iter)->graphic_info.vertex )
                  {
                      delete elem;
                  }
-                 (*map_iter)->vertex.clear();
+                 (*map_iter)->graphic_info.vertex.clear();
              }
              ++map_iter;
          }
      }
 
-     std::vector< sf::VertexArray* >* citymap_graphic_t::get_city_vertex()
-     {
-         //Generate the full map and return the pointer
-         vertex.clear();
-         citymap_container::iterator map_iter = map->begin() , map_end = map->end();
-         while( map_iter != map_end )
-         {
-             for( auto elem : (*map_iter)->vertex )
-             {
-                 vertex.push_back( elem );
-             }
-             ++map_iter;
-         }
-         return &vertex;
-     }
+    //Use the renderwindow object to draw on the canvas the city map
+    void citymap_graphic_t::draw_the_map( sf::RenderWindow& window )
+    {
+        citymap_container::iterator begin = map->begin() , end = map->end();
+        for( ; begin != end ; begin++ )
+        {
+            //draw the vertex
+            for( auto* vertex : (*begin)->graphic_info.vertex )
+            {
+                window.draw( *vertex );
+            }
+        }
+    }
 }
 
 

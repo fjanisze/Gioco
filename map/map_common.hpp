@@ -143,7 +143,6 @@ namespace cities
         city_agent( city_manager* manager , city_info_t* city_info );
         bool set_city_coord( map_common::field_coordinate coord );
         long get_city_id();
-        std::vector< sf::VertexArray* >* get_vertex();
         citymap_field_t* get_field_at_pos( long x , long y );
         city_info_t* get_city_info();
         citymap_t* get_city_map();

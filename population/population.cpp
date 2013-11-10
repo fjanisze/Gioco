@@ -58,10 +58,28 @@ namespace population
         return collection.size();
     }
 
+    //Set the residnece city for this family unit
+    void family_collection_t::set_residence_city( long city_id )
+    {
+        residence_info.city_id = city_id;
+    }
+
+    //Set the building information.
+    void family_collection_t::set_residence_building( long building_id )
+    {
+        residence_info.building_id = building_id;
+    }
+
+    //Return a copy of the residence information
+    residence_info_t family_collection_t::get_residence_info()
+    {
+        return residence_info;
+    }
+
     ////////////////////////////////////////////////////////////////////
     //
     //
-    //	Follow the implementation for family_t , population_unit_t and population_manager
+    //	Follow the implementation for family_t , population_unit_t
     //
     //
     ////////////////////////////////////////////////////////////////////
@@ -119,7 +137,7 @@ namespace population
         else
         {
             //Must be a kid, for now is not implemented!!
-            LOG_WARN("family_t::add_member(): Trying to add a kid, are not implemented now!!");
+            LOG_WARN("family_t::add_member(): Trying to add a kid, NOT IMPLEMENTED NOW!!");
         }
         return NOT_VALID_ID;
     }
@@ -140,6 +158,14 @@ namespace population
             delete mather;
         }
     }
+
+    ////////////////////////////////////////////////////////////////////
+    //
+    //
+    //	Follow the implementation for population_manager
+    //
+    //
+    ////////////////////////////////////////////////////////////////////
 
     population_unit_t::population_unit_t( long id ): gender( gender_t::male ) ,
                                             status( family_status_t::is_single ),
@@ -196,6 +222,12 @@ namespace population
     family_collection_t* population_manager::get_homeless_collection()
     {
         return family_collections.begin()->second;
+    }
+
+    //Return the ID for the homeless collection
+    long population_manager::get_homeless_collection_id()
+    {
+        return family_collections.begin()->first; //This is the ID
     }
 
     //Look for a specific family and return a pointer to them

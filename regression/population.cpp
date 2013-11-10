@@ -1,3 +1,5 @@
+#if COMPILE_TEST_MODE
+
 #include "population.hpp"
 
 void PopulationTests::SetUp()
@@ -12,7 +14,8 @@ void PopulationTests::TearDown()
 TEST_F( PopulationTests , CollectionBasicOperation )
 {
     //The first collection is create automatically, should be the one for the homeless
-    ASSERT_NE( nullptr , pop.get_collection( 2 ) );
+    long homeless_collection_id = pop.get_homeless_collection_id();
+    ASSERT_NE( nullptr , pop.get_collection( homeless_collection_id ) );
     //Create a couple of collections
     long id_1 = pop.create_collection();
     ASSERT_EQ( 3 , id_1 );
@@ -83,7 +86,7 @@ TEST_F( PopulationTests , AddingRemovingHomelessFamilies )
 }
 
 
-
+#endif
 
 
 

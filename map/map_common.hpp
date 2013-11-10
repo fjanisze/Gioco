@@ -119,6 +119,7 @@ namespace cities
 {
     using namespace citymap;
     class city_manager;
+
      //This structure handles the information related with a city (like the owner or the city name) as the citymap_t itself
 	struct city_info_t
 	{
@@ -134,6 +135,7 @@ namespace cities
 	    city_info_t( long id , const std::string& city_name );
 	    city_info_t() = delete;
 	};
+
     //A city agent is an object responsible for managing operation on a specific city
     class city_agent
     {

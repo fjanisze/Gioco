@@ -4,7 +4,6 @@
 #include "config.hpp"
 #include "logging/logger.hpp"
 #include "game.hpp"
-#include <process.h>
 
 #include "buildings.hpp"
 #include "ui/ui.hpp"
@@ -31,10 +30,6 @@ void graphical_ui_thread(void*)
 
 int main()
 {
-
-
-	//This thread will run the event manager object.
-	_beginthread( &execution_thread_b, 0 , nullptr );
 
     game_manager::game_manager* game_manager = game_manager::game_manager::get_instance();
     game_manager->init();

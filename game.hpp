@@ -2,6 +2,7 @@
 #define GAME_HPP
 
 #include "logging/logger.hpp"
+#include "population/population.hpp"
 #include "mytypes.hpp"
 #include "map/map.hpp"
 #include "buildings.hpp"
@@ -20,7 +21,6 @@
 #include <string>
 #include <ctime>
 #include <cmath>
-#include <windows.h>
 #include <cassert>
 #include <memory>
 #include <map>
@@ -74,6 +74,7 @@ namespace game_manager
 		cities::city_manager* city_manager;
 		graphic_ui::game_ui* game_ui;
 		events::event_manager* events;
+		population::population_manager* population_manager;
 	public:
 		static game_manager* get_instance();
 		game_manager();

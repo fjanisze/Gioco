@@ -1,3 +1,5 @@
+#if COMPILE_TEST_MODE
+
 #include "gtest.h"
 #include "..\population\population.hpp"
 
@@ -9,3 +11,5 @@ protected:
 
     population::population_manager pop;
 };
+
+#endif

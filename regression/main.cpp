@@ -1,3 +1,5 @@
+#if COMPILE_TEST_MODE
+
 #define LOGGING_LEVEL_1
 #define LOGGING_LEVEL_2
 
@@ -5,13 +7,7 @@
 #include "../logging/logger.hpp"
 #include "gtest.h"
 
-#include <windows.h>
-#include <process.h>
 #include "../events.hpp"
-
-#if COMPILE_TEST_MODE
-
-
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

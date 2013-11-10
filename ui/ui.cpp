@@ -171,6 +171,7 @@ namespace graphic_ui
     //The user press one mouse button
     void game_ui::mouse_press_event( const sf::Event& event )
     {
+        ELOG("game_ui::mouse_press_event(): Mouse button press, x:",event.mouseButton.x,"/y:",event.mouseButton.y);
         //Check if the mouse is moving in the gameplay area or over some menu ecc..
         if( is_over_the_game_map( event.mouseButton.x , event.mouseButton.y ) )
         {

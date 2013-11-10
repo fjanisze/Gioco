@@ -50,9 +50,14 @@ namespace constructions
 
         //The price in the descriptor may be not valid anymore, a perks can influence the price
         mlong unit_price;
+
+        //The collection related to this construction
+        long population_collection_id;
     public:
         construction_t() = default;
         construction_t( const construction_t* source , long new_obj_id );
+        void set_population_collection_id( long id );
+        long get_population_collection_id();
     public:
         construction_type_t get_construction_type();
         void init( long id, const std::string& construction_name, const std::string& construction_desc,

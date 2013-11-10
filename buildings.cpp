@@ -400,6 +400,7 @@ namespace constructions
         amount_of_unit = source->amount_of_unit;
         unit_capacity = source->unit_capacity;
         unit_price = source->unit_price;
+        population_collection_id = -1;
     }
 
     construction_type_t construction_t::get_construction_type()
@@ -427,6 +428,16 @@ namespace constructions
 
     construction_office::construction_office()
     {
+    }
+
+    void construction_t::set_population_collection_id( long id )
+    {
+        population_collection_id = id;
+    }
+
+    long construction_t::get_population_collection_id()
+    {
+        return population_collection_id;
     }
 
 }

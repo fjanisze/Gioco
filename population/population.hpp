@@ -37,6 +37,16 @@ namespace population
         population_unit_t( long id );
     };
 
+    //Information about where a certain collection live
+    struct residence_info_t
+    {
+        long city_id; //City
+        long building_id; //Building
+
+        residence_info_t() : city_id( -1 ) , building_id( -1 )
+        {   }
+    };
+
     //The family is an atomic unit type, which may have different size and be composed by different type of members.
     //Is needed at least one person (unit) to have a family.
     class family_t
@@ -64,12 +74,18 @@ namespace population
     {
         long collection_id;
         family_map_t collection;
+        //Information on where those family are living
+        residence_info_t residence_info;
     public:
         family_collection_t( long id );
         void add_family( family_t* family );
         family_t* remove_family( long family_id );
         long get_population();
         long get_amount_of_families();
+        //Residence information
+        void set_residence_city( long city_id );
+        void set_residence_building( long building_id );
+        residence_info_t get_residence_info();
     };
 
     typedef std::map< long , family_collection_t* >::iterator family_coll_iter;
@@ -77,7 +93,7 @@ namespace population
     //Responsible for the population management.
     class population_manager
     {
-        family_map_t family_container;//All the families are in this container
+        family_map_t family_container;//All the familiy collection are in this container
         static long next_family_id;
         static long next_collection_id;
         long get_next_family_id();
@@ -92,6 +108,8 @@ namespace population
         long create_collection();
         family_collection_t* get_collection( long id );
         family_collection_t* get_homeless_collection();
+        long get_homeless_collection_id();
+    public:
 
     public: //Other
         population_manager();

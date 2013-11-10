@@ -239,6 +239,7 @@ namespace graphic_ui
 
     void console_wnd_t::remove_all_buttons()
     {
+        ELOG("console_wnd_t::remove_all_buttons(): Cleaning the button container..");
         buttons.clear();
     }
 
@@ -337,6 +338,7 @@ namespace graphic_ui
             }
             break;
         };
+        ELOG("console_manager::button_trigger_action(): Done.");
     }
 
     //This function is used to handle a click of a non common button

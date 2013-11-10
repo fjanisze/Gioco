@@ -128,7 +128,7 @@ namespace events
 				}
 			}
 			event_mutex.unlock();
-			Sleep( 1000 );
+			std::this_thread::sleep_for( std::chrono::seconds{ 1 } );
 		}while( 1 );
 		LOG("event_manager::main_loop(): Quitting");
 	}

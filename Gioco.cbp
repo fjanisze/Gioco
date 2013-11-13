@@ -63,8 +63,9 @@
 			<Add library="sfml-graphics" />
 			<Add library="sfml-window" />
 			<Add library="sfml-system" />
+			<Add library="..\gtest\gtest-1.6.0\gtest-1.6.0\fused-src\gtest\libgtest.a" />
 			<Add directory="../SFML/SFML-2.0-windows-gcc-4.7-tdm-64bits/SFML-2.0/bin" />
-			<Add directory="../SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/lib" />
+			<Add directory="../SFML/SFML-2.0-windows-gcc-4.7-tdm-64bits/SFML-2.0/lib" />
 		</Linker>
 		<Unit filename="buildings.cpp" />
 		<Unit filename="buildings.hpp" />

@@ -3,10 +3,10 @@
 	"logging/logger.hpp"
 	"buildings.hpp"
 
-1358956542 d:\gioco\logging\logger.hpp
+1384347270 d:\gioco\logging\logger.hpp
 	"log.hpp"
 
-1375323727 d:\gioco\logging\log.hpp
+1384368859 d:\gioco\logging\log.hpp
 	<iostream>
 	<memory>
 	<string>
@@ -15,6 +15,13 @@
 	<ctime>
 	<sstream>
 	<mutex>
+	<chrono>
+	<cstring>
+	<thread>
+	<map>
+	<queue>
+	<atomic>
+	<cassert>
 
 1381313760 d:\gioco\buildings.hpp
 	"mytypes.hpp"
@@ -405,7 +412,7 @@
 	<chrono>
 	<list>
 
-1382798568 source:d:\gioco\game.cpp
+1384068964 source:d:\gioco\game.cpp
 	"game.hpp"
 
 1384066683 d:\gioco\game.hpp

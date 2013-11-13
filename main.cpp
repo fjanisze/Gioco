@@ -30,6 +30,7 @@ void graphical_ui_thread(void*)
 
 int main()
 {
+    log_inst.set_thread_name( "MAIN" );
 
     game_manager::game_manager* game_manager = game_manager::game_manager::get_instance();
     game_manager->init();
@@ -38,7 +39,7 @@ int main()
 	game_manager->create_test_scenario_1();
     game_manager->handle_game();
 
-
+    log_inst.terminate_logger();
 //	delete game_manager::game_manager::get_instance();
 	return 0;
 }

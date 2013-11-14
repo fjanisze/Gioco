@@ -1,7 +1,8 @@
-#if COMPILE_TEST_MODE
-
 #include "gtest.h"
 #include "..\population\population.hpp"
+#include "..\config.hpp"
+
+#if COMPILE_TEST_MODE
 
 class PopulationTests : public ::testing::Test
 {

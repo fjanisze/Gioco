@@ -164,7 +164,8 @@ namespace city_ui_manager
         }
         else if( input_mode == city_ui_input_mode_t::building_mode )
         {
-            (*focus_box) = sf::VertexArray( sf::Quads , 4 );
+            //FIXME.. Something wrong here!!
+    /*        (*focus_box) = sf::VertexArray( sf::Quads , 4 );
             (*focus_box)[0].position = sf::Vector2f( x_pos , y_pos );
             (*focus_box)[1].position = sf::Vector2f( x_pos + field_width , y_pos );
             (*focus_box)[2].position = sf::Vector2f( x_pos + field_width , y_pos + field_height );
@@ -173,7 +174,7 @@ namespace city_ui_manager
             for( short i = 0 ; i <= 4 ; i++ )
             {
                 (*focus_box)[i].color = sf::Color::Black;
-            }
+            }*/
         }
     }
 

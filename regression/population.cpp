@@ -1,6 +1,8 @@
+#include "..\config.hpp"
+#include "population.hpp"
+
 #if COMPILE_TEST_MODE
 
-#include "population.hpp"
 
 void PopulationTests::SetUp()
 {

@@ -66,7 +66,7 @@ namespace logging
 	{
 		//Dump the log data if any
 		do{
-			std::this_thread::sleep_for( std::chrono::milliseconds{ 500 } );
+			std::this_thread::sleep_for( std::chrono::milliseconds{ 1 } );
 			if( logger->log_buffer.size() )
 			{
 				std::lock_guard< std::mutex > lock{ logger->write_mutex };
@@ -79,13 +79,13 @@ namespace logging
 		}while( logger->is_still_running.test_and_set() || logger->log_buffer.size() );
 		logger->policy->write( " - Terminating the logger daemon! - " );
 	}
-	
+
 	template< typename log_policy >
 	class logger
 	{
 		static std::string source_name;
 		std::chrono::high_resolution_clock::time_point reference_epoch;
-		
+
 		unsigned log_line_number;
 
 		static std::stringstream log_stream;
@@ -133,7 +133,7 @@ namespace logging
 	{
 		//Terminate the daemon activity
 		is_still_running.clear();
-		daemon.join(); 
+		daemon.join();
 	}
 
 	template< typename log_policy >
@@ -207,7 +207,7 @@ namespace logging
 	{
 		policy->write( "- Logger activity terminated -" );
 		policy->close_ostream();
-		delete policy;	
+		delete policy;
 	}
 }
 

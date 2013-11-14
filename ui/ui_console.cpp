@@ -11,6 +11,12 @@ namespace graphic_elements
     {
     }
 
+    ui_button_t::~ui_button_t()
+    {
+        LOG("ui_button_t::~ui_button_t(): Destroying");
+        vertex.clear();
+    }
+
     void ui_button_t::create( long x_pos, long y_pos, long width, long height )
     {
         LOG("ui_button_t::create(): New button : x_pos:",x_pos,",y_pos:",y_pos,",width:",width,",height:",height);
@@ -223,12 +229,12 @@ namespace graphic_ui
     {
         //Draw the vertex
         window.draw( background_vertex );
-        for( auto elem : vertex )
+        for( auto& elem : vertex )
         {
             window.draw( elem );
         }
         //Draw the button text
-        for( auto elem : buttons )
+        for( auto& elem : buttons )
         {
             window.draw( elem.second.get_vertex() );
             window.draw( elem.second.get_text() );
@@ -239,8 +245,11 @@ namespace graphic_ui
 
     void console_wnd_t::remove_all_buttons()
     {
-        ELOG("console_wnd_t::remove_all_buttons(): Cleaning the button container..");
-        buttons.clear();
+        ELOG("console_wnd_t::remove_all_buttons(): Cleaning the button container, container size: " , buttons.size() );
+        if( buttons.size() )
+        {
+            buttons.clear();
+        }
         ELOG("console_wnd_t::remove_all_buttons(): Done");
     }
 
@@ -285,6 +294,7 @@ namespace graphic_ui
     //Draw the console in the proper context
     void console_manager::draw_console( sf::RenderWindow& window )
     {
+        ELOG("console_manager::draw_console(): Drawing the console");
         status_console.draw( window );
         info_console.draw( window );
         main_console.draw( window);

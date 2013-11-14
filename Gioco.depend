@@ -6,7 +6,7 @@
 1384347270 d:\gioco\logging\logger.hpp
 	"log.hpp"
 
-1384368859 d:\gioco\logging\log.hpp
+1384432568 d:\gioco\logging\log.hpp
 	<iostream>
 	<memory>
 	<string>
@@ -490,7 +490,7 @@
 	"../map/city_map.hpp"
 	<cassert>
 
-1384429537 d:\gioco\ui\ui_console.hpp
+1384434575 d:\gioco\ui\ui_console.hpp
 	"../logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
@@ -501,6 +501,8 @@
 	<string>
 	<map>
 	<mutex>
+	<chrono>
+	<thread>
 
 1381993652 d:\gioco\ui\ui_common.hpp
 	"../map/map_common.hpp"
@@ -521,9 +523,9 @@
 	"ui/ui.hpp"
 	"map/city_map.hpp"
 
-1384428372 d:\gioco\config.hpp
+1384436986 d:\gioco\config.hpp
 
-1382083154 source:d:\gioco\map\city_map.cpp
+1384433498 source:d:\gioco\map\city_map.cpp
 	"city_map.hpp"
 
 1384417088 source:d:\gioco\map\map.cpp
@@ -598,7 +600,7 @@
 	<iosfwd>
 	<vector>
 
-1384430074 source:d:\gioco\regression\population.cpp
+1384430398 source:d:\gioco\regression\population.cpp
 	"..\config.hpp"
 	"population.hpp"
 
@@ -615,7 +617,7 @@
 	"../buildings.hpp"
 	"../game.hpp"
 
-1384429716 source:d:\gioco\ui\ui_console.cpp
+1384436894 source:d:\gioco\ui\ui_console.cpp
 	"ui_console.hpp"
 	"../game.hpp"
 

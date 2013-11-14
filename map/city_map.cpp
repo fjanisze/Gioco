@@ -531,6 +531,7 @@ namespace citymap
     //Use the renderwindow object to draw on the canvas the city map
     void citymap_graphic_t::draw_the_map( sf::RenderWindow& window )
     {
+        ELOG("citymap_graphic_t::draw_the_map(): Drawing the map");
         citymap_container::iterator begin = map->begin() , end = map->end();
         for( ; begin != end ; begin++ )
         {
@@ -540,6 +541,7 @@ namespace citymap
                 window.draw( *vertex );
             }
         }
+        ELOG("citymap_graphic_t::draw_the_map(): Done!.");
     }
 
     //Set the color of a field (when no texture are used )

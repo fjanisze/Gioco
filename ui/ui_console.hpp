@@ -14,6 +14,8 @@
 #include <string>
 #include <map>
 #include <mutex>
+#include <chrono>
+#include <thread>
 
 #define COMMON_BUILD_BUTTON 0
 #define COMMON_MAP_BUTTON 1
@@ -32,6 +34,7 @@ namespace graphic_elements
         long action_id; //A kind of code which can be used to identify which action need to be triggered.
     public:
         ui_button_t();
+        ~ui_button_t();
         void create( long x_pos, long y_pos, long width, long height );
         void set_text( const std::string& text , const sf::Font* font );
         sf::Text get_text();

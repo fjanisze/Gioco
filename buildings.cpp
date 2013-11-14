@@ -337,12 +337,12 @@ namespace constructions
 	}
 
 	//Create a copy of an existing construction_t, this copy can be placed on a field.
-	construction_t* construction_manager::create_new_construction( construction_t* construction_source )
+	construction_t* construction_manager::construction_copy( construction_t* construction_source )
 	{
-	    ELOG("construction_manager::create_new_construction(): Source construction ID:",construction_source->get_obj_id() );
+	    ELOG("construction_manager::construction_copy(): Source construction ID:",construction_source->get_obj_id() );
 	    construction_t* new_obj = new construction_t( construction_source, get_new_building_id() );
 	    assert( new_obj != nullptr );
-	    ELOG("construction_manager::create_new_construction(): Construction ID:",new_obj->get_obj_id(),",is a copy of the Construction ID:",construction_source->get_obj_id() );
+	    ELOG("construction_manager::construction_copy(): Construction ID:",new_obj->get_obj_id(),",is a copy of the Construction ID:",construction_source->get_obj_id() );
 	    return new_obj;
 	}
 
@@ -356,7 +356,7 @@ namespace constructions
             if( elem->get_obj_id() == obj_id )
             {
                 //Make a copy and return the construction object
-                return create_new_construction( elem );
+                return construction_copy( elem );
             }
         }
         LOG_WARN("construction_manager::get_construction_obj(): Building with ID:",obj_id,", not found!");

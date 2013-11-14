@@ -424,13 +424,22 @@ namespace game_map
 	}
 
 	//The next function create a city field in a specific point of the map
-	field_manager* gameplay_map::create_a_city_at_random_coord( const string& name , cities::city_agent* agent )
+	field_manager* gameplay_map::create_a_city_at_random_coord( cities::city_agent* agent )
 	{
 		ELOG("gameplay_map::create_a_city_at_random_coord(): Creating \'", name  );
 		field_manager* field = nullptr;
 		//First of all, the proper object will be addeo
 		field_coordinate city_coord = find_random_field( terrain_grass );
-		if( are_coord_valid( city_coord ) )
+		field = create_a_city( agent , city_coord );
+		return field;
+	}
+
+	//Create a city on a specific coordinates
+    field_manager* gameplay_map::create_a_city( cities::city_agent* agent, const field_coordinate& city_coord )
+    {
+        ELOG("field_manager* create_a_city(): Creating the city");
+        field_manager* field = nullptr;
+        if( are_coord_valid( city_coord ) )
 		{
 			field = add_obj_to_field( city_coord , &terrain_city );
 			//Add the city agent to the field
@@ -438,10 +447,10 @@ namespace game_map
 		}
 		else
 		{
-			LOG_ERR("gameplay_map::create_a_city_at_random_coord(): Unable to create the city!! Not found any valid random coordinate");
+			LOG_ERR("gameplay_map::create_a_city(): Unable to create the city!! Not valid coordinates");
 		}
 		return field;
-	}
+    }
 
     ////////////////////////////////////////////////////////////////////
 	//

@@ -81,6 +81,7 @@ namespace game_manager
 		~game_manager();
 	public:
 		game_map::game_map* get_the_game_map();
+		cities::city_manager* get_city_manager();
 		void create_test_scenario_1();
 		void init();
 		void stop();
@@ -91,7 +92,6 @@ namespace game_manager
 		events::event_manager* get_event_manager();
     public://Operations that the user is allowed to perform
         bool user_want_start_construction( long construction_id, long city_id, long field_id );
-
 	};
 };
 

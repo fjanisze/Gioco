@@ -57,7 +57,7 @@ namespace constructions
 		void add_new_apartment();
 		bool execute_instruction( std::pair< short, string >& instr );
         construction_handler_t get_next_hnd_id();
-	    construction_t* create_new_construction( construction_t* construction_source );
+	    construction_t* construction_copy( construction_t* construction_source );
 	public:
 		construction_manager();
 		~construction_manager();

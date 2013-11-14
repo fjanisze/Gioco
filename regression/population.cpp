@@ -15,6 +15,7 @@ void PopulationTests::TearDown()
 //Regression for population_manager
 TEST_F( PopulationTests , CollectionBasicOperation )
 {
+    LOG_WARN("STARTING: PopulationTests , CollectionBasicOperation");
     //The first collection is create automatically, should be the one for the homeless
     long homeless_collection_id = pop.get_homeless_collection_id();
     ASSERT_NE( nullptr , pop.get_collection( homeless_collection_id ) );
@@ -33,6 +34,7 @@ TEST_F( PopulationTests , CollectionBasicOperation )
 //Family creation tests
 TEST_F( PopulationTests , FamilyBasicOperation )
 {
+    LOG_WARN("STARTING: PopulationTests , FamilyBasicOperation");
     //Create a family
     population::family_t family( 1 );
     ASSERT_EQ( 1 , family.get_id() );
@@ -48,6 +50,7 @@ TEST_F( PopulationTests , FamilyBasicOperation )
 //Adding family elements to a population collection
 TEST_F( PopulationTests , AddingRemovingHomelessFamilies )
 {
+    LOG_WARN("STARTING: PopulationTests , AddingRemovingHomelessFamilies");
     //Create some families
     population::family_t family1( 1 ) , family2( 2 ), family3( 3 );
 

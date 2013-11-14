@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1382799626 source:d:\gioco\buildings.cpp
+1384421673 source:d:\gioco\buildings.cpp
 	"logging/logger.hpp"
 	"buildings.hpp"
 
@@ -23,7 +23,7 @@
 	<atomic>
 	<cassert>
 
-1381313760 d:\gioco\buildings.hpp
+1384421673 d:\gioco\buildings.hpp
 	"mytypes.hpp"
 	"events.hpp"
 	<string>
@@ -413,10 +413,10 @@
 1384066916 source:d:\gioco\events.cpp
 	"events.hpp"
 
-1384068964 source:d:\gioco\game.cpp
+1384422672 source:d:\gioco\game.cpp
 	"game.hpp"
 
-1384066683 d:\gioco\game.hpp
+1384417263 d:\gioco\game.hpp
 	"logging/logger.hpp"
 	"population/population.hpp"
 	"mytypes.hpp"
@@ -448,7 +448,7 @@
 	<cassert>
 	<map>
 
-1381995895 d:\gioco\map\map.hpp
+1384417034 d:\gioco\map\map.hpp
 	"../mytypes.hpp"
 	"map_common.hpp"
 	<map>
@@ -483,7 +483,7 @@
 	<OpenGL/gl.h>
 	<OpenGL/glu.h>
 
-1382001218 d:\gioco\ui\ui_city.hpp
+1384424764 d:\gioco\ui\ui_city.hpp
 	"../logging/logger.hpp"
 	"../map/map_common.hpp"
 	"ui_console.hpp"
@@ -521,19 +521,19 @@
 	"ui/ui.hpp"
 	"map/city_map.hpp"
 
-1384414415 d:\gioco\config.hpp
+1384416270 d:\gioco\config.hpp
 
 1382083154 source:d:\gioco\map\city_map.cpp
 	"city_map.hpp"
 
-1382004648 source:d:\gioco\map\map.cpp
+1384417088 source:d:\gioco\map\map.cpp
 	"../logging/logger.hpp"
 	"map.hpp"
 
 1382799076 source:d:\gioco\population\population.cpp
 	"population.hpp"
 
-1384414472 source:d:\gioco\regression\main.cpp
+1384415776 source:d:\gioco\regression\main.cpp
 	"../config.hpp"
 	"../logging/logger.hpp"
 	"gtest.h"
@@ -598,22 +598,34 @@
 	<iosfwd>
 	<vector>
 
-1384068371 source:d:\gioco\regression\population.cpp
+1384417563 source:d:\gioco\regression\population.cpp
+	"..\config.hpp"
 	"population.hpp"
 
-1384068370 d:\gioco\regression\population.hpp
+1384415936 d:\gioco\regression\population.hpp
 	"gtest.h"
 	"..\population\population.hpp"
+	"..\config.hpp"
 
-1384068731 source:d:\gioco\ui\ui.cpp
+1384419133 source:d:\gioco\ui\ui.cpp
 	"ui.hpp"
 
-1384369889 source:d:\gioco\ui\ui_city.cpp
+1384424734 source:d:\gioco\ui\ui_city.cpp
 	"ui_city.hpp"
 	"../buildings.hpp"
 	"../game.hpp"
 
-1384068869 source:d:\gioco\ui\ui_console.cpp
+1384418427 source:d:\gioco\ui\ui_console.cpp
 	"ui_console.hpp"
 	"../game.hpp"
+
+1384421533 source:d:\gioco\regression\construction.cpp
+	"..\config.hpp"
+	"construction.hpp"
+	"..\construction_common_struct.hpp"
+
+1384416519 d:\gioco\regression\construction.hpp
+	"gtest.h"
+	"..\config.hpp"
+	"..\game.hpp"
 

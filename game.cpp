@@ -67,6 +67,11 @@ namespace game_manager
 		return game_map::game_map::get_instance();
 	}
 
+	cities::city_manager* game_manager::get_city_manager()
+	{
+	    return city_manager;
+	}
+
 	//Create a test scenario
 	void game_manager::create_test_scenario_1()
 	{
@@ -83,9 +88,9 @@ namespace game_manager
 		cities::city_agent* torino_agent = city_manager->create_new_city( "Torino", 100 );
 
 		//Create the cities on the map
-		get_the_game_map()->create_a_city_at_random_coord( "Roma" , roma_agent );
-		get_the_game_map()->create_a_city_at_random_coord( "Milano" , milano_agent );
-		get_the_game_map()->create_a_city_at_random_coord( "Torino" , torino_agent );
+		get_the_game_map()->create_a_city_at_random_coord( roma_agent );
+		get_the_game_map()->create_a_city_at_random_coord( milano_agent );
+		get_the_game_map()->create_a_city_at_random_coord( torino_agent );
 
 	}
 
@@ -105,6 +110,8 @@ namespace game_manager
         //Create the population manager
         population_manager = new population::population_manager();
         assert( population_manager != nullptr );
+        //User Interface object
+	    game_ui = graphic_ui::game_ui::get_instance();
 	}
 
 	void game_manager::stop()
@@ -120,8 +127,6 @@ namespace game_manager
 	void game_manager::handle_game()
 	{
 	    LOG("game_manager::handle_game(): Starting");
-	    //User Interface object
-	    game_ui = graphic_ui::game_ui::get_instance();
 	    //Populate the map with all the vertex
 	    get_the_game_map()->create_vertex_map();
 	    game_ui->create_render_window();
@@ -187,6 +192,7 @@ namespace game_manager
         //Ok now we have all the object ready to be used.
         //The construction process is pretty simple, the construction_t is just added on the field if no other constructions are present
         citymap->set_construction( field_id, constr_obj );
+        LOG("game_manager::user_want_start_construction(): Construction completed");
         return true;
     }
 }

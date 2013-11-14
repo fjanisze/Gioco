@@ -150,6 +150,7 @@ namespace graphic_ui
     //Handle the events from the window
     void game_ui::handle_event( const sf::Event& event )
     {
+        ELOG("game_ui::handle_event(): Handling a new event :" , event.type );
         switch( event.type )
         {
         case sf::Event::Closed:

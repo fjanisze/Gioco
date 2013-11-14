@@ -78,8 +78,9 @@ namespace city_ui_manager
     }
 
     //Manage the mouse click when we are in the city view
-    void city_ui::mouse_press_event( const sf::Event& event )
+    bool city_ui::mouse_press_event( const sf::Event& event )
     {
+        bool operation_verdict = true;
         ELOG("city_ui::mouse_press_event(): Mouse button pressed, x:",event.mouseButton.x,",y:",event.mouseButton.y);
         if(! is_over_the_game_map( event.mouseButton.x , event.mouseButton.y ) )
         {
@@ -89,19 +90,20 @@ namespace city_ui_manager
         {
             if( input_mode == city_ui_input_mode_t::building_mode )
             {
-                //If we are here, then the user want to build a construction on the map.
-                //Get the field on which the user want to start the construction
-                build_info.field = city_agent->get_field_at_pos( event.mouseButton.x , event.mouseButton.y );
-                ELOG("city_ui::mouse_press_event(): We are in building mode, handling the construction request, field ID:",build_info.field->field_id );
-                //the building info structure should contain all the proper information now
-                if( handle_new_construction() )
+                operation_verdict = handle_new_construction( event.mouseButton.x , event.mouseButton.y );
+                if( operation_verdict )
                 {
                     //Quit the construction mode, the construction process started
                     set_std_view_mode();
                     update_focus_box( event.mouseButton.x , event.mouseButton.y );
                 }
+                else
+                {
+                    LOG_ERR("city_ui::mouse_press_event(): Construction failed!");
+                }
             }
         }
+        return operation_verdict;
     }
 
     //This function is called when the mouse move event is triggered over the city map
@@ -165,7 +167,7 @@ namespace city_ui_manager
         else if( input_mode == city_ui_input_mode_t::building_mode )
         {
             //FIXME.. Something wrong here!!
-    /*        (*focus_box) = sf::VertexArray( sf::Quads , 4 );
+            (*focus_box) = sf::VertexArray( sf::Quads , 4 );
             (*focus_box)[0].position = sf::Vector2f( x_pos , y_pos );
             (*focus_box)[1].position = sf::Vector2f( x_pos + field_width , y_pos );
             (*focus_box)[2].position = sf::Vector2f( x_pos + field_width , y_pos + field_height );
@@ -174,7 +176,7 @@ namespace city_ui_manager
             for( short i = 0 ; i <= 4 ; i++ )
             {
                 (*focus_box)[i].color = sf::Color::Black;
-            }*/
+            }
         }
     }
 
@@ -204,12 +206,15 @@ namespace city_ui_manager
     }
 
     //This function is called when the user has chosen which building want to build and has clicked on the map for the place
-    bool city_ui::handle_new_construction()
+    bool city_ui::handle_new_construction( long x_pos , long y_pos )
     {
+        //If we are here, then the user want to build a construction on the map.
+        //Get the field on which the user want to start the construction
+        assert( city_agent != nullptr );
+        build_info.field = city_agent->get_field_at_pos( x_pos , y_pos );
         ELOG("city_ui::handle_new_construction(): The user want to build a new building, building ID:",build_info.building_id,", field ID:", build_info.field->field_id,",city ID:",city_agent->get_city_id());
         //Get the construction manager and try to build the building
-        bool verdict = game_manager::game_manager::get_instance()->user_want_start_construction( build_info.building_id , city_agent->get_city_id() , build_info.field->field_id );
-        return verdict;
+        return game_manager::game_manager::get_instance()->user_want_start_construction( build_info.building_id , city_agent->get_city_id() , build_info.field->field_id );
     }
 
     //The view mode is also the 'default' viewing mode

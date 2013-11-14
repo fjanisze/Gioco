@@ -364,16 +364,16 @@ namespace graphic_ui
         //As now, this menu just show the building which is possible to build
         graphic_elements::ui_button_t button;
         //One button for each building that can be built
-        std::vector< constructions::construction_t* >* appartment = constructions_mng->get_all_construction();
-        if( appartment != nullptr )
+        std::vector< constructions::construction_t* >* constructions = constructions_mng->get_all_construction();
+        if( constructions != nullptr )
         {
-            if( appartment->empty() )
+            if( constructions->empty() )
             {
                 LOG_ERR("console_manager::add_building_construction_btn(): No construction available, this is wrong..");
                 return; //quit
             }
             long button_id = BUILDING_BUTTON_ID_BEGIN; //From 1000 begins the ID for the consturction buttons.
-            for( auto elem : (*appartment) )
+            for( auto elem : (*constructions) )
             {
                 button.create( 0 , y_pos , 200 , 30 );
                 button.set_appearence( sf::Color::Black );
@@ -387,7 +387,7 @@ namespace graphic_ui
         }
         else
         {
-            LOG_WARN("console_manager::add_building_construction_btn(): No appartment available for the menu!");
+            LOG_WARN("console_manager::add_building_construction_btn(): No constructions available for the menu!");
         }
     }
 

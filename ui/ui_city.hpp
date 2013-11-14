@@ -37,7 +37,7 @@ namespace city_ui_manager
         game_map::game_canvas_settings_t game_canvas;
         city_ui_input_mode_t input_mode;
         build_trigger_info_t build_info;
-        bool handle_new_construction();
+        bool handle_new_construction( long x_pos , long y_pos );
     public:
         city_ui( sf::RenderWindow* rnd_window , game_map::game_canvas_settings_t game_canvas_setting );
         ~city_ui();
@@ -47,7 +47,7 @@ namespace city_ui_manager
         void city_map_mouse_move( const sf::Event& event );
         void draw_city_ui_elements();
         void enter_city_menu();
-        void mouse_press_event( const sf::Event& event );
+        bool mouse_press_event( const sf::Event& event );
         bool is_over_the_game_map( long x_pos , long y_pos );
         void handle_build_btn_click( long action_id );
         void set_std_view_mode();

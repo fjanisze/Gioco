@@ -103,7 +103,8 @@ namespace game_map
 		field_coordinate find_random_field( const object_descriptor& type );
 	public:
 		void make_all_map_explored();
-		field_manager* create_a_city_at_random_coord( const string& name , cities::city_agent* agent );
+		field_manager* create_a_city_at_random_coord( cities::city_agent* agent );
+		field_manager* create_a_city( cities::city_agent* agent, const field_coordinate& city_coord );
 	};
 
 	//Object reppresenting the graphical reppresentation of the field

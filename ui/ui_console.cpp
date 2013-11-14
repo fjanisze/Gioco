@@ -241,6 +241,7 @@ namespace graphic_ui
     {
         ELOG("console_wnd_t::remove_all_buttons(): Cleaning the button container..");
         buttons.clear();
+        ELOG("console_wnd_t::remove_all_buttons(): Done");
     }
 
     console_manager::console_manager( )
@@ -248,20 +249,27 @@ namespace graphic_ui
     }
 
     //Initializate the console window
-    short console_manager::init_consoles( const game_window_config_t& window_config )
+    std::vector< console_wnd_t* > console_manager::init_consoles( const game_window_config_t& window_config )
     {
         std::lock_guard< std::mutex > lock( mutex );
         LOG("console_manager::init_consoles(): Initializing all the consoles");
         long status_console_height = 20;
-        //Status console
-        status_console.create( 0 , 0 , window_config.window_width , status_console_height );
-        status_console.set_color( sf::Color( 255 , 100 , 20 ) );
-        //Info Console
-        info_console.create( 0 , window_config.map_canvas_setting.canvas_height + status_console_height , window_config.window_width , 30 );
-        info_console.set_color( sf::Color( 10 , 20 , 30 ) );
+        //Put them in the vector and return back
+        std::vector< console_wnd_t* > consoles;
+
         //Main console
         main_console.create( window_config.map_canvas_setting.canvas_width , status_console_height , 200 , 600 );
         main_console.set_color( sf::Color( 20 , 30 , 40 ) );
+        consoles.push_back( &main_console );
+        //Status console
+        status_console.create( 0 , 0 , window_config.window_width , status_console_height );
+        status_console.set_color( sf::Color( 255 , 100 , 20 ) );
+        consoles.push_back( &status_console );
+        //Info Console
+        info_console.create( 0 , window_config.map_canvas_setting.canvas_height + status_console_height , window_config.window_width , 30 );
+        info_console.set_color( sf::Color( 10 , 20 , 30 ) );
+        consoles.push_back( &info_console );
+
         //Create the buttons for the main console.
         main_console.add_button_map( main_menu_button_position , 10 );
 
@@ -270,6 +278,8 @@ namespace graphic_ui
         status_console.set_font( font );
         main_console.set_font( font );
         info_console.set_font( font );
+
+        return consoles;
     }
 
     //Draw the console in the proper context
@@ -357,7 +367,7 @@ namespace graphic_ui
     }
 
     //Create the proper context for the main menu
-    void console_manager::add_building_construction_btn( console_wnd_t& console , long y_pos )
+    short console_manager::add_building_construction_btn( console_wnd_t& console , long y_pos )
     {
         ELOG("console_wnd_t::add_building_construction_btn(): Adding the construction buttons..");
         constructions::construction_manager* constructions_mng = game_manager::game_manager::get_instance()->get_buildings();
@@ -365,12 +375,14 @@ namespace graphic_ui
         graphic_elements::ui_button_t button;
         //One button for each building that can be built
         std::vector< constructions::construction_t* >* constructions = constructions_mng->get_all_construction();
+        //Return the amount of buttons
+        short amount_of_buttons = 0;
         if( constructions != nullptr )
         {
             if( constructions->empty() )
             {
                 LOG_ERR("console_manager::add_building_construction_btn(): No construction available, this is wrong..");
-                return; //quit
+                return amount_of_buttons;//quit
             }
             long button_id = BUILDING_BUTTON_ID_BEGIN; //From 1000 begins the ID for the consturction buttons.
             for( auto elem : (*constructions) )
@@ -383,12 +395,14 @@ namespace graphic_ui
                 console.add_button( button , button_id );
                 ++button_id;
                 y_pos += 30;
+                ++amount_of_buttons;
             }
         }
         else
         {
             LOG_WARN("console_manager::add_building_construction_btn(): No constructions available for the menu!");
         }
+        return amount_of_buttons;
     }
 
     //Add to the main menu some common buttons

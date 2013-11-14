@@ -1,7 +1,7 @@
 #include "../config.hpp"
 #include "../logging/logger.hpp"
 #include "gtest.h"
-#include "../events.hpp"
+#include "../game.hpp"
 
 #if COMPILE_TEST_MODE
 
@@ -11,6 +11,9 @@
 int main(int argc, char **argv)
 {
     log_inst.set_thread_name("GTEST_MAIN");
+
+    //Some common initialization
+    game_manager::game_manager::get_instance()->init();
 
     ::testing::InitGoogleTest(&argc, argv);
 

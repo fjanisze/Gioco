@@ -413,7 +413,7 @@
 1384066916 source:d:\gioco\events.cpp
 	"events.hpp"
 
-1384422672 source:d:\gioco\game.cpp
+1384425145 source:d:\gioco\game.cpp
 	"game.hpp"
 
 1384417263 d:\gioco\game.hpp
@@ -443,7 +443,7 @@
 	<locale>
 	<atomic>
 
-1382890828 d:\gioco\population\population.hpp
+1384430373 d:\gioco\population\population.hpp
 	"../logging/logger.hpp"
 	<cassert>
 	<map>
@@ -490,7 +490,7 @@
 	"../map/city_map.hpp"
 	<cassert>
 
-1375754794 d:\gioco\ui\ui_console.hpp
+1384429537 d:\gioco\ui\ui_console.hpp
 	"../logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
@@ -521,7 +521,7 @@
 	"ui/ui.hpp"
 	"map/city_map.hpp"
 
-1384416270 d:\gioco\config.hpp
+1384428372 d:\gioco\config.hpp
 
 1382083154 source:d:\gioco\map\city_map.cpp
 	"city_map.hpp"
@@ -530,14 +530,14 @@
 	"../logging/logger.hpp"
 	"map.hpp"
 
-1382799076 source:d:\gioco\population\population.cpp
+1384430294 source:d:\gioco\population\population.cpp
 	"population.hpp"
 
-1384415776 source:d:\gioco\regression\main.cpp
+1384429872 source:d:\gioco\regression\main.cpp
 	"../config.hpp"
 	"../logging/logger.hpp"
 	"gtest.h"
-	"../events.hpp"
+	"../game.hpp"
 
 1375925879 d:\gtest\gtest-1.6.0\gtest-1.6.0\fused-src\gtest\gtest.h
 	<limits>
@@ -598,7 +598,7 @@
 	<iosfwd>
 	<vector>
 
-1384417563 source:d:\gioco\regression\population.cpp
+1384430074 source:d:\gioco\regression\population.cpp
 	"..\config.hpp"
 	"population.hpp"
 
@@ -607,25 +607,34 @@
 	"..\population\population.hpp"
 	"..\config.hpp"
 
-1384419133 source:d:\gioco\ui\ui.cpp
+1384427709 source:d:\gioco\ui\ui.cpp
 	"ui.hpp"
 
-1384424734 source:d:\gioco\ui\ui_city.cpp
+1384426736 source:d:\gioco\ui\ui_city.cpp
 	"ui_city.hpp"
 	"../buildings.hpp"
 	"../game.hpp"
 
-1384418427 source:d:\gioco\ui\ui_console.cpp
+1384429716 source:d:\gioco\ui\ui_console.cpp
 	"ui_console.hpp"
 	"../game.hpp"
 
-1384421533 source:d:\gioco\regression\construction.cpp
+1384429847 source:d:\gioco\regression\construction.cpp
 	"..\config.hpp"
 	"construction.hpp"
 	"..\construction_common_struct.hpp"
 
-1384416519 d:\gioco\regression\construction.hpp
+1384423803 d:\gioco\regression\construction.hpp
 	"gtest.h"
 	"..\config.hpp"
 	"..\game.hpp"
+
+1384429782 source:d:\gioco\regression\ui_console.cpp
+	"..\config.hpp"
+	"ui_console.hpp"
+
+1384428432 d:\gioco\regression\ui_console.hpp
+	"..\config.hpp"
+	"gtest.h"
+	"..\ui\ui_console.hpp"
 

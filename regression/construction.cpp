@@ -10,7 +10,6 @@
 ConstructionTests::ConstructionTests()
 {
     game = game_manager::game_manager::get_instance();
-    game->init();
     //Generate the random map.
     game->get_the_game_map()->create_new_map( 50 );
     game->get_the_game_map()->generate_random_map();

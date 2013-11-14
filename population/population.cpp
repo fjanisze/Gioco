@@ -174,9 +174,6 @@ namespace population
     {
     }
 
-    long population_manager::next_family_id = 1;
-    long population_manager::next_collection_id = 1;
-
     long population_manager::get_next_family_id()
     {
         return ++next_family_id;

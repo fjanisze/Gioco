@@ -94,8 +94,8 @@ namespace population
     class population_manager
     {
         family_map_t family_container;//All the familiy collection are in this container
-        static long next_family_id;
-        static long next_collection_id;
+        long next_family_id{};
+        long next_collection_id{};
         long get_next_family_id();
         long get_next_coll_id();
         //Collection data structures

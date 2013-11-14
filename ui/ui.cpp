@@ -139,7 +139,6 @@ namespace graphic_ui
                     break;
                 };
             }
-
             screen_refresh();
         }
         //We are quitting, let's clean
@@ -150,7 +149,6 @@ namespace graphic_ui
     //Handle the events from the window
     void game_ui::handle_event( const sf::Event& event )
     {
-        ELOG("game_ui::handle_event(): Handling a new event :" , event.type );
         switch( event.type )
         {
         case sf::Event::Closed:
@@ -298,6 +296,7 @@ namespace graphic_ui
     //Draw the gameplay map
     void game_ui::draw_gameplay_map()
     {
+        LOG("game_ui::draw_gameplay_map(): Drawing gameplay map");
         game_map::field_graphic_vector_t* vertex = map->get_vertex_data();
         for( auto &elem : *vertex )
         {
@@ -308,6 +307,7 @@ namespace graphic_ui
     //Draw the current city
     void game_ui::draw_current_city()
     {
+        ELOG("game_ui::draw_current_city(): Drawing current city");
         current_city->get_city_map()->draw_the_map( window );
         city_ui->draw_city_ui_elements();
     }

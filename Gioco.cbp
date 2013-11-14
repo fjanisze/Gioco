@@ -90,9 +90,13 @@
 		<Unit filename="mytypes.hpp" />
 		<Unit filename="population/population.cpp" />
 		<Unit filename="population/population.hpp" />
+		<Unit filename="regression/construction.cpp" />
+		<Unit filename="regression/construction.hpp" />
 		<Unit filename="regression/main.cpp" />
 		<Unit filename="regression/population.cpp" />
 		<Unit filename="regression/population.hpp" />
+		<Unit filename="regression/ui_console.cpp" />
+		<Unit filename="regression/ui_console.hpp" />
 		<Unit filename="ui/ui.cpp" />
 		<Unit filename="ui/ui.hpp" />
 		<Unit filename="ui/ui_city.cpp" />

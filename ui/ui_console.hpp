@@ -150,13 +150,13 @@ namespace graphic_ui
         bool handle_non_common_button( graphic_elements::ui_button_t* button  );
     public:
         console_manager();
-        short init_consoles( const graphic_ui::game_window_config_t& window_config );
+        std::vector< console_wnd_t* > init_consoles( const graphic_ui::game_window_config_t& window_config );
         void draw_console( sf::RenderWindow& window );
         //For writing operation
         void write_info( const std::string& msg );
         void write_status( const std::string& location );
         void handle_console_click( long x_pos , long y_pos );
-        void add_building_construction_btn( console_wnd_t& console , long y_pos = 0  );
+        short add_building_construction_btn( console_wnd_t& console , long y_pos = 0  );
         long add_city_common_btn( console_wnd_t& console );
         long add_map_common_btn( console_wnd_t& console );
         void show_city_main_menu();

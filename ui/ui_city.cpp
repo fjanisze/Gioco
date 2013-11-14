@@ -150,8 +150,19 @@ namespace city_ui_manager
         x_pos -= ( ( x_pos - game_canvas.canvas_x_offset ) % field_width );
         y_pos -= ( ( y_pos - game_canvas.canvas_y_offset ) % field_height );
 
+        static long old_x_pos{} , old_y_pos{};
+
+        if( x_pos == old_x_pos && y_pos == old_y_pos )
+        {
+            return; //Nothing to update here
+        }
+
+        old_x_pos = x_pos;
+        old_y_pos = y_pos;
+
         if( input_mode == city_ui_input_mode_t::view_mode )
         {
+            ELOG("city_ui::update_focus_box(): Updating in view mode, x_pos: ",x_pos, ", y_pos: ", y_pos );
             (*focus_box) = sf::VertexArray( sf::LinesStrip , 5 );
             (*focus_box)[0].position = sf::Vector2f( x_pos , y_pos );
             (*focus_box)[1].position = sf::Vector2f( x_pos + field_width , y_pos );
@@ -166,7 +177,7 @@ namespace city_ui_manager
         }
         else if( input_mode == city_ui_input_mode_t::building_mode )
         {
-            //FIXME.. Something wrong here!!
+            ELOG("city_ui::update_focus_box(): Updating in build mode, x_pos: ",x_pos, ", y_pos: ", y_pos );
             (*focus_box) = sf::VertexArray( sf::Quads , 4 );
             (*focus_box)[0].position = sf::Vector2f( x_pos , y_pos );
             (*focus_box)[1].position = sf::Vector2f( x_pos + field_width , y_pos );

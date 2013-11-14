@@ -1,3 +1,6 @@
+#define LOGGING_LEVEL_1
+#define LOGGING_LEVEL_2
+
 #include "..\config.hpp"
 #include "population.hpp"
 
@@ -21,9 +24,9 @@ TEST_F( PopulationTests , CollectionBasicOperation )
     ASSERT_NE( nullptr , pop.get_collection( homeless_collection_id ) );
     //Create a couple of collections
     long id_1 = pop.create_collection();
-    ASSERT_EQ( 3 , id_1 );
+    ASSERT_EQ( 2 , id_1 );
     long id_2 = pop.create_collection();
-    ASSERT_EQ( 4 , id_2 );
+    ASSERT_EQ( 3 , id_2 );
     //Now tries to get the collection
     population::family_collection_t* coll_ptr = pop.get_collection( id_1 );
     ASSERT_NE( nullptr , coll_ptr );

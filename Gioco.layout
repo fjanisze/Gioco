@@ -1,9 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="buildings.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="regression\population.hpp" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="12434" topLine="356" />
+			<Cursor1 position="270" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="regression\ui_console.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1087" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="main.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="707" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="274" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="regression\ui_console.hpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="24" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="map\city_map.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="19541" topLine="468" />
+		</Cursor>
+		<Folding>
+			<Collapse line="16" />
+			<Collapse line="136" />
+			<Collapse line="141" />
+			<Collapse line="147" />
+			<Collapse line="153" />
+			<Collapse line="170" />
+		</Folding>
+	</File>
+	<File name="ui\ui.cpp" open="0" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="9337" topLine="266" />
 		</Cursor>
 	</File>
 	<File name="map\city_map.hpp" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -11,9 +44,14 @@
 			<Cursor1 position="4149" topLine="102" />
 		</Cursor>
 	</File>
-	<File name="buildings.hpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="cities.hpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1699" topLine="36" />
+			<Cursor1 position="891" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="ui\ui.hpp" open="0" top="0" tabpos="14" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="30" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="map\map.cpp" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -21,9 +59,14 @@
 			<Cursor1 position="14273" topLine="406" />
 		</Cursor>
 	</File>
-	<File name="cities.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="config.hpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3104" topLine="82" />
+			<Cursor1 position="29" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="ui\ui_city.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="8112" topLine="184" />
 		</Cursor>
 	</File>
 	<File name="map\map.hpp" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -31,9 +74,34 @@
 			<Cursor1 position="3490" topLine="82" />
 		</Cursor>
 	</File>
+	<File name="construction_common_struct.hpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="999" topLine="48" />
+		</Cursor>
+	</File>
+	<File name="ui\ui_city.hpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1065" topLine="0" />
+		</Cursor>
+	</File>
 	<File name="map\map_common.hpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="2568" topLine="61" />
+		</Cursor>
+	</File>
+	<File name="buildings.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="12434" topLine="356" />
+		</Cursor>
+	</File>
+	<File name="ui\ui_common.hpp" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="192" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="ui\ui_console.cpp" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="849" topLine="6" />
 		</Cursor>
 	</File>
 	<File name="population\population.cpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -41,9 +109,19 @@
 			<Cursor1 position="5290" topLine="147" />
 		</Cursor>
 	</File>
+	<File name="buildings.hpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1699" topLine="36" />
+		</Cursor>
+	</File>
 	<File name="population\population.hpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="2828" topLine="67" />
+		</Cursor>
+	</File>
+	<File name="cities.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3104" topLine="82" />
 		</Cursor>
 	</File>
 	<File name="regression\construction.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -61,49 +139,14 @@
 			<Cursor1 position="102" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="regression\population.cpp" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="ui\ui_console.hpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="941" topLine="9" />
+			<Cursor1 position="279" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="regression\population.hpp" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="events.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="270" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="regression\ui_console.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1087" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="regression\ui_console.hpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="24" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="ui\ui.cpp" open="0" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="9337" topLine="266" />
-		</Cursor>
-	</File>
-	<File name="ui\ui.hpp" open="0" top="0" tabpos="14" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="30" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="ui\ui_city.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="8112" topLine="184" />
-		</Cursor>
-	</File>
-	<File name="ui\ui_city.hpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1065" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="ui\ui_common.hpp" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="192" topLine="0" />
+			<Cursor1 position="3689" topLine="67" />
 		</Cursor>
 	</File>
 	<File name="events.hpp" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -111,19 +154,9 @@
 			<Cursor1 position="197" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="ui\ui_console.cpp" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="244" topLine="0" />
-		</Cursor>
-	</File>
 	<File name="game.cpp" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="4704" topLine="54" />
-		</Cursor>
-	</File>
-	<File name="ui\ui_console.hpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="279" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="game.hpp" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -136,47 +169,14 @@
 			<Cursor1 position="1363" topLine="60" />
 		</Cursor>
 	</File>
-	<File name="cities.hpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="regression\population.cpp" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="891" topLine="0" />
+			<Cursor1 position="941" topLine="9" />
 		</Cursor>
 	</File>
 	<File name="logging\logger.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="99" topLine="0" />
 		</Cursor>
-	</File>
-	<File name="config.hpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="29" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="construction_common_struct.hpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="999" topLine="48" />
-		</Cursor>
-	</File>
-	<File name="main.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="707" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="274" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="events.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="3689" topLine="67" />
-		</Cursor>
-	</File>
-	<File name="map\city_map.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="19541" topLine="468" />
-		</Cursor>
-		<Folding>
-			<Collapse line="16" />
-			<Collapse line="136" />
-			<Collapse line="141" />
-			<Collapse line="147" />
-			<Collapse line="153" />
-			<Collapse line="170" />
-		</Folding>
 	</File>
 </CodeBlocks_layout_file>

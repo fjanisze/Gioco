@@ -35,6 +35,9 @@ namespace graphic_elements
     public:
         ui_button_t();
         ~ui_button_t();
+        ui_button_t( ui_button_t&& other );
+        ui_button_t& operator=( const ui_button_t& other );
+        ui_button_t& operator=( ui_button_t&& other );
         void create( long x_pos, long y_pos, long width, long height );
         void set_text( const std::string& text , const sf::Font* font );
         sf::Text get_text();
@@ -42,7 +45,7 @@ namespace graphic_elements
         sf::VertexArray& get_vertex();
         void set_offset( long x_axis, long y_axis );
         void set_id( long id );
-        long get_id();
+        long get_id() const;
         void set_action_id( long id );
         long get_action_id();
         bool is_point_over_the_button( long x_pos , long y_pos );
@@ -133,7 +136,7 @@ namespace graphic_ui
         sf::VertexArray& get_background_vertex();
         sf::Text& get_text();
         void add_button_map( const button_position_t* map , short amount_of_buttons );
-        void add_button( graphic_elements::ui_button_t button , short index );
+        int add_button( graphic_elements::ui_button_t&& button , short index );
         void draw( sf::RenderWindow& window );
         void remove_all_buttons();
     };

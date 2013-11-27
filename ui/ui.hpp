@@ -39,6 +39,8 @@ namespace graphic_ui
         void city_map_mouse_move( const sf::Event& event );
         void print_status_info();
     public:
+        void set_view_to_citymap();
+        void set_view_to_gamemap();
         sf::RenderWindow& create_render_window();
         static game_ui* get_instance();
         city_ui_manager::city_ui* get_city_ui();

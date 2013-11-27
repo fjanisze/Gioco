@@ -11,6 +11,37 @@ namespace graphic_elements
     {
     }
 
+    ui_button_t::ui_button_t( ui_button_t&& other )
+    {
+        ELOG("ui_button_t::ui_button_t(): R-value constructor, source: ",other.get_id() );
+        vertex = std::move( other.vertex );
+        reference_id = other.reference_id;
+        action_id = other.action_id;
+        button_text = std::move( other.button_text );
+        other.vertex.clear();
+    }
+
+    ui_button_t& ui_button_t::operator=( const ui_button_t& other )
+    {
+        ELOG("ui_button_t::operator=(): From button_t with ID:",other.get_id());
+        vertex = other.vertex;
+        reference_id = other.reference_id;
+        action_id = other.action_id;
+        button_text = other.button_text;
+        return *this;
+    }
+
+    ui_button_t& ui_button_t::operator=( ui_button_t&& other )
+    {
+        ELOG("ui_button_t::operator=(): R-Value assignment, from button_t with ID:",other.get_id());
+        vertex = std::move( other.vertex );
+        reference_id = other.reference_id;
+        action_id = other.action_id;
+        button_text = std::move( other.button_text );
+        other.vertex.clear();
+        return *this;
+    }
+
     ui_button_t::~ui_button_t()
     {
         LOG("ui_button_t::~ui_button_t(): Destroying");
@@ -79,7 +110,7 @@ namespace graphic_elements
         reference_id = id;
     }
 
-    long ui_button_t::get_id()
+    long ui_button_t::get_id() const
     {
         return reference_id;
     }
@@ -216,13 +247,23 @@ namespace graphic_ui
     }
 
     //The value 'index' is used to set the button position on the base of the button position map provided
-    void console_wnd_t::add_button( graphic_elements::ui_button_t button , short index )
+    int console_wnd_t::add_button( graphic_elements::ui_button_t&& button , short index )
     {
         std::string button_name = button.get_text().getString();
         ELOG("console_wnd_t::add_button(): Adding button element, ID:",button.get_id() , ",name: ",button_name );
+        //If the button already exist, do not add
+        for( auto& elem : buttons )
+        {
+            if( elem.second.get_id() == button.get_id() )
+            {
+                ELOG("console_wnd_t::add_button(): This button (",button.get_id(),") already exist, not adding");
+                return -1; //Do not add this button, already exist.
+            }
+        }
         //Set the proper offset
         button.set_offset( x_offset , y_offset );
-        buttons[ index ] = button;
+        buttons[ index ] = std::move( button );
+        return index;
     }
 
     void console_wnd_t::draw( sf::RenderWindow& window )
@@ -294,7 +335,6 @@ namespace graphic_ui
     //Draw the console in the proper context
     void console_manager::draw_console( sf::RenderWindow& window )
     {
-        ELOG("console_manager::draw_console(): Drawing the console");
         status_console.draw( window );
         info_console.draw( window );
         main_console.draw( window);
@@ -382,7 +422,6 @@ namespace graphic_ui
         ELOG("console_wnd_t::add_building_construction_btn(): Adding the construction buttons..");
         constructions::construction_manager* constructions_mng = game_manager::game_manager::get_instance()->get_buildings();
         //As now, this menu just show the building which is possible to build
-        graphic_elements::ui_button_t button;
         //One button for each building that can be built
         std::vector< constructions::construction_t* >* constructions = constructions_mng->get_all_construction();
         //Return the amount of buttons
@@ -397,12 +436,13 @@ namespace graphic_ui
             long button_id = BUILDING_BUTTON_ID_BEGIN; //From 1000 begins the ID for the consturction buttons.
             for( auto elem : (*constructions) )
             {
+                graphic_elements::ui_button_t button;
                 button.create( 0 , y_pos , 200 , 30 );
                 button.set_appearence( sf::Color::Black );
                 button.set_text( elem->get_name() , font );
                 button.set_id( button_id );
                 button.set_action_id( elem->get_obj_id() );
-                console.add_button( button , button_id );
+                console.add_button( std::move( button ) , button_id );
                 ++button_id;
                 y_pos += 30;
                 ++amount_of_buttons;
@@ -420,19 +460,19 @@ namespace graphic_ui
     {
         ELOG("console_manager::add_city_common_btn(): Entering");
 
-        graphic_elements::ui_button_t button;
-        button.create( 0 , 0 , 100 , 60 );
-        button.set_appearence( sf::Color::Blue );
-        button.set_text( "Build" , font );
-        button.set_id( COMMON_BUILD_BUTTON );
-        console.add_button( button , COMMON_BUILD_BUTTON); //Back button, ID: 0
+        graphic_elements::ui_button_t build_button;
+        build_button.create( 0 , 0 , 100 , 60 );
+        build_button.set_appearence( sf::Color::Blue );
+        build_button.set_text( "Build" , font );
+        build_button.set_id( COMMON_BUILD_BUTTON );
+        console.add_button( std::move( build_button ) , COMMON_BUILD_BUTTON ); //Back button, ID: 0
 
-
-        button.create( 100 , 0 , 100 , 60 );
-        button.set_appearence( sf::Color::Blue );
-        button.set_text( "MAP" , font );
-        button.set_id( COMMON_MAP_BUTTON );
-        console.add_button( button , COMMON_MAP_BUTTON ); //MAP button, ID: 1
+        graphic_elements::ui_button_t map_button;
+        map_button.create( 100 , 0 , 100 , 60 );
+        map_button.set_appearence( sf::Color::Blue );
+        map_button.set_text( "MAP" , font );
+        map_button.set_id( COMMON_MAP_BUTTON );
+        console.add_button( std::move( map_button ) , COMMON_MAP_BUTTON ); //MAP button, ID: 1
 
         return 60;
     }

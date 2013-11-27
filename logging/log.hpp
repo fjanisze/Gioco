@@ -66,7 +66,7 @@ namespace logging
 	{
 		//Dump the log data if any
 		do{
-			std::this_thread::sleep_for( std::chrono::milliseconds{ 1 } );
+		//	std::this_thread::sleep_for( std::chrono::milliseconds{ 1 } );
 			if( logger->log_buffer.size() )
 			{
 				std::lock_guard< std::mutex > lock{ logger->write_mutex };

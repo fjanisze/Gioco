@@ -56,7 +56,7 @@ namespace graphic_ui
 		init_consoles( ui_config );
 
 		//Default view
-		current_view = type_of_view_t::game_map_view;
+		set_view_to_gamemap();
     }
 
     //Return the pointer to the city_ui
@@ -189,7 +189,7 @@ namespace graphic_ui
                 LOG("game_ui::mouse_press_event(): Entering the city id:",agent->get_city_id());
                 current_city = agent;
                 city_ui->set_cityagent( agent );
-                current_view = type_of_view_t::city_map_view;
+                set_view_to_citymap();
                 city_ui->enter_city_menu();
             }
             else
@@ -202,6 +202,20 @@ namespace graphic_ui
             //The click seems to happen over a menu of over a info bar
             handle_console_click( event.mouseButton.x , event.mouseButton.y );
         }
+    }
+
+    //Set the current view to the citymap view -entering the city-
+    void game_ui::set_view_to_citymap()
+    {
+        ELOG("game_ui::set_view_to_citymap(): Set the citymap view");
+        current_view = type_of_view_t::city_map_view;
+    }
+
+    //Set the current view to the game map -entering the map-
+    void game_ui::set_view_to_gamemap()
+    {
+        ELOG("game_ui::set_view_to_gamemap(): Set the map view");
+        current_view = type_of_view_t::game_map_view;
     }
 
     //Manage the mouse moving event
@@ -296,7 +310,6 @@ namespace graphic_ui
     //Draw the gameplay map
     void game_ui::draw_gameplay_map()
     {
-        LOG("game_ui::draw_gameplay_map(): Drawing gameplay map");
         game_map::field_graphic_vector_t* vertex = map->get_vertex_data();
         for( auto &elem : *vertex )
         {
@@ -307,7 +320,6 @@ namespace graphic_ui
     //Draw the current city
     void game_ui::draw_current_city()
     {
-        ELOG("game_ui::draw_current_city(): Drawing current city");
         current_city->get_city_map()->draw_the_map( window );
         city_ui->draw_city_ui_elements();
     }

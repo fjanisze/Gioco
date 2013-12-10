@@ -21,33 +21,6 @@ namespace drawing_objects
         return nullptr;
     }*/
 
-    //Default empty constructor
-    drawable_object::drawable_object()
-    {
-    }
-
-    //Create a drawable object with one element
-    drawable_object::drawable_object( sf::Drawable* first_obj , use_font apply_font ) :
-            use_font_when_rendering{ apply_font == use_font::yes }
-    {
-        std::unique_ptr< sf::Drawable > obj( first_obj );
-        objects.push_back( std::move( obj ) );
-    }
-
-    //Clear the content for the drawable object
-    long drawable_object::clear()
-    {
-        std::lock_guard< std::mutex > lock( mutex );
-        long sz = objects.size();
-        objects.clear();
-        return sz;
-    }
-
-    //Return a reference to the whole container
-    drawable_obj_cnt& drawable_object::get_all()
-    {
-        return objects;
-    }
 
     drawing_facility::drawing_facility() : continue_looping{ false } , draw_fps{ 30 },
                         is_render_window_ready{ false }
@@ -74,15 +47,6 @@ namespace drawing_objects
     {
         LOG("drawing_facility::start(): Starting the rendering thread.");
         rendering_thread = std::unique_ptr< std::thread >( new std::thread( &drawing_facility::rendering_loop , this ) );
-    }
-
-    //Add the object to the container and return the amount of available objects
-    long drawing_facility::add( drawable_object* obj_ptr )
-    {
-        ELOG("drawing_facility::add(): Adding new object.");
-        std::lock_guard< std::mutex > lock( write_mutex );
-        objects.push_back( obj_ptr );
-        return objects.size();
     }
 
     //If any event in the queue, pop it
@@ -119,24 +83,9 @@ namespace drawing_objects
             //No adding operation allowed during the loop
             std::lock_guard< std::mutex > lock( write_mutex );
             //To through all the objects
-            for( auto obj : objects )
-            {
-                //Can i used the object?
-                if( !obj->mutex.try_lock() )
-                {
-                    continue; //Just skip the not usable items -locked-
-                }
-                //Ok
-                for( auto& elem : obj->get_all() )
-                {
-                    if( obj->apply_font() )
-                    {
-                        dynamic_cast< sf::Text* >( elem.get() )->setFont( font );
-                    }
-                    render_window.draw( *elem );
-                }
-                obj->mutex.unlock();
-            }
+            render( objects.get< sf::Text >() );
+            render( objects.get< sf::VertexArray >() );
+
             render_window.display();
             //Unfortunately SFML works in a way that is possible to poll the events
             //only in the same thread which create the render window, and the render operation

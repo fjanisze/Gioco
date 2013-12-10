@@ -115,7 +115,7 @@ namespace game_map
         const map_field* field; //Relative field
         field_manager* manager; //Link to the manager for this field
         //Vertex
-        drawing_objects::drawable_object vertex;
+        drawing_objects::drawable_object< sf::VertexArray > vertex;
 	    //sf::VertexArray* vertex; //For the graphical rappresentation TODO
 
 	    field_graphics_t( const map_field* m_field, long& cur_x, long& cur_y , long size_x , long size_y );

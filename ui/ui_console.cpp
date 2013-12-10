@@ -22,10 +22,10 @@ namespace graphic_elements
     void ui_button_t::create( long x_pos, long y_pos, long width, long height )
     {
         LOG("ui_button_t::create(): New button : x_pos:",x_pos,",y_pos:",y_pos,",width:",width,",height:",height);
-        vertex.get< sf::VertexArray >()[0].position = sf::Vector2f( x_pos , y_pos );
-        vertex.get< sf::VertexArray >()[1].position = sf::Vector2f( x_pos + width , y_pos );
-        vertex.get< sf::VertexArray >()[2].position = sf::Vector2f( x_pos + width , y_pos + height );
-        vertex.get< sf::VertexArray >()[3].position = sf::Vector2f( x_pos , y_pos + height );
+        vertex.get()[0].position = sf::Vector2f( x_pos , y_pos );
+        vertex.get()[1].position = sf::Vector2f( x_pos + width , y_pos );
+        vertex.get()[2].position = sf::Vector2f( x_pos + width , y_pos + height );
+        vertex.get()[3].position = sf::Vector2f( x_pos , y_pos + height );
 
         drawing_objects::drawing_facility::get_instance()->add( &vertex );
     }
@@ -36,9 +36,9 @@ namespace graphic_elements
         vertex.lock();
         for( short i = 0 ; i < 4 ; i++ )
         {
-            vertex.get< sf::VertexArray >()[ i ].position += sf::Vector2f( x_axis , y_axis );
+            vertex.get()[ i ].position += sf::Vector2f( x_axis , y_axis );
         }
-        button_text.get< sf::Text >().setPosition( vertex.get< sf::VertexArray >()[ 0 ].position );
+        button_text.get().setPosition( vertex.get()[ 0 ].position );
         vertex.unlock();
         button_text.unlock();
     }
@@ -46,31 +46,31 @@ namespace graphic_elements
     void ui_button_t::set_text( const std::string& text )
     {
         button_text.lock();
-        button_text.get< sf::Text >().setPosition( vertex.get< sf::VertexArray >()[ 0 ].position );
-        button_text.get< sf::Text >().setString( text.c_str() );
-        button_text.get< sf::Text >().setCharacterSize( 12 );
+        button_text.get().setPosition( vertex.get()[ 0 ].position );
+        button_text.get().setString( text.c_str() );
+        button_text.get().setCharacterSize( 12 );
         button_text.unlock();
     }
 
-    sf::Text  ui_button_t::get_text()
+    sf::Text ui_button_t::get_text()
     {
-        return button_text.get< sf::Text >();
+        return button_text.get();
     }
 
     void ui_button_t::set_appearence( const sf::Color& color )
     {
         vertex.lock();
-        vertex.get< sf::VertexArray >()[0].color = color;
-        vertex.get< sf::VertexArray >()[1].color = color;
-        vertex.get< sf::VertexArray >()[2].color = color;
-        vertex.get< sf::VertexArray >()[3].color = color;
+        vertex.get()[0].color = color;
+        vertex.get()[1].color = color;
+        vertex.get()[2].color = color;
+        vertex.get()[3].color = color;
         vertex.unlock();
     }
 
     //Return true if the point is on this button
     bool ui_button_t::is_point_over_the_button( long x_pos , long y_pos )
     {
-        sf::VertexArray& vrtx = vertex.get< sf::VertexArray >();
+        sf::VertexArray& vrtx = vertex.get();
         if( ( x_pos >= vrtx[0].position.x ) && ( x_pos <= vrtx[1].position.x ) )
         {
             if( ( y_pos >= vrtx[0].position.y ) && ( y_pos <= vrtx[3].position.y ) )
@@ -146,17 +146,17 @@ namespace graphic_ui
         //set as quad
         background.update( new sf::VertexArray( sf::Quads , 4 ) );
         //Create the vertex position
-        background.get< sf::VertexArray >()[ 0 ].position = sf::Vector2f( x_off, y_off );
-        background.get< sf::VertexArray >()[ 1 ].position = sf::Vector2f( x_off + width , y_off );
-        background.get< sf::VertexArray >()[ 2 ].position = sf::Vector2f( x_off + width , y_off + height );
-        background.get< sf::VertexArray >()[ 3 ].position = sf::Vector2f( x_off , y_off + height );
+        background.get()[ 0 ].position = sf::Vector2f( x_off, y_off );
+        background.get()[ 1 ].position = sf::Vector2f( x_off + width , y_off );
+        background.get()[ 2 ].position = sf::Vector2f( x_off + width , y_off + height );
+        background.get()[ 3 ].position = sf::Vector2f( x_off , y_off + height );
         //Set a default color
         set_color( sf::Color( 10 , 30 , 150 ) );
         //Configure properly the text entity
         text.update( new sf::Text() , use_font::yes );
-        text.get< sf::Text >().setPosition( sf::Vector2f( x_off, y_off ) );
-        text.get< sf::Text >().setCharacterSize( 12 );
-        text.get< sf::Text >().setColor( sf::Color::White );
+        text.get().setPosition( sf::Vector2f( x_off, y_off ) );
+        text.get().setCharacterSize( 12 );
+        text.get().setColor( sf::Color::White );
 
         //drawing_objects::drawing_facility::get_instance()->add( &background );
         drawing_objects::drawing_facility::get_instance()->add( &text );
@@ -167,20 +167,20 @@ namespace graphic_ui
         background.lock();
         for( short i = 0 ; i < 4 ; i++  )
         {
-            background.get< sf::VertexArray >()[ i ].color = color;
+            background.get()[ i ].color = color;
         }
         background.unlock();
     }
 
     std::string console_wnd_t::get_text()
     {
-        return text.get< sf::Text >().getString();
+        return text.get().getString();
     }
 
     void console_wnd_t::set_text( const std::string& msg )
     {
         text.lock();
-        text.get< sf::Text >().setString( msg.c_str() );
+        text.get().setString( msg.c_str() );
         text.unlock();
     }
 

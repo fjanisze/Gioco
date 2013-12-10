@@ -30,9 +30,9 @@ namespace graphic_elements
     //Button entity, the user can click to trigger some action
     class ui_button_t
     {
-        drawing_objects::drawable_object vertex;
+        drawing_objects::drawable_object< sf::VertexArray > vertex;
         long reference_id;
-        drawing_objects::drawable_object button_text;
+        drawing_objects::drawable_object< sf::Text > button_text;
         long action_id; //A kind of code which can be used to identify which action need to be triggered.
     public:
         ui_button_t();
@@ -117,11 +117,11 @@ namespace graphic_ui
         long width,
             height;
         //Related vertex
-        drawing_objects::drawable_object background;
+        drawing_objects::drawable_object< sf::VertexArray > background;
         //Position of all the buttons
         std::vector< button_position_t > button_map;
         //Text visible on the console
-        drawing_objects::drawable_object text;
+        drawing_objects::drawable_object< sf::Text > text;
         std::map< long , std::shared_ptr< graphic_elements::ui_button_t > > buttons; //Button on the console
     public:
         //Constructor and utility

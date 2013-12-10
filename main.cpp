@@ -26,7 +26,8 @@ int main()
 
  // std::thread kill( killer );
 
-    drawable_object text_container, vertex_container;
+    drawable_object< sf::Text > text_container;
+    drawable_object< sf::VertexArray > vertex_container;
 
     drawing_facility draw;
     draw.start();
@@ -51,29 +52,29 @@ int main()
     vertex_container.update( data2 );
 
     //Update vertex position
-    vertex_container.get< sf::VertexArray >( 0 )[ 0 ].position = sf::Vector2f( 0 , 0 );
-    vertex_container.get< sf::VertexArray >( 0 )[ 1 ].position = sf::Vector2f( 100 , 0 );
-    vertex_container.get< sf::VertexArray >( 0 )[ 2 ].position = sf::Vector2f( 100 , 100 );
-    vertex_container.get< sf::VertexArray >( 0 )[ 3 ].position = sf::Vector2f( 0 , 100 );
-    vertex_container.get< sf::VertexArray >( 0 )[ 0 ].color = sf::Color::Cyan;
-    vertex_container.get< sf::VertexArray >( 0 )[ 1 ].color = sf::Color::Cyan;
-    vertex_container.get< sf::VertexArray >( 0 )[ 2 ].color = sf::Color::Cyan;
-    vertex_container.get< sf::VertexArray >( 0 )[ 3 ].color = sf::Color::Cyan;
+    vertex_container.get( 0 )[ 0 ].position = sf::Vector2f( 0 , 0 );
+    vertex_container.get( 0 )[ 1 ].position = sf::Vector2f( 100 , 0 );
+    vertex_container.get( 0 )[ 2 ].position = sf::Vector2f( 100 , 100 );
+    vertex_container.get( 0 )[ 3 ].position = sf::Vector2f( 0 , 100 );
+    vertex_container.get( 0 )[ 0 ].color = sf::Color::Cyan;
+    vertex_container.get( 0 )[ 1 ].color = sf::Color::Cyan;
+    vertex_container.get( 0 )[ 2 ].color = sf::Color::Cyan;
+    vertex_container.get( 0 )[ 3 ].color = sf::Color::Cyan;
 
-    vertex_container.get< sf::VertexArray >( 1 )[ 0 ].position = sf::Vector2f( 300 , 300 );
-    vertex_container.get< sf::VertexArray >( 1 )[ 1 ].position = sf::Vector2f( 400 , 300 );
-    vertex_container.get< sf::VertexArray >( 1 )[ 2 ].position = sf::Vector2f( 400 , 400 );
-    vertex_container.get< sf::VertexArray >( 1 )[ 3 ].position = sf::Vector2f( 300 , 400 );
-    vertex_container.get< sf::VertexArray >( 1 )[ 0 ].color = sf::Color::Cyan;
-    vertex_container.get< sf::VertexArray >( 1 )[ 1 ].color = sf::Color::Cyan;
-    vertex_container.get< sf::VertexArray >( 1 )[ 2 ].color = sf::Color::Cyan;
-    vertex_container.get< sf::VertexArray >( 1 )[ 3 ].color = sf::Color::Cyan;
+    vertex_container.get( 1 )[ 0 ].position = sf::Vector2f( 300 , 300 );
+    vertex_container.get( 1 )[ 1 ].position = sf::Vector2f( 400 , 300 );
+    vertex_container.get( 1 )[ 2 ].position = sf::Vector2f( 400 , 400 );
+    vertex_container.get( 1 )[ 3 ].position = sf::Vector2f( 300 , 400 );
+    vertex_container.get( 1 )[ 0 ].color = sf::Color::Cyan;
+    vertex_container.get( 1 )[ 1 ].color = sf::Color::Cyan;
+    vertex_container.get( 1 )[ 2 ].color = sf::Color::Cyan;
+    vertex_container.get( 1 )[ 3 ].color = sf::Color::Cyan;
 
-    text_container.get< sf::Text >( 0 ).setPosition( sf::Vector2f( 400, 400 ) );
-    text_container.get< sf::Text >( 0 ).setCharacterSize( 30 );
-    text_container.get< sf::Text >( 0 ).setColor( sf::Color::White );
-    text_container.get< sf::Text >( 0 ).setStyle( sf::Text::Regular );
-    text_container.get< sf::Text >( 0 ).setString("MERDAAA");
+    text_container.get( 0 ).setPosition( sf::Vector2f( 400, 400 ) );
+    text_container.get( 0 ).setCharacterSize( 30 );
+    text_container.get( 0 ).setColor( sf::Color::White );
+    text_container.get( 0 ).setStyle( sf::Text::Regular );
+    text_container.get( 0 ).setString("MERDAAA");
 
 
     draw.add( &vertex_container );
@@ -89,9 +90,9 @@ int main()
 	//Creating the game scenario
 	game_manager->create_test_scenario_1();
     game_manager->handle_game();
+*/
 
-
-    log_inst.terminate_logger();*/
+    log_inst.terminate_logger();
 //	delete game_manager::game_manager::get_instance();
 	return 0;
 }

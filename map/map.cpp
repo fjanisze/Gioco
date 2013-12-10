@@ -487,7 +487,7 @@ namespace game_map
     //Return true is the provided coordinate belong to this field
     bool field_graphics_t::is_within_the_field( long x, long y )
     {
-        sf::VertexArray& vrtx = vertex.get< sf::VertexArray >();
+        sf::VertexArray& vrtx = vertex.get();
         //Check the x coord
         if( x > vrtx[ 0 ].position.x && x <= vrtx[ 1 ].position.x )
         {
@@ -581,7 +581,7 @@ namespace game_map
 
 	void game_map::set_vertex_texture( field_graphics_t* field )
 	{
-	    sf::VertexArray& vrtx = field->vertex.get< sf::VertexArray >();
+	    sf::VertexArray& vrtx = field->vertex.get();
 	    //Different color/texture depending on the field type
 	    map_common::object_descriptor* obj = field->field->manager->get_visible_object();
 

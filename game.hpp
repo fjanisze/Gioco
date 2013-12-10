@@ -26,6 +26,7 @@
 #include <map>
 #include <locale>
 #include <atomic>
+#include "ui/draw.hpp"
 
 using namespace std;
 

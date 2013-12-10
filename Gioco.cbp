@@ -15,8 +15,8 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-DSFML_STATIC" />
-					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0" />
-					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/include" />
+					<Add directory="D:/SFML/SFML-2.1-windows-gcc-4.7-mingw-32bits/SFML-2.1" />
+					<Add directory="D:/SFML/SFML-2.1-windows-gcc-4.7-mingw-32bits/SFML-2.1/include" />
 					<Add directory="../gtest/gtest-1.6.0/gtest-1.6.0/fused-src/gtest" />
 				</Compiler>
 				<Linker>
@@ -24,8 +24,8 @@
 					<Add library="sfml-window" />
 					<Add library="sfml-system" />
 					<Add library="..\gtest\gtest-1.6.0\gtest-1.6.0\fused-src\gtest\libgtest.a" />
-					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/bin" />
-					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/lib" />
+					<Add directory="D:/SFML/SFML-2.1-windows-gcc-4.7-mingw-32bits/SFML-2.1/bin" />
+					<Add directory="D:/SFML/SFML-2.1-windows-gcc-4.7-mingw-32bits/SFML-2.1/lib" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -97,6 +97,8 @@
 		<Unit filename="regression/population.hpp" />
 		<Unit filename="regression/ui_console.cpp" />
 		<Unit filename="regression/ui_console.hpp" />
+		<Unit filename="ui/draw.cpp" />
+		<Unit filename="ui/draw.hpp" />
 		<Unit filename="ui/ui.cpp" />
 		<Unit filename="ui/ui.hpp" />
 		<Unit filename="ui/ui_city.cpp" />

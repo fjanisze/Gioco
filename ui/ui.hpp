@@ -12,6 +12,7 @@
 #include "ui_city.hpp"
 #include "ui_console.hpp"
 #include "ui_common.hpp"
+#include <thread>
 
 namespace graphic_ui
 {
@@ -28,11 +29,8 @@ namespace graphic_ui
         void load_and_set_font();
         game_window_config_t ui_config;
         bool is_the_window_running;
-        sf::RenderWindow window;
+        sf::RenderWindow* window;
         void handle_event( const sf::Event& event );
-        void screen_refresh();
-        void draw_gameplay_map();
-        void draw_current_city();
         void mouse_moving_event( const sf::Event& event );
         void mouse_press_event( const sf::Event& event );
         void game_map_mouse_move( const sf::Event& event );
@@ -41,10 +39,10 @@ namespace graphic_ui
     public:
         void set_view_to_citymap();
         void set_view_to_gamemap();
-        sf::RenderWindow& create_render_window();
         static game_ui* get_instance();
         city_ui_manager::city_ui* get_city_ui();
         void main_loop();
+        void quit();
         game_map::game_canvas_settings_t get_game_canvas_settings();
         game_ui();
         ~game_ui();

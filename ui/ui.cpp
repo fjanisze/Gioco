@@ -35,8 +35,6 @@ namespace graphic_ui
     {
         LOG("game_ui::game_ui(): Window width: " , ui_config.window_width, ", height: ", ui_config.window_height, ", full screen: ", ui_config.full_screen, ". Creating the window" );
         is_the_window_running = false;
-        //font
-		load_and_set_font();
 
         //Create the proper instance, check if this is the only one
         assert( instance == nullptr );
@@ -46,7 +44,7 @@ namespace graphic_ui
 		map->configure_game_canvas( ui_config.map_canvas_setting );
 
 		//Create the city_ui object
-		city_ui = new( std::nothrow ) city_ui_manager::city_ui( &window , ui_config.map_canvas_setting );
+		city_ui = new( std::nothrow ) city_ui_manager::city_ui( window , ui_config.map_canvas_setting );
 		assert( city_ui != nullptr );
 
 		//Set the console manager
@@ -69,56 +67,21 @@ namespace graphic_ui
     {
     }
 
-    //Set the proper font.
-    void game_ui::load_and_set_font()
-    {
-        std::lock_guard< std::mutex > lock( mutex );
-        ELOG("game_ui::load_and_set_font(): Loading font consola.ttf");
-        if( !ui_config.font.loadFromFile("consola.ttf") )
-        {
-            LOG_WARN("game_ui::load_and_set_font(): Unable to load the selected font consola.ttf");
-        }
-    }
-
-    //Configure and create the appropriate window
-    sf::RenderWindow& game_ui::create_render_window()
-    {
-        LOG("game_ui::create_render_window(): Creating the rendering window" );
-        //Create the resource
-        //Video mode:
-        sf::VideoMode video_mode;
-        video_mode.bitsPerPixel = 24;
-        video_mode.height = ui_config.window_height;
-        video_mode.width = ui_config.window_width;
-        //Context settings:
-        sf::ContextSettings context;
-        context.depthBits = 24;
-        context.stencilBits = 8;
-        context.minorVersion = 0;
-        context.majorVersion = 3;
-        context.antialiasingLevel = 4;
-        //Style
-        UINT32 style = sf::Style::Default;
-        //Full screen?
-        if( ui_config.full_screen )
-        {
-            style |= sf::Style::Fullscreen;
-        }
-
-        window.create( video_mode , "Economics" , style , context );
-        is_the_window_running = true;
-
-        return window;
-    }
-
     //Main loop handling the graphic interface
     void game_ui::main_loop()
     {
         LOG("game_ui::main_loop(): Entering..");
+  //      std::thread screen_refresh_thread{ &game_ui::screen_refresh, this }; TODO
+        //Map Menu
+        //show_map_main_menu();
+        is_the_window_running = true;
+        drawing_objects::drawing_facility* draw = drawing_objects::drawing_facility::get_instance();
+        //Event fetching loop
+        LOG("game_ui::main_loop(): Starting the loop");
         while( is_the_window_running )
         {
             sf::Event event;
-            while( window.pollEvent( event ))
+            while( draw->poll_event( event ) )
             {
                 //Different handle is called on the base of the type of view
                 switch( current_view )
@@ -139,11 +102,19 @@ namespace graphic_ui
                     break;
                 };
             }
-            screen_refresh();
+            //screen_refresh(); TODO
         }
+   //     screen_refresh_thread.join(); TODO
         //We are quitting, let's clean
         map->destroy_vertex_map();
         LOG("game_ui::main_loop(): Quitting..");
+    }
+
+    //The quit function terminate the game_ui object freeing all the used memory
+    void game_ui::quit()
+    {
+        LOG("game_ui::quit(): Quitting!!");
+        is_the_window_running = false;
     }
 
     //Handle the events from the window
@@ -276,25 +247,6 @@ namespace graphic_ui
         return false;
     }
 
-    //Redraw the graphic elements.
-    void game_ui::screen_refresh()
-    {
-        window.clear( sf::Color::Black );
-
-        if( current_view == type_of_view_t::game_map_view )
-        {
-            draw_gameplay_map();
-        }
-        else if( current_view == type_of_view_t::city_map_view )
-        {
-            draw_current_city();
-        }
-        draw_console( window );
-        //Draw the status info.
-        print_status_info();
-        window.display();
-    }
-
     void game_ui::print_status_info()
     {
         if( current_view == type_of_view_t::game_map_view )
@@ -307,22 +259,6 @@ namespace graphic_ui
         }
     }
 
-    //Draw the gameplay map
-    void game_ui::draw_gameplay_map()
-    {
-        game_map::field_graphic_vector_t* vertex = map->get_vertex_data();
-        for( auto &elem : *vertex )
-        {
-            window.draw( *elem->vertex );
-        }
-    }
-
-    //Draw the current city
-    void game_ui::draw_current_city()
-    {
-        current_city->get_city_map()->draw_the_map( window );
-        city_ui->draw_city_ui_elements();
-    }
 }
 
 

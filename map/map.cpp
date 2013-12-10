@@ -461,7 +461,7 @@ namespace game_map
 	////////////////////////////////////////////////////////////////////
 
 
-    field_graphics_t::field_graphics_t( const map_field* m_field )
+    field_graphics_t::field_graphics_t( const map_field* m_field , long& cur_x, long& cur_y , long size_x , long size_y  )
     {
         assert( m_field != nullptr );
         //ELOG("field_graphics_t::field_graphics_t(): Field ID: ", m_field->field_id );
@@ -469,26 +469,30 @@ namespace game_map
         manager = m_field->manager;
         descriptor = m_field->manager->get_visible_object();
         //Create and empty vertex
-        vertex = new(nothrow) sf::VertexArray( sf::Quads , 4 );
-        assert( vertex != nullptr );
+        sf::VertexArray* vrtx = new sf::VertexArray( sf::Quads , 4 );
+
+        //Set the position
+        (*vrtx)[0].position = sf::Vector2f( cur_x , cur_y );
+        (*vrtx)[1].position = sf::Vector2f( cur_x + size_x, cur_y );
+        (*vrtx)[2].position = sf::Vector2f( cur_x + size_x, cur_y + size_y );
+        (*vrtx)[3].position = sf::Vector2f( cur_x , cur_y + size_y );
+
+        vertex.update( vrtx );
     }
 
     field_graphics_t::~field_graphics_t()
     {
-        if( vertex )
-        {
-            delete vertex;
-        }
     }
 
     //Return true is the provided coordinate belong to this field
     bool field_graphics_t::is_within_the_field( long x, long y )
     {
+        sf::VertexArray& vrtx = vertex.get< sf::VertexArray >();
         //Check the x coord
-        if( x > (*vertex)[ 0 ].position.x && x <= (*vertex)[ 1 ].position.x )
+        if( x > vrtx[ 0 ].position.x && x <= vrtx[ 1 ].position.x )
         {
             //Check the y coord
-            if( y > (*vertex)[ 0 ].position.y && y <= (*vertex)[ 2 ].position.y )
+            if( y > vrtx[ 0 ].position.y && y <= vrtx[ 2 ].position.y )
             {
                 return true;
             }
@@ -539,12 +543,25 @@ namespace game_map
 
             for( auto& elem : map )
             {
-                field_graphics_t* field = new field_graphics_t( elem );
-                //Set the proper coordinate to the vertex quad.
-                set_proper_vertex_position( field->vertex , current_x_pos , current_y_pos , field_x_size , field_y_size );
+                field_graphics_t* field = new field_graphics_t( elem , current_x_pos , current_y_pos , field_x_size , field_y_size  );
+                //update the current position
+                current_x_pos += field_x_size;
+                //Moving down of one fow?
+                if( current_x_pos >= game_canvas->canvas_width )
+                {
+                    current_x_pos = 0;
+                    current_y_pos += field_y_size;
+                }
                 set_vertex_texture( field );
                 g_map.push_back( field );
                 ++amount_of_vertex;
+            }
+            LOG("game_map::create_vertex_map(): Adding " , g_map.size() , " drawable objects to the drawing factory");
+            //Adding all the drawable object to the drawing facility
+            drawing_objects::drawing_facility* draw = drawing_objects::drawing_facility::get_instance();
+            for( auto elem : g_map )
+            {
+                draw->add( &elem->vertex );
             }
 
         }catch( std::exception& xa )
@@ -560,50 +577,20 @@ namespace game_map
     void game_map::destroy_vertex_map()
     {
         LOG("game_map::destroy_vertex_map(): Cleaning.." );
-        for( auto& elem : g_map )
-        {
-            if( elem->vertex != nullptr )
-            {
-                delete elem->vertex;
-                elem->vertex = nullptr;
-            }
-        }
     }
-
-	//Set the proper position for the vertex, cur_x and cur_y will be modified
-	void game_map::set_proper_vertex_position( sf::VertexArray* vertex , long& cur_x, long& cur_y ,
-                                                                long size_x , long size_y )
-	{
-	    //ELOG("game_map::set_proper_vertex_position(): cur_x: ", cur_x , ", cur_y: ", cur_y, ", size_x: ",size_x , ", size_y: ",size_y);
-        long tmp_x = cur_x,
-            tmp_y = cur_y;
-        //Set the position
-        (*vertex)[0].position = sf::Vector2f( tmp_x , tmp_y );
-        (*vertex)[1].position = sf::Vector2f( tmp_x + size_x, tmp_y );
-        (*vertex)[2].position = sf::Vector2f( tmp_x + size_x, tmp_y + size_y );
-        (*vertex)[3].position = sf::Vector2f( tmp_x , tmp_y + size_y );
-        //update the current position
-        tmp_x += size_x;
-        //Moving down of one fow?
-	    if( tmp_x >= game_canvas->canvas_width )
-        {
-            tmp_x = 0;
-            tmp_y = cur_y + size_y;
-        }
-        cur_x = tmp_x;
-        cur_y = tmp_y;
-	}
 
 	void game_map::set_vertex_texture( field_graphics_t* field )
 	{
-	    sf::VertexArray& vertex = *field->vertex;
+	    sf::VertexArray& vrtx = field->vertex.get< sf::VertexArray >();
 	    //Different color/texture depending on the field type
 	    map_common::object_descriptor* obj = field->field->manager->get_visible_object();
 
+	    field->vertex.lock();
         for( short i = 0 ; i < 4 ; i ++  )
         {
-            vertex[ i ].color = obj->color;
+            vrtx[ i ].color = obj->color;
         }
+        field->vertex.unlock();
 	}
 
 	game_map::game_map()
@@ -617,11 +604,6 @@ namespace game_map
         {
             delete game_canvas;
         }
-	}
-
-	std::vector< field_graphics_t* >* game_map::get_vertex_data()
-	{
-	    return &g_map;
 	}
 
 	//Return the field object which belong to the provided coordinates

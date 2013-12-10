@@ -3,6 +3,7 @@
 
 #include "../mytypes.hpp"
 #include "map_common.hpp"
+#include "../ui/draw.hpp"
 #include <map>
 #include <vector>
 #include <string>
@@ -114,9 +115,10 @@ namespace game_map
         const map_field* field; //Relative field
         field_manager* manager; //Link to the manager for this field
         //Vertex
-	    sf::VertexArray* vertex; //For the graphical rappresentation
+        drawing_objects::drawable_object vertex;
+	    //sf::VertexArray* vertex; //For the graphical rappresentation TODO
 
-	    field_graphics_t( const map_field* m_field );
+	    field_graphics_t( const map_field* m_field, long& cur_x, long& cur_y , long size_x , long size_y );
 	    ~field_graphics_t();
 
 	    bool is_within_the_field( long x, long y);
@@ -129,13 +131,12 @@ namespace game_map
 	{
 	    static game_map* instance;
 	    game_canvas_settings_t* game_canvas;
-	    std::vector< field_graphics_t* > g_map; //g_ stand for graphic
+	    std::vector< field_graphics_t* > g_map;
     public:
         static game_map* get_instance();
         game_map();
         ~game_map();
         bool configure_game_canvas( const game_canvas_settings_t& conf );
-        void set_proper_vertex_position( sf::VertexArray* vertex , long& cur_x, long& cur_y , long size_x , long size_y );
         void set_vertex_texture( field_graphics_t* field );
         long create_vertex_map();
         void destroy_vertex_map();

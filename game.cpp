@@ -129,9 +129,12 @@ namespace game_manager
 	    LOG("game_manager::handle_game(): Starting");
 	    //Populate the map with all the vertex
 	    get_the_game_map()->create_vertex_map();
-	    game_ui->create_render_window();
+	    // game_ui->create_render_window(); TODO
+        drawing_objects::drawing_facility* draw = drawing_objects::drawing_facility::get_instance();
+        draw->start();
 	    game_ui->main_loop();
-	    LOG("game_manager::handle_game(): Out of the mail loop.");
+	    draw->terminate();
+	    LOG("game_manager::handle_game(): Out of the main loop.");
 	    stop();
 	}
 

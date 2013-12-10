@@ -46,6 +46,9 @@ namespace city_ui_manager
         switch( event.type )
         {
         case sf::Event::Closed:
+            {
+                ELOG("city_ui::handle_event(): User want to close the application.");
+            }
             return -1;
         case sf::Event::MouseMoved:
             //The mouse is moving over the game window.

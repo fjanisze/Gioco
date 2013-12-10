@@ -7,97 +7,73 @@
 namespace graphic_elements
 {
 
-    ui_button_t::ui_button_t() : vertex( sf::Quads , 4 ) , reference_id(-1)
+    ui_button_t::ui_button_t() : vertex( new sf::VertexArray( sf::Quads , 4 ) )
+                                ,button_text( new sf::Text() , use_font::no )
+                                ,reference_id(-1)
     {
-    }
 
-    ui_button_t::ui_button_t( ui_button_t&& other )
-    {
-        ELOG("ui_button_t::ui_button_t(): R-value constructor, source: ",other.get_id() );
-        vertex = std::move( other.vertex );
-        reference_id = other.reference_id;
-        action_id = other.action_id;
-        button_text = std::move( other.button_text );
-        other.vertex.clear();
-    }
-
-    ui_button_t& ui_button_t::operator=( const ui_button_t& other )
-    {
-        ELOG("ui_button_t::operator=(): From button_t with ID:",other.get_id());
-        vertex = other.vertex;
-        reference_id = other.reference_id;
-        action_id = other.action_id;
-        button_text = other.button_text;
-        return *this;
-    }
-
-    ui_button_t& ui_button_t::operator=( ui_button_t&& other )
-    {
-        ELOG("ui_button_t::operator=(): R-Value assignment, from button_t with ID:",other.get_id());
-        vertex = std::move( other.vertex );
-        reference_id = other.reference_id;
-        action_id = other.action_id;
-        button_text = std::move( other.button_text );
-        other.vertex.clear();
-        return *this;
     }
 
     ui_button_t::~ui_button_t()
     {
         LOG("ui_button_t::~ui_button_t(): Destroying");
-        vertex.clear();
     }
 
     void ui_button_t::create( long x_pos, long y_pos, long width, long height )
     {
         LOG("ui_button_t::create(): New button : x_pos:",x_pos,",y_pos:",y_pos,",width:",width,",height:",height);
-        vertex[0].position = sf::Vector2f( x_pos , y_pos );
-        vertex[1].position = sf::Vector2f( x_pos + width , y_pos );
-        vertex[2].position = sf::Vector2f( x_pos + width , y_pos + height );
-        vertex[3].position = sf::Vector2f( x_pos , y_pos + height );
+        vertex.get< sf::VertexArray >()[0].position = sf::Vector2f( x_pos , y_pos );
+        vertex.get< sf::VertexArray >()[1].position = sf::Vector2f( x_pos + width , y_pos );
+        vertex.get< sf::VertexArray >()[2].position = sf::Vector2f( x_pos + width , y_pos + height );
+        vertex.get< sf::VertexArray >()[3].position = sf::Vector2f( x_pos , y_pos + height );
+
+        drawing_objects::drawing_facility::get_instance()->add( &vertex );
     }
 
     void ui_button_t::set_offset( long x_axis, long y_axis )
     {
+        button_text.lock();
+        vertex.lock();
         for( short i = 0 ; i < 4 ; i++ )
         {
-            vertex[ i ].position += sf::Vector2f( x_axis , y_axis );
+            vertex.get< sf::VertexArray >()[ i ].position += sf::Vector2f( x_axis , y_axis );
         }
-        button_text.setPosition( vertex[ 0 ].position );
+        button_text.get< sf::Text >().setPosition( vertex.get< sf::VertexArray >()[ 0 ].position );
+        vertex.unlock();
+        button_text.unlock();
     }
 
-    void ui_button_t::set_text( const std::string& text , const sf::Font* font  )
+    void ui_button_t::set_text( const std::string& text )
     {
-        button_text.setPosition( vertex[ 0 ].position );
-        button_text.setFont( *font );
-        button_text.setString( text.c_str() );
-        button_text.setCharacterSize( 12 );
+        button_text.lock();
+        button_text.get< sf::Text >().setPosition( vertex.get< sf::VertexArray >()[ 0 ].position );
+        button_text.get< sf::Text >().setString( text.c_str() );
+        button_text.get< sf::Text >().setCharacterSize( 12 );
+        button_text.unlock();
     }
 
     sf::Text  ui_button_t::get_text()
     {
-        return button_text;
+        return button_text.get< sf::Text >();
     }
 
     void ui_button_t::set_appearence( const sf::Color& color )
     {
-        vertex[0].color = color;
-        vertex[1].color = color;
-        vertex[2].color = color;
-        vertex[3].color = color;
-    }
-
-    sf::VertexArray& ui_button_t::get_vertex()
-    {
-        return vertex;
+        vertex.lock();
+        vertex.get< sf::VertexArray >()[0].color = color;
+        vertex.get< sf::VertexArray >()[1].color = color;
+        vertex.get< sf::VertexArray >()[2].color = color;
+        vertex.get< sf::VertexArray >()[3].color = color;
+        vertex.unlock();
     }
 
     //Return true if the point is on this button
     bool ui_button_t::is_point_over_the_button( long x_pos , long y_pos )
     {
-        if( ( x_pos >= vertex[0].position.x ) && ( x_pos <= vertex[1].position.x ) )
+        sf::VertexArray& vrtx = vertex.get< sf::VertexArray >();
+        if( ( x_pos >= vrtx[0].position.x ) && ( x_pos <= vrtx[1].position.x ) )
         {
-            if( ( y_pos >= vertex[0].position.y ) && ( y_pos <= vertex[3].position.y ) )
+            if( ( y_pos >= vrtx[0].position.y ) && ( y_pos <= vrtx[3].position.y ) )
             {
                 return true;
             }
@@ -168,25 +144,44 @@ namespace graphic_ui
         width = wnd_width;
         height = wnd_height;
         //set as quad
-        background_vertex = sf::VertexArray( sf::Quads , 4 );
+        background.update( new sf::VertexArray( sf::Quads , 4 ) );
         //Create the vertex position
-        background_vertex[ 0 ].position = sf::Vector2f( x_off, y_off );
-        background_vertex[ 1 ].position = sf::Vector2f( x_off + width , y_off );
-        background_vertex[ 2 ].position = sf::Vector2f( x_off + width , y_off + height );
-        background_vertex[ 3 ].position = sf::Vector2f( x_off , y_off + height );
+        background.get< sf::VertexArray >()[ 0 ].position = sf::Vector2f( x_off, y_off );
+        background.get< sf::VertexArray >()[ 1 ].position = sf::Vector2f( x_off + width , y_off );
+        background.get< sf::VertexArray >()[ 2 ].position = sf::Vector2f( x_off + width , y_off + height );
+        background.get< sf::VertexArray >()[ 3 ].position = sf::Vector2f( x_off , y_off + height );
         //Set a default color
         set_color( sf::Color( 10 , 30 , 150 ) );
         //Configure properly the text entity
-        text.setPosition( background_vertex[ 0 ].position );
-        text.setCharacterSize( 12 );
+        text.update( new sf::Text() , use_font::yes );
+        text.get< sf::Text >().setPosition( sf::Vector2f( x_off, y_off ) );
+        text.get< sf::Text >().setCharacterSize( 12 );
+        text.get< sf::Text >().setColor( sf::Color::White );
+
+        //drawing_objects::drawing_facility::get_instance()->add( &background );
+        drawing_objects::drawing_facility::get_instance()->add( &text );
     }
 
     void console_wnd_t::set_color( sf::Color color )
     {
+        background.lock();
         for( short i = 0 ; i < 4 ; i++  )
         {
-            background_vertex[ i ].color = color;
+            background.get< sf::VertexArray >()[ i ].color = color;
         }
+        background.unlock();
+    }
+
+    std::string console_wnd_t::get_text()
+    {
+        return text.get< sf::Text >().getString();
+    }
+
+    void console_wnd_t::set_text( const std::string& msg )
+    {
+        text.lock();
+        text.get< sf::Text >().setString( msg.c_str() );
+        text.unlock();
     }
 
     //Return a console_point_t related with the specified point
@@ -204,36 +199,16 @@ namespace graphic_ui
                 //Check if the click happened over a button
                 for( auto& elem : buttons )
                 {
-                    if( elem.second.is_point_over_the_button( x, y ) )
+                    if( elem.second->is_point_over_the_button( x, y ) )
                     {
                         result.click_possible = true;
-                        result.button = &elem.second;
+                        result.button = elem.second;
                         break;
                     }
                 }
             }
         }
         return result;
-    }
-
-    void console_wnd_t::set_font( const sf::Font* fnt )
-    {
-        text.setFont( *fnt );
-    }
-
-    std::vector< sf::VertexArray >& console_wnd_t::get_vertex()
-    {
-        return vertex;
-    }
-
-    sf::VertexArray& console_wnd_t::get_background_vertex()
-    {
-        return background_vertex;
-    }
-
-    sf::Text& console_wnd_t::get_text()
-    {
-        return text;
     }
 
     //Get from the array all the position of the buttons
@@ -247,41 +222,23 @@ namespace graphic_ui
     }
 
     //The value 'index' is used to set the button position on the base of the button position map provided
-    int console_wnd_t::add_button( graphic_elements::ui_button_t&& button , short index )
+    int console_wnd_t::add_button( std::shared_ptr< graphic_elements::ui_button_t >& button , short index )
     {
-        std::string button_name = button.get_text().getString();
-        ELOG("console_wnd_t::add_button(): Adding button element, ID:",button.get_id() , ",name: ",button_name );
+        std::string button_name = button->get_text().getString();
+        ELOG("console_wnd_t::add_button(): Adding button element, ID:",button->get_id() , ",name: ",button_name );
         //If the button already exist, do not add
         for( auto& elem : buttons )
         {
-            if( elem.second.get_id() == button.get_id() )
+            if( elem.second->get_id() == button->get_id() )
             {
-                ELOG("console_wnd_t::add_button(): This button (",button.get_id(),") already exist, not adding");
+                ELOG("console_wnd_t::add_button(): This button (",button->get_id(),") already exist, not adding");
                 return -1; //Do not add this button, already exist.
             }
         }
         //Set the proper offset
-        button.set_offset( x_offset , y_offset );
+        button->set_offset( x_offset , y_offset );
         buttons[ index ] = std::move( button );
         return index;
-    }
-
-    void console_wnd_t::draw( sf::RenderWindow& window )
-    {
-        //Draw the vertex
-        window.draw( background_vertex );
-        for( auto& elem : vertex )
-        {
-            window.draw( elem );
-        }
-        //Draw the button text
-        for( auto& elem : buttons )
-        {
-            window.draw( elem.second.get_vertex() );
-            window.draw( elem.second.get_text() );
-        }
-        //Draw text
-        window.draw( text );
     }
 
     void console_wnd_t::remove_all_buttons()
@@ -323,27 +280,13 @@ namespace graphic_ui
         //Create the buttons for the main console.
         main_console.add_button_map( main_menu_button_position , 10 );
 
-        //Copy the font
-        font = &window_config.font;
-        status_console.set_font( font );
-        main_console.set_font( font );
-        info_console.set_font( font );
-
         return consoles;
-    }
-
-    //Draw the console in the proper context
-    void console_manager::draw_console( sf::RenderWindow& window )
-    {
-        status_console.draw( window );
-        info_console.draw( window );
-        main_console.draw( window);
     }
 
     //Write a message in the info console
     void console_manager::write_info( const std::string& msg )
     {
-        info_console.get_text().setString( msg );
+        info_console.set_text( msg );
     }
 
     //Used to update the status console
@@ -351,7 +294,7 @@ namespace graphic_ui
     {
         std::stringstream str;
         str << "View on: " << location;
-        status_console.get_text().setString( str.str() );
+        status_console.set_text( str.str() );
     }
 
     //The player just pushed the mouse button over a menu or status bar
@@ -364,7 +307,7 @@ namespace graphic_ui
         {
             if( point.click_possible )
             {
-                button_trigger_action( point.button );
+                button_trigger_action( point.button.get() );
             }
         }
     }
@@ -388,6 +331,10 @@ namespace graphic_ui
                 show_map_main_menu();
             }
             break;
+        case COMMON_QUIT_BUTTON: //The user want to quit the application
+            {
+
+            }
         default:
             {
                 //Check for non common buttons, like the button the construction.
@@ -436,13 +383,13 @@ namespace graphic_ui
             long button_id = BUILDING_BUTTON_ID_BEGIN; //From 1000 begins the ID for the consturction buttons.
             for( auto elem : (*constructions) )
             {
-                graphic_elements::ui_button_t button;
-                button.create( 0 , y_pos , 200 , 30 );
-                button.set_appearence( sf::Color::Black );
-                button.set_text( elem->get_name() , font );
-                button.set_id( button_id );
-                button.set_action_id( elem->get_obj_id() );
-                console.add_button( std::move( button ) , button_id );
+                std::shared_ptr< graphic_elements::ui_button_t > button( new graphic_elements::ui_button_t );
+                button->create( 0 , y_pos , 200 , 30 );
+                button->set_appearence( sf::Color::Black );
+                button->set_text( elem->get_name() );
+                button->set_id( button_id );
+                button->set_action_id( elem->get_obj_id() );
+                console.add_button( button , button_id );
                 ++button_id;
                 y_pos += 30;
                 ++amount_of_buttons;
@@ -460,19 +407,19 @@ namespace graphic_ui
     {
         ELOG("console_manager::add_city_common_btn(): Entering");
 
-        graphic_elements::ui_button_t build_button;
-        build_button.create( 0 , 0 , 100 , 60 );
-        build_button.set_appearence( sf::Color::Blue );
-        build_button.set_text( "Build" , font );
-        build_button.set_id( COMMON_BUILD_BUTTON );
-        console.add_button( std::move( build_button ) , COMMON_BUILD_BUTTON ); //Back button, ID: 0
+        std::shared_ptr< graphic_elements::ui_button_t > build_button( new graphic_elements::ui_button_t );
+        build_button->create( 0 , 0 , 100 , 60 );
+        build_button->set_appearence( sf::Color::Blue );
+        build_button->set_text( "Build" );
+        build_button->set_id( COMMON_BUILD_BUTTON );
+        console.add_button( build_button, COMMON_BUILD_BUTTON ); //Back button, ID: 0
 
-        graphic_elements::ui_button_t map_button;
-        map_button.create( 100 , 0 , 100 , 60 );
-        map_button.set_appearence( sf::Color::Blue );
-        map_button.set_text( "MAP" , font );
-        map_button.set_id( COMMON_MAP_BUTTON );
-        console.add_button( std::move( map_button ) , COMMON_MAP_BUTTON ); //MAP button, ID: 1
+        std::shared_ptr< graphic_elements::ui_button_t > map_button( new graphic_elements::ui_button_t );
+        map_button->create( 100 , 0 , 100 , 60 );
+        map_button->set_appearence( sf::Color::Blue );
+        map_button->set_text( "MAP" );
+        map_button->set_id( COMMON_MAP_BUTTON );
+        console.add_button( map_button , COMMON_MAP_BUTTON ); //MAP button, ID: 1
 
         return 60;
     }
@@ -480,7 +427,14 @@ namespace graphic_ui
     //Add to the main menu the common buttons which are visible in the game map view.
     long console_manager::add_map_common_btn( console_wnd_t& console )
     {
-        //No button in the map view now.
+        ELOG("console_manager::add_map_common_btn(): Entering");
+        std::shared_ptr< graphic_elements::ui_button_t > quit_button( new graphic_elements::ui_button_t );
+        quit_button->create( 0 , 0 , 100 , 60 );
+        quit_button->set_appearence( sf::Color::Blue );
+        quit_button->set_text( "Quit" );
+        quit_button->set_id( COMMON_QUIT_BUTTON );
+        console.add_button( quit_button , COMMON_QUIT_BUTTON );
+
         return 0;
     }
 
@@ -497,6 +451,7 @@ namespace graphic_ui
     {
         ELOG("console_manager::show_map_main_menu(): Entering..");
         main_console.remove_all_buttons();
+        add_map_common_btn( main_console );
     }
 }
 

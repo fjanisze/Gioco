@@ -15,16 +15,10 @@
 #ifndef DRAW_HPP
 #define DRAW_HPP
 
-typedef enum use_font {
-    yes,
-    no
-} use_font;
 
 namespace drawing_objects
 {
     class drawing_facility;
-
-    using drawable_obj_cnt = std::vector< std::unique_ptr< sf::Drawable > >;
 
     typedef enum draw_type {
         draw_text = 0,
@@ -43,20 +37,20 @@ namespace drawing_objects
         friend class drawing_facility;
         friend class drawable_object_factory;
         std::mutex mutex{};
+        std::atomic_flag render_init_done{ ATOMIC_FLAG_INIT };
     private:
         drawable_obj_cnt objects; //The drawable object container
-        bool use_font_when_rendering{ false };
         draw_type object_type;
     public:
         //static drawable_object* create( draw_type type , sf::Drawable* first_obj = nullptr );
         drawable_object();
-        drawable_object( OBJ_T* first_obj , use_font apply_font = use_font::no );
+        drawable_object( OBJ_T* first_obj );
         drawable_object( const drawable_object& other ) = delete;
         drawable_object& operator=( drawable_object&& other ) = delete;
         long clear();
         //update functions, replace the existing information with the new one
-        long update( std::vector< OBJ_T* >& new_obj , use_font apply_font = use_font::no );
-        long update( OBJ_T* new_obj , use_font apply_font = use_font::no );
+        long update( std::vector< OBJ_T* >& new_obj );
+        long update( OBJ_T* new_obj );
         //Append new objects
         long add( std::vector< OBJ_T* >& new_obj );
 
@@ -71,11 +65,8 @@ namespace drawing_objects
         }
         void unlock()
         {
+            glFlush(); //Force the context update
             mutex.unlock();
-        }
-        bool apply_font()
-        {
-            return use_font_when_rendering;
         }
     };
 
@@ -84,6 +75,7 @@ namespace drawing_objects
     OBJ_T& drawable_object< OBJ_T >::get() throw( std::range_error )
     {
         if( objects.empty() ) throw std::range_error("Objects is empty!");
+        render_init_done.clear();
         return *objects[ 0 ];
     }
 
@@ -91,12 +83,13 @@ namespace drawing_objects
     OBJ_T& drawable_object< OBJ_T >::get( int pos ) throw( std::range_error )
     {
         if( pos < 0 || pos > objects.size() ) throw std::range_error("Not valid index");
+        render_init_done.clear();
         return *objects[ pos ];
     }
 
     //Update the elements in the drawable object container
     template< typename OBJ_T >
-    long drawable_object< OBJ_T >::update( std::vector< OBJ_T* >& new_obj , use_font apply_font )
+    long drawable_object< OBJ_T >::update( std::vector< OBJ_T* >& new_obj )
     {
         std::lock_guard< std::mutex > lock( mutex );
         objects.clear();
@@ -107,18 +100,20 @@ namespace drawing_objects
         };
         //Copy the new elements
         std::for_each( std::begin( new_obj ) , std::end( new_obj ) , make_copy_and_push_back );
-        use_font_when_rendering = ( apply_font == use_font::yes );
+        render_init_done.clear();
+        glFlush();
         return objects.size();
     }
     template< typename OBJ_T >
-    long drawable_object< OBJ_T >::update( OBJ_T* new_obj, use_font apply_font )
+    long drawable_object< OBJ_T >::update( OBJ_T* new_obj )
     {
         std::lock_guard< std::mutex > lock( mutex );
         objects.clear();
         std::unique_ptr< OBJ_T > obj_cp( new_obj );
         //Copy the new elements
         objects.push_back( std::move( obj_cp ) );
-        use_font_when_rendering = ( apply_font == use_font::yes );
+        render_init_done.clear();
+        glFlush();
         return objects.size();
     }
 
@@ -133,6 +128,8 @@ namespace drawing_objects
             objects.push_back( std::move( obj_cp ) ); //push
         };
         std::for_each( std::begin( new_obj ) , std::end( new_obj ), make_copy_and_push_back );
+        render_init_done.clear();
+        glFlush();
         return objects.size();
     }
 
@@ -144,8 +141,7 @@ namespace drawing_objects
 
     //Create a drawable object with one element
     template< typename OBJ_T >
-    drawable_object< OBJ_T >::drawable_object( OBJ_T* first_obj , use_font apply_font ) :
-            use_font_when_rendering{ apply_font == use_font::yes }
+    drawable_object< OBJ_T >::drawable_object( OBJ_T* first_obj )
     {
         std::unique_ptr< OBJ_T > obj( first_obj );
         objects.push_back( std::move( obj ) );
@@ -158,6 +154,7 @@ namespace drawing_objects
         std::lock_guard< std::mutex > lock( mutex );
         long sz = objects.size();
         objects.clear();
+        render_init_done.clear();
         return sz;
     }
 
@@ -167,6 +164,15 @@ namespace drawing_objects
     {
         return objects;
     }
+
+    //Define the types for the container
+    template< typename T >
+    struct object_cnt
+    {
+        typedef std::shared_ptr< drawable_object< T > > ptr_to_obj;
+        typedef std::vector< ptr_to_obj > type;
+    };
+
 
     //drawable_object container, very basic implementation of a tuple
     template< typename T >
@@ -179,7 +185,7 @@ namespace drawing_objects
     {
     public:
         template< typename OBJ >
-        std::vector< std::shared_ptr< drawable_object< OBJ > > >& get()
+        typename object_cnt< OBJ >::type& get()
         {
             return dynamic_cast< box< drawable_object< OBJ > >* >( this )->obj;
         }
@@ -189,7 +195,7 @@ namespace drawing_objects
     class drawing_facility
     {
         static drawing_facility* instance;
-        std::mutex write_mutex{};
+        std::mutex render_mutex{};
         //std::vector< drawable_object* > objects;
         drawable_obj_container< sf::Text , sf::VertexArray > objects;
         std::atomic_flag event_queue_guard{ ATOMIC_FLAG_INIT };
@@ -203,8 +209,11 @@ namespace drawing_objects
         std::unique_ptr< std::thread > rendering_thread;
         void rendering_loop();
         sf::RenderWindow& create_render_window( graphic_ui::game_window_config_t& ui_config );
+    public:
+        void init_object( object_cnt< sf::Text >::ptr_to_obj obj );
+        void init_object( object_cnt< sf::VertexArray >::ptr_to_obj obj );
         template< typename T >
-        long render( std::vector< std::shared_ptr< drawable_object< T > > >& elements );
+        long render( typename object_cnt< T >::type& elements, draw_type type );
     public:
         static drawing_facility* get_instance();
         drawing_facility();
@@ -222,14 +231,15 @@ namespace drawing_objects
     long drawing_facility::add( drawable_object< OBJ_T >* obj_ptr )
     {
         ELOG("drawing_facility::add(): Adding a new object.");
-        std::lock_guard< std::mutex > lock( write_mutex );
+        std::lock_guard< std::mutex > lock( render_mutex );
         objects.get< OBJ_T >().push_back( std::shared_ptr< drawable_object< OBJ_T > >( obj_ptr ) );
         return objects.get< OBJ_T >().size();
     }
 
+
     //Perform the rendering
     template< typename T >
-    long drawing_facility::render( std::vector< std::shared_ptr< drawable_object< T > > >& elements )
+    long drawing_facility::render( typename object_cnt< T >::type& elements, draw_type type )
     {
         for( auto obj : elements )
         {
@@ -238,9 +248,15 @@ namespace drawing_objects
             {
                 continue; //Just skip the not usable items -locked-
             }
+            //Any computation needed?
+            if( !obj->render_init_done.test_and_set( std::memory_order::memory_order_acquire ) )
+            {
+                init_object( obj );
+            }
             //Ok
             for( auto& elem : obj->get_all() )
             {
+                //Draw the object
                 render_window.draw( *elem );
             }
             obj->mutex.unlock();

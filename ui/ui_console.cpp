@@ -8,7 +8,7 @@ namespace graphic_elements
 {
 
     ui_button_t::ui_button_t() : vertex( new sf::VertexArray( sf::Quads , 4 ) )
-                                ,button_text( new sf::Text() , use_font::no )
+                                ,button_text( new sf::Text() )
                                 ,reference_id(-1)
     {
 
@@ -153,12 +153,12 @@ namespace graphic_ui
         //Set a default color
         set_color( sf::Color( 10 , 30 , 150 ) );
         //Configure properly the text entity
-        text.update( new sf::Text() , use_font::yes );
+        text.update( new sf::Text() );
         text.get().setPosition( sf::Vector2f( x_off, y_off ) );
         text.get().setCharacterSize( 12 );
         text.get().setColor( sf::Color::White );
 
-        //drawing_objects::drawing_facility::get_instance()->add( &background );
+        drawing_objects::drawing_facility::get_instance()->add( &background );
         drawing_objects::drawing_facility::get_instance()->add( &text );
     }
 

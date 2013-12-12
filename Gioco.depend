@@ -1160,7 +1160,7 @@
 1384347270 source:d:\programmi\gioco\logging\logger.cpp
 	"logger.hpp"
 
-1386680094 source:d:\programmi\gioco\main.cpp
+1386848934 source:d:\programmi\gioco\main.cpp
 	"config.hpp"
 	"logging/logger.hpp"
 	"game.hpp"
@@ -1168,6 +1168,7 @@
 	"ui/ui.hpp"
 	"map/city_map.hpp"
 	"ui/draw.hpp"
+	<SFML/Graphics.hpp>
 
 1384436986 d:\programmi\gioco\config.hpp
 
@@ -1282,11 +1283,11 @@
 	"../buildings.hpp"
 	"../game.hpp"
 
-1386679771 source:d:\programmi\gioco\ui\ui_console.cpp
+1386849202 source:d:\programmi\gioco\ui\ui_console.cpp
 	"ui_console.hpp"
 	"../game.hpp"
 
-1386680569 d:\programmi\gioco\ui\draw.hpp
+1386849063 d:\programmi\gioco\ui\draw.hpp
 	"../logging/logger.hpp"
 	"ui_common.hpp"
 	<SFML/OpenGL.hpp>
@@ -1301,6 +1302,7 @@
 	<map>
 	<iostream>
 
-1386680530 source:d:\programmi\gioco\ui\draw.cpp
+1386836361 source:d:\programmi\gioco\ui\draw.cpp
 	"draw.hpp"
+	<GL/Gl.h>
 

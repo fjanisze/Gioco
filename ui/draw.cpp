@@ -2,27 +2,11 @@
 #define LOGGING_LEVEL_2
 
 #include "draw.hpp"
+#include <GL/Gl.h>
 
 namespace drawing_objects
 {
-    //Create one of the possible objects
- /*   drawable_object* drawable_object_trait::create( draw_type type , sf::Drawable* first_obj  )
-    try{
-        drawable_object* object = new drawable_object;
-        object->object_type = type;
-        if( first_obj != nullptr )
-        {
-            //update( first_obj );
-        }
-        return object;
-    }catch( std::bad_alloc& xa )
-    {
-        LOG_ERR("drawable_object_trait::create(): Unable to allocate the memory for the required object..");
-        return nullptr;
-    }*/
-
-
-    drawing_facility::drawing_facility() : continue_looping{ false } , draw_fps{ 30 },
+    drawing_facility::drawing_facility() : continue_looping{ false } , draw_fps{ 35 },
                         is_render_window_ready{ false }
     {
         LOG("drawing_facility::drawing_facility(): Creating the object.");
@@ -81,10 +65,13 @@ namespace drawing_objects
         while( continue_looping )
         {
             //No adding operation allowed during the loop
-            std::lock_guard< std::mutex > lock( write_mutex );
+            std::lock_guard< std::mutex > lock( render_mutex );
+            //Clear the screen
+            render_window.clear( sf::Color::Black );
+
             //To through all the objects
-            render( objects.get< sf::Text >() );
-            render( objects.get< sf::VertexArray >() );
+            render< sf::VertexArray >( objects.get< sf::VertexArray >(), draw_type::draw_vertex );
+            render< sf::Text >( objects.get< sf::Text >(), draw_type::draw_text );
 
             render_window.display();
             //Unfortunately SFML works in a way that is possible to poll the events
@@ -104,6 +91,21 @@ namespace drawing_objects
             std::this_thread::sleep_for( std::chrono::milliseconds{ 1000 / draw_fps } );
         }
         LOG("drawing_facility::rendering_loop(): Quitting.");
+    }
+
+    //Those functions are responsible for specific procedures which cannot be handled
+    //in the common to all 'render' function
+    void drawing_facility::init_object( object_cnt< sf::Text >::ptr_to_obj obj )
+    {
+        //Set the font
+        for( auto& elem : obj->get_all() )
+        {
+            elem->setFont( font );
+        }
+    }
+    void drawing_facility::init_object( object_cnt< sf::VertexArray >::ptr_to_obj obj )
+    {
+        //Actually do nothing
     }
 
     drawing_facility* drawing_facility::instance = nullptr;

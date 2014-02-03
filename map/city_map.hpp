@@ -5,6 +5,7 @@
 #include "../logging/logger.hpp"
 #include "map_common.hpp"
 #include "../mytypes.hpp"
+#include "../ui/draw.hpp"
 #include <string>
 #include <cassert>
 #include <SFML/Graphics.hpp>
@@ -34,7 +35,7 @@ namespace citymap_field_container
     struct field_graphic_info
     {
         //Graphic information for the field
-        std::vector< sf::VertexArray* > vertex;
+        drawing_objects::drawable_object< sf::VertexArray > vertex;
         //Texture for this field
         sf::Texture* texture;
 
@@ -105,10 +106,10 @@ namespace citymap
 	class citymap_graphic_t
 	{
         std::mutex mutex;
-	    //Copy of the game map
 	    citymap_container* map;
-	    //Vertex information
-	    std::vector< sf::VertexArray* > vertex;
+	    drawing_objects::drawing_facility* draw;
+	    //ID of the context for the city
+	    int city_graphic_context_id;
 	    sf::VertexArray* create_single_vertex( node_t* node );
      protected:
 	    //Information needed for the field creation
@@ -120,11 +121,10 @@ namespace citymap
     public:
         citymap_container* set_citymap_container( citymap_container* city_map );
         void set_game_canvas_settings( game_map::game_canvas_settings_t canvas_setting );
-        long create_vertex_map();
-        void clear_all_vertex();
-        void draw_the_map( sf::RenderWindow& window );
+        long create_vertex_map( const std::string& city_name );
         long get_field_width() { return field_width; }
         long get_field_height() { return field_height; }
+        int get_graphic_context_id();
 	};
 
 
@@ -132,6 +132,7 @@ namespace citymap
 	class citymap_t : public citymap_graphic_t
 	{
 	    citymap_field_container::citymap_container map;
+        std::string city_name;
     private:
 	    long next_field_id;
 	    citymap_info_t city_info;
@@ -139,7 +140,7 @@ namespace citymap
 	    citymap_field_t* create_citymap_field( field_type_t type );
         bool fill_empty_map();
 	public:
-	    citymap_t( int map_size , game_map::game_canvas_settings_t game_canvas  );
+	    citymap_t( int map_size , game_map::game_canvas_settings_t game_canvas , const std::string& name );
 	    citymap_field_t* get_field_at_pos( long x , long y );
 	    citymap_field_t* get_field( long field_id );
 	    ~citymap_t();

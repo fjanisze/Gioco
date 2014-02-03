@@ -12,11 +12,11 @@
  */
 namespace city_ui_manager
 {
-    enum city_ui_input_mode_t
+    typedef enum city_ui_input_mode_t
     {
         view_mode, //This is the standard view, when the player just move around the map or menu
         building_mode //The user has clicked one build button and is willing to build something.
-    };
+    } city_ui_input_mode_t;
 
     //Information on the field where the user want to build a construction
     struct build_trigger_info_t
@@ -33,20 +33,19 @@ namespace city_ui_manager
         void update_focus_box( long x_pos , long y_pos );
         long field_width,
             field_height;
-        sf::RenderWindow* window;
         game_map::game_canvas_settings_t game_canvas;
         city_ui_input_mode_t input_mode;
         build_trigger_info_t build_info;
         bool handle_new_construction( long x_pos , long y_pos );
     public:
-        city_ui( sf::RenderWindow* rnd_window , game_map::game_canvas_settings_t game_canvas_setting );
+        city_ui( game_map::game_canvas_settings_t game_canvas_setting );
         ~city_ui();
         void set_cityagent( cities::city_agent* agent );
         void set_console_manager( graphic_ui::console_manager* console );
         long handle_event( const sf::Event& event );
         void city_map_mouse_move( const sf::Event& event );
-        void draw_city_ui_elements();
-        void enter_city_menu();
+        void enter_city();
+        void quit_city();
         bool mouse_press_event( const sf::Event& event );
         bool is_over_the_game_map( long x_pos , long y_pos );
         void handle_build_btn_click( long action_id );

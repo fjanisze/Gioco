@@ -44,7 +44,7 @@ namespace graphic_ui
 		map->configure_game_canvas( ui_config.map_canvas_setting );
 
 		//Create the city_ui object
-		city_ui = new( std::nothrow ) city_ui_manager::city_ui( window , ui_config.map_canvas_setting );
+		city_ui = new( std::nothrow ) city_ui_manager::city_ui( ui_config.map_canvas_setting );
 		assert( city_ui != nullptr );
 
 		//Set the console manager
@@ -71,17 +71,16 @@ namespace graphic_ui
     void game_ui::main_loop()
     {
         LOG("game_ui::main_loop(): Entering..");
-  //      std::thread screen_refresh_thread{ &game_ui::screen_refresh, this }; TODO
         //Map Menu
         //show_map_main_menu();
         is_the_window_running = true;
-        drawing_objects::drawing_facility* draw = drawing_objects::drawing_facility::get_instance();
+        draw_facility = drawing_objects::drawing_facility::get_instance();
         //Event fetching loop
         LOG("game_ui::main_loop(): Starting the loop");
         while( is_the_window_running )
         {
             sf::Event event;
-            while( draw->poll_event( event ) )
+            while( draw_facility->poll_event( event ) )
             {
                 //Different handle is called on the base of the type of view
                 switch( current_view )
@@ -94,6 +93,7 @@ namespace graphic_ui
                     if( city_ui->handle_event( event ) != 0 )
                     {
                         is_the_window_running = false; //Close the window
+                        draw_facility->terminate();
                     }
                     break;
                 default:
@@ -102,9 +102,7 @@ namespace graphic_ui
                     break;
                 };
             }
-            //screen_refresh(); TODO
         }
-   //     screen_refresh_thread.join(); TODO
         //We are quitting, let's clean
         map->destroy_vertex_map();
         LOG("game_ui::main_loop(): Quitting..");
@@ -161,7 +159,6 @@ namespace graphic_ui
                 current_city = agent;
                 city_ui->set_cityagent( agent );
                 set_view_to_citymap();
-                city_ui->enter_city_menu();
             }
             else
             {
@@ -180,6 +177,10 @@ namespace graphic_ui
     {
         ELOG("game_ui::set_view_to_citymap(): Set the citymap view");
         current_view = type_of_view_t::city_map_view;
+        //Disable the main map context
+        map->hide_map();
+        //Enable the city view
+        city_ui->enter_city();
     }
 
     //Set the current view to the game map -entering the map-

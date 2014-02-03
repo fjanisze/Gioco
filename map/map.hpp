@@ -27,10 +27,10 @@ namespace game_objects
 
 	//Some standard objects
 	static const object_descriptor base_land = { 1, "Land" , "Piece of land, nothing more", 100, 'X' , sf::Color::White };
-	static const object_descriptor terrain_grass = { 2, "Grass", "Fresh grass", 200, '.' , sf::Color( 150 , 250 , 120 ) };
-	static const object_descriptor terrain_forest = { 3, "Forest", "A lot of tree", 600 , 'F' , sf::Color( 34 , 90 , 28 ) };
+	static const object_descriptor terrain_grass = { 2, "Grass", "Fresh grass", 200, '.' , sf::Color( 15 , 25 , 12 ) };
+	static const object_descriptor terrain_forest = { 3, "Forest", "A lot of tree", 600 , 'F' , sf::Color( 3 , 30 , 5 ) };
 	static const object_descriptor terrain_dummy = { 4, "DUMMY", "A dummy terrain", 0 , '?' , sf::Color::Black };
-	static const object_descriptor terrain_city = { 5, "City", "In this field a city was deployed", 0 , 'C' , sf::Color( 190 , 0 , 10 ) }; //The value of those fields depend on the items present in the city
+	static const object_descriptor terrain_city = { 5, "City", "In this field a city was deployed", 0 , 'C' , sf::Color( 50 , 0 , 10 ) }; //The value of those fields depend on the items present in the city
 	//Some specific objects
 
 	bool is_a_terrain_object(const object_descriptor& obj);
@@ -131,7 +131,9 @@ namespace game_map
 	{
 	    static game_map* instance;
 	    game_canvas_settings_t* game_canvas;
+	    int game_map_context_id;
 	    std::vector< field_graphics_t* > g_map;
+	    drawing_objects::drawing_facility* draw;
     public:
         static game_map* get_instance();
         game_map();
@@ -142,6 +144,8 @@ namespace game_map
         void destroy_vertex_map();
         std::vector< field_graphics_t* >* get_vertex_data();
         field_graphics_t* get_field_at_pos( long x , long y );
+        void hide_map();
+        void show_map();
 	};
 
 	//field_manager is responsible to managing the objects that lead on a field

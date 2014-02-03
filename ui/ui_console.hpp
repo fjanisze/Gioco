@@ -30,6 +30,7 @@ namespace graphic_elements
     //Button entity, the user can click to trigger some action
     class ui_button_t
     {
+        int button_context_id;
         drawing_objects::drawable_object< sf::VertexArray > vertex;
         long reference_id;
         drawing_objects::drawable_object< sf::Text > button_text;
@@ -116,6 +117,7 @@ namespace graphic_ui
         //Size
         long width,
             height;
+        int console_graphic_context_id;
         //Related vertex
         drawing_objects::drawable_object< sf::VertexArray > background;
         //Position of all the buttons
@@ -127,7 +129,7 @@ namespace graphic_ui
         //Constructor and utility
         console_wnd_t( long x_off , long y_off , long wnd_width, long wnd_height );
         console_wnd_t();
-        void create( long x_off , long y_off , long wnd_width, long wnd_height );
+        int create( long x_off , long y_off , long wnd_width, long wnd_height );
         void set_color( sf::Color color );
         std::string get_text();
         void set_text( const std::string& msg );
@@ -135,6 +137,7 @@ namespace graphic_ui
         void add_button_map( const button_position_t* map , short amount_of_buttons );
         int add_button( std::shared_ptr< graphic_elements::ui_button_t >& button , short index );
         void remove_all_buttons();
+        int get_render_contex_id();
     };
 
     //This object is reponsible for the console management

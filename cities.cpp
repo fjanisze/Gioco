@@ -41,7 +41,7 @@ namespace cities
         city_info_t* new_city = new(std::nothrow) city_info_t( city_id , name );
         assert( new_city != nullptr );
         //Going ahead with the resource creation
-        new_city->citymap = new(std::nothrow) citymap_t( size, map_canvas_setting );
+        new_city->citymap = new(std::nothrow) citymap_t( size, map_canvas_setting , name );
         assert( new_city->citymap != nullptr );
         //Add to the container
         city_container.push_back( new_city );
@@ -136,6 +136,8 @@ namespace cities
 
     citymap_t* city_agent::get_city_map()
     {
+        assert( city != nullptr );
+        assert( city->citymap != nullptr );
         return city->citymap;
     }
 }

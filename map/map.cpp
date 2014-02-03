@@ -561,7 +561,7 @@ namespace game_map
             drawing_objects::drawing_facility* draw = drawing_objects::drawing_facility::get_instance();
             for( auto elem : g_map )
             {
-                draw->add( &elem->vertex );
+                draw->add( &elem->vertex , game_map_context_id );
             }
 
         }catch( std::exception& xa )
@@ -595,7 +595,26 @@ namespace game_map
 
 	game_map::game_map()
 	{
+	    LOG("game_map::game_map(): Creating the object");
+	    //Get the ID for the main game map
+	    draw = drawing_objects::drawing_facility::get_instance();
+	    game_map_context_id = draw->create_render_context( "Game Map" );
+	    draw->enable_context( game_map_context_id );
 	    game_canvas = nullptr;
+	}
+
+	//Hide the map by disabling the drawing context
+	void game_map::hide_map()
+	{
+	    LOG("game_map::hide_map(): Disabling the map graphic context");
+	    draw->disable_context( game_map_context_id );
+	}
+
+	//Show the map context
+	void game_map::show_map()
+	{
+	    LOG("game_map::show_map(): Enabling the map graphic context");
+	    draw->enable_context( game_map_context_id );
 	}
 
 	game_map::~game_map()

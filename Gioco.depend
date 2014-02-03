@@ -686,7 +686,7 @@
 	<chrono>
 	<list>
 
-1382440091 d:\programmi\gioco\map\map_common.hpp
+1386936950 d:\programmi\gioco\map\map_common.hpp
 	<string>
 	<SFML/Graphics.hpp>
 	"../mytypes.hpp"
@@ -1030,7 +1030,7 @@
 	"mytypes.hpp"
 	<string>
 
-1382073632 source:d:\programmi\gioco\cities.cpp
+1386936950 source:d:\programmi\gioco\cities.cpp
 	"cities.hpp"
 
 1381995336 d:\programmi\gioco\cities.hpp
@@ -1040,10 +1040,11 @@
 	"map/map_common.hpp"
 	"map/city_map.hpp"
 
-1382082838 d:\programmi\gioco\map\city_map.hpp
+1386937047 d:\programmi\gioco\map\city_map.hpp
 	"../logging/logger.hpp"
 	"map_common.hpp"
 	"../mytypes.hpp"
+	"../ui/draw.hpp"
 	<string>
 	<cassert>
 	<SFML/Graphics.hpp>
@@ -1090,7 +1091,7 @@
 	<cassert>
 	<map>
 
-1386679292 d:\programmi\gioco\map\map.hpp
+1390546260 d:\programmi\gioco\map\map.hpp
 	"../mytypes.hpp"
 	"map_common.hpp"
 	"../ui/draw.hpp"
@@ -1103,7 +1104,7 @@
 	<cassert>
 	<mutex>
 
-1386247756 d:\programmi\gioco\ui\ui.hpp
+1386934377 d:\programmi\gioco\ui\ui.hpp
 	"../logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
@@ -1112,6 +1113,7 @@
 	<iostream>
 	"../map/map.hpp"
 	"../map/city_map.hpp"
+	"draw.hpp"
 	"ui_city.hpp"
 	"ui_console.hpp"
 	"ui_common.hpp"
@@ -1127,14 +1129,14 @@
 	<OpenGL/gl.h>
 	<OpenGL/glu.h>
 
-1384424764 d:\programmi\gioco\ui\ui_city.hpp
+1386936813 d:\programmi\gioco\ui\ui_city.hpp
 	"../logging/logger.hpp"
 	"../map/map_common.hpp"
 	"ui_console.hpp"
 	"../map/city_map.hpp"
 	<cassert>
 
-1386679292 d:\programmi\gioco\ui\ui_console.hpp
+1386932805 d:\programmi\gioco\ui\ui_console.hpp
 	"../logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
@@ -1160,7 +1162,7 @@
 1384347270 source:d:\programmi\gioco\logging\logger.cpp
 	"logger.hpp"
 
-1386848934 source:d:\programmi\gioco\main.cpp
+1386849279 source:d:\programmi\gioco\main.cpp
 	"config.hpp"
 	"logging/logger.hpp"
 	"game.hpp"
@@ -1168,14 +1170,13 @@
 	"ui/ui.hpp"
 	"map/city_map.hpp"
 	"ui/draw.hpp"
-	<SFML/Graphics.hpp>
 
 1384436986 d:\programmi\gioco\config.hpp
 
-1385546206 source:d:\programmi\gioco\map\city_map.cpp
+1386942602 source:d:\programmi\gioco\map\city_map.cpp
 	"city_map.hpp"
 
-1386679617 source:d:\programmi\gioco\map\map.cpp
+1386934934 source:d:\programmi\gioco\map\map.cpp
 	"../logging/logger.hpp"
 	"map.hpp"
 
@@ -1275,19 +1276,19 @@
 	"gtest.h"
 	"..\ui\ui_console.hpp"
 
-1386330219 source:d:\programmi\gioco\ui\ui.cpp
+1386942812 source:d:\programmi\gioco\ui\ui.cpp
 	"ui.hpp"
 
-1385555107 source:d:\programmi\gioco\ui\ui_city.cpp
+1386936813 source:d:\programmi\gioco\ui\ui_city.cpp
 	"ui_city.hpp"
 	"../buildings.hpp"
 	"../game.hpp"
 
-1386849202 source:d:\programmi\gioco\ui\ui_console.cpp
+1386932986 source:d:\programmi\gioco\ui\ui_console.cpp
 	"ui_console.hpp"
 	"../game.hpp"
 
-1386849063 d:\programmi\gioco\ui\draw.hpp
+1386942740 d:\programmi\gioco\ui\draw.hpp
 	"../logging/logger.hpp"
 	"ui_common.hpp"
 	<SFML/OpenGL.hpp>
@@ -1301,8 +1302,9 @@
 	<chrono>
 	<map>
 	<iostream>
+	<list>
 
-1386836361 source:d:\programmi\gioco\ui\draw.cpp
+1390546470 source:d:\programmi\gioco\ui\draw.cpp
 	"draw.hpp"
 	<GL/Gl.h>
 

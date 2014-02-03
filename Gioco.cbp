@@ -64,6 +64,7 @@
 			<Add library="sfml-window" />
 			<Add library="sfml-system" />
 			<Add library="..\gtest\gtest-1.6.0\gtest-1.6.0\fused-src\gtest\libgtest.a" />
+			<Add library="C:\Program Files\mingw-builds\x64-4.8.1-posix-seh-rev5\mingw64\x86_64-w64-mingw32\lib\libopengl32.a" />
 			<Add directory="../SFML/SFML-2.0-windows-gcc-4.7-tdm-64bits/SFML-2.0/bin" />
 			<Add directory="../SFML/SFML-2.0-windows-gcc-4.7-tdm-64bits/SFML-2.0/lib" />
 		</Linker>

@@ -8,12 +8,11 @@
 namespace city_ui_manager
 {
     //Constructor
-    city_ui::city_ui( sf::RenderWindow* rnd_window , game_map::game_canvas_settings_t game_canvas_setting )
+    city_ui::city_ui( game_map::game_canvas_settings_t game_canvas_setting )
     {
         LOG("city_ui::city_ui(): Creating the city_ui object");
         focus_box = new(std::nothrow) sf::VertexArray( sf::LinesStrip , 5 );
         assert( focus_box != nullptr );
-        window = rnd_window;
         LOG("city_ui::city_ui(): canvas: X size:",game_canvas_setting.canvas_width,",Y size: ",game_canvas_setting.canvas_height,",X offset: ",game_canvas_setting.canvas_x_offset,", Y offset: ",game_canvas_setting.canvas_y_offset);
         game_canvas = game_canvas_setting;
         input_mode = city_ui_input_mode_t::view_mode;
@@ -194,20 +193,22 @@ namespace city_ui_manager
         }
     }
 
-    //Draw other elements like the focus box ecc
-    void city_ui::draw_city_ui_elements()
+    //When the user enter the city menu
+    void city_ui::enter_city()
     {
-        if( focus_box )
-        {
-            window->draw( *focus_box );
-        }
+        LOG("city_ui::enter_city(): Entering.");
+        ui_console->show_city_main_menu();
+        //Enable the graphic context for the city
+        int graphic_context_id = city_agent->get_city_map()->get_graphic_context_id();
+        drawing_objects::drawing_facility::get_instance()->enable_context( graphic_context_id );
     }
 
-    //When the user enter the city menu
-    void city_ui::enter_city_menu()
+    //When the user is leaving the city UI
+    void city_ui::quit_city()
     {
-        ELOG("city_ui::enter_city_menu(): Entering.");
-        ui_console->show_city_main_menu();
+        LOG("city_ui::quit_city(): Quitting.");
+        int graphic_context_id = city_agent->get_city_map()->get_graphic_context_id();
+        drawing_objects::drawing_facility::get_instance()->disable_context( graphic_context_id );
     }
 
     //This function is called when the user click on a button related with a building that may be built (from the menu)

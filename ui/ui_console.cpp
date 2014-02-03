@@ -11,7 +11,7 @@ namespace graphic_elements
                                 ,button_text( new sf::Text() )
                                 ,reference_id(-1)
     {
-
+        button_context_id = drawing_objects::drawing_facility::get_instance()->create_render_context( "UI Button");
     }
 
     ui_button_t::~ui_button_t()
@@ -27,7 +27,7 @@ namespace graphic_elements
         vertex.get()[2].position = sf::Vector2f( x_pos + width , y_pos + height );
         vertex.get()[3].position = sf::Vector2f( x_pos , y_pos + height );
 
-        drawing_objects::drawing_facility::get_instance()->add( &vertex );
+        drawing_objects::drawing_facility::get_instance()->add( &vertex , button_context_id );
     }
 
     void ui_button_t::set_offset( long x_axis, long y_axis )
@@ -136,7 +136,8 @@ namespace graphic_ui
     {
     }
 
-    void console_wnd_t::create( long x_off , long y_off , long wnd_width, long wnd_height )
+    //Return the graphic context for this console
+    int console_wnd_t::create( long x_off , long y_off , long wnd_width, long wnd_height )
     {
         LOG("console_wnd_t::create(): Creating a new console object: ",x_off,",",y_off,",",wnd_width,",",wnd_height);
         x_offset = x_off;
@@ -158,8 +159,11 @@ namespace graphic_ui
         text.get().setCharacterSize( 12 );
         text.get().setColor( sf::Color::White );
 
-        drawing_objects::drawing_facility::get_instance()->add( &background );
-        drawing_objects::drawing_facility::get_instance()->add( &text );
+        //Make it visible to the graphic engine.
+        console_graphic_context_id = drawing_objects::drawing_facility::get_instance()->create_render_context( "Console" );
+        drawing_objects::drawing_facility::get_instance()->add( &background , console_graphic_context_id );
+        drawing_objects::drawing_facility::get_instance()->add( &text , console_graphic_context_id );
+        return console_graphic_context_id;
     }
 
     void console_wnd_t::set_color( sf::Color color )
@@ -251,6 +255,11 @@ namespace graphic_ui
         ELOG("console_wnd_t::remove_all_buttons(): Done");
     }
 
+    int console_wnd_t::get_render_contex_id()
+    {
+        return console_graphic_context_id;
+    }
+
     console_manager::console_manager( )
     {
     }
@@ -279,6 +288,12 @@ namespace graphic_ui
 
         //Create the buttons for the main console.
         main_console.add_button_map( main_menu_button_position , 10 );
+
+        //Enable the consoles context
+        drawing_objects::drawing_facility* draw = drawing_objects::drawing_facility::get_instance();
+        draw->enable_context( status_console.get_render_contex_id() );
+        draw->enable_context( main_console.get_render_contex_id() );
+        draw->enable_context( info_console.get_render_contex_id() );
 
         return consoles;
     }

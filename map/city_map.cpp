@@ -262,7 +262,7 @@ namespace citymap
     //
     ////////////////////////////////////////////////////////////////////
 
-    citymap_t::citymap_t( int map_size , game_map::game_canvas_settings_t canvas_setting ) : next_field_id( 1 )
+    citymap_t::citymap_t( int map_size , game_map::game_canvas_settings_t canvas_setting , const std::string& name ) : next_field_id{ 1 } , city_name{ name }
     {
         LOG("citymap_t::citymap_t(): Creating a new citymap container ");
         assert( map_size > 0 );
@@ -280,14 +280,13 @@ namespace citymap
             set_citymap_container( &map  );
             set_game_canvas_settings( canvas_setting );
             //Create the map
-            create_vertex_map();
+            create_vertex_map( name );
         }
     }
 
     citymap_t::~citymap_t()
     {
         map.clear_all_the_field();
-        clear_all_vertex();
     }
 
     long citymap_t::get_next_id()
@@ -436,10 +435,13 @@ namespace citymap
     }
 
      //Create the vertex map for all the city
-     long citymap_graphic_t::create_vertex_map( )
+     long citymap_graphic_t::create_vertex_map( const std::string& city_name )
      {
          LOG("citymap_graphic_t::create_vertex_map(): Size of the map: ", map->get_size() );
          std::lock_guard< std::mutex > lock( mutex );
+         //First create the context id for the map
+         draw = drawing_objects::drawing_facility::get_instance();
+         city_graphic_context_id = draw->create_render_context( city_name );
          long amount_of_vertex = 0;
          if( !map->empty() )
          {
@@ -462,12 +464,19 @@ namespace citymap
                      break;
                  }
                  //Add the vertex
-                 node->graphic_info.vertex.push_back( node_vertex );
+                 node->graphic_info.vertex.update( node_vertex );
+                 draw->add( &node->graphic_info.vertex , city_graphic_context_id );
                  ++map_iter;
                  ++amount_of_vertex;
              }
          }
          return amount_of_vertex;
+     }
+
+     //Return the graphic context ID for the city
+     int citymap_graphic_t::get_graphic_context_id()
+     {
+         return city_graphic_context_id;
      }
 
      //Create a single vertex for the provided node
@@ -508,50 +517,10 @@ namespace citymap
          return ver;
      }
 
-     //Clear the vertex deleting them
-     void citymap_graphic_t::clear_all_vertex()
-     {
-         std::lock_guard< std::mutex > lock( mutex );
-         LOG("citymap_graphic_t::clear_all_vertex(): Amount of vertex ", vertex.size() );
-         citymap_container::iterator map_iter = map->begin() , map_end = map->end();
-         while( map_iter != map_end )
-         {
-             if( !(*map_iter)->graphic_info.vertex.empty() )
-             {
-                 for( auto elem : (*map_iter)->graphic_info.vertex )
-                 {
-                     delete elem;
-                 }
-                 (*map_iter)->graphic_info.vertex.clear();
-             }
-             ++map_iter;
-         }
-     }
-
-    //Use the renderwindow object to draw on the canvas the city map
-    void citymap_graphic_t::draw_the_map( sf::RenderWindow& window )
-    {
-        citymap_container::iterator begin = map->begin() , end = map->end();
-        for( ; begin != end ; begin++ )
-        {
-            //draw the vertex
-            for( auto* vertex : (*begin)->graphic_info.vertex )
-            {
-                window.draw( *vertex );
-            }
-        }
-    }
-
     //Set the color of a field (when no texture are used )
     void citymap_graphic_t::set_field_color( field_graphic_info* field_graphic, sf::Color new_color )
     {
-        for( auto* vertex_array : field_graphic->vertex )
-        {
-            for( short i = 0 ; i < 4 ; i++ )
-            {
-                (*vertex_array)[ i ].color = new_color;
-            }
-        }
+        LOG_ERR("citymap_graphic_t::set_field_color(): NOT IMPLEMENTED");
     }
 }
 

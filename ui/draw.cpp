@@ -6,6 +6,33 @@
 
 namespace drawing_objects
 {
+    int drawing_context::next_context_id = 0;
+
+    //Return a unique ID for the context
+    int drawing_context::get_next_unique_id()
+    {
+        long cnt = 10;
+        while( context_id_guard.test_and_set( std::memory_order::memory_order_acquire ) )
+        {
+            std::this_thread::sleep_for( std::chrono::microseconds{ 5 } );
+            --cnt;
+            if( cnt == 0 )
+            {
+                LOG_ERR("drawing_context::get_next_unique_id(): Unable to get a new unique ID, deadlock?..");
+                return -1;
+            }
+        }
+        int result = ++next_context_id;
+        context_id_guard.clear();
+        return result;
+    }
+
+    drawing_context::drawing_context()
+    {
+        context_id = get_next_unique_id();
+        assert( context_id > 0 ); // :(
+    }
+
     drawing_facility::drawing_facility() : continue_looping{ false } , draw_fps{ 35 },
                         is_render_window_ready{ false }
     {
@@ -69,9 +96,15 @@ namespace drawing_objects
             //Clear the screen
             render_window.clear( sf::Color::Black );
 
-            //To through all the objects
-            render< sf::VertexArray >( objects.get< sf::VertexArray >(), draw_type::draw_vertex );
-            render< sf::Text >( objects.get< sf::Text >(), draw_type::draw_text );
+            //To through all the objects in all the context
+            for( auto& elem : objects )
+            {
+                if( elem.second->state == context_state::enabled )
+                {
+                    render< sf::VertexArray >( elem.second->objects.get< sf::VertexArray >() );
+                    render< sf::Text >( elem.second->objects.get< sf::Text >() );
+                }
+            }
 
             render_window.display();
             //Unfortunately SFML works in a way that is possible to poll the events
@@ -158,11 +191,37 @@ namespace drawing_objects
             style |= sf::Style::Fullscreen;
         }
 
-        render_window.create( video_mode , "Economics" , style , context );
+        render_window.create( video_mode , "Test" , style , context );
         continue_looping = true;
         //Ok, the render window can be used
         is_render_window_ready.store( true, std::memory_order::memory_order_acquire );
 
         return render_window;
+    }
+
+    //This render facility draw just the active rendering context
+    int drawing_facility::create_render_context( const std::string& name )
+    try{
+        drawing_context* new_context = new drawing_context();
+        new_context->name = name; //The name is optional
+        objects[ new_context->context_id ] = std::unique_ptr< drawing_context >(new_context);
+        LOG("drawing_facility::create_render_context(): New context ready, ID:",new_context->context_id,", name: ",name );
+        return new_context->context_id;
+    }catch( std::bad_alloc& xa )
+    {
+        LOG_ERR("drawing_facility::create_render_context(): Allocation failure..");
+        return -1;
+    }
+
+    //Activate or deactivate a drawing context
+    bool drawing_facility::enable_context( int num )
+    {
+        ELOG("drawing_facility::enable_contex(): Enabling ID:",num);
+        objects[ num ]->state = context_state::enabled;
+    }
+    bool drawing_facility::disable_context( int num )
+    {
+        ELOG("drawing_facility::disable_context(): Disabling ID:",num);
+        objects[ num ]->state = context_state::disabled;
     }
 }

@@ -9,6 +9,7 @@
 #include <iostream>
 #include "../map/map.hpp"
 #include "../map/city_map.hpp"
+#include "draw.hpp"
 #include "ui_city.hpp"
 #include "ui_console.hpp"
 #include "ui_common.hpp"
@@ -23,6 +24,7 @@ namespace graphic_ui
         game_map::game_map* map;
         cities::city_agent* current_city;
         city_ui_manager::city_ui* city_ui;
+        drawing_objects::drawing_facility* draw_facility;
     public:
         bool is_over_the_game_map( long x_pos , long y_pos );
     private:

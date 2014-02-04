@@ -107,15 +107,80 @@ namespace graphic_ui
     ////////////////////////////////////////////////////////////////////
 	//
 	//
-	//	Implementation for console_wnd_state
+	//	Implementation for console_wnd_state and console_wnd_state_handler
 	//
 	//
 	////////////////////////////////////////////////////////////////////
 
-    console_wnd_state::console_wnd_state( long origin_console_id )
+    long console_wnd_state::next_console_state_id = 0;
+
+    long console_wnd_state::get_next_state_id()
     {
-        LOG("console_wnd_state::console_wnd_state(): Creating new console state for the console ID", origin_console_id );
+        return next_console_state_id++;
+    }
+
+    console_wnd_state::console_wnd_state( long id )
+    {
+        draw = drawing_objects::drawing_facility::get_instance();
+        origin_console_id = id;
+        console_state_id = get_next_state_id();
+        state_graphic_context = draw->create_render_context("Console State");
+        LOG("console_wnd_state::console_wnd_state(): Creating new console state for the console ID:", id
+                                                            ,", Graphic console ID:",state_graphic_context );
+    }
+
+    int console_wnd_state::add_visible_button( std::shared_ptr< graphic_elements::ui_button_t > button )
+    {
+        visible_buttons.push_back( button );
+        return visible_buttons.size();
+    }
+
+    void console_wnd_state::state_enter()
+    {
+        ELOG("console_wnd_state::state_enter(): Entering state ID:",console_state_id,", Graphic context ID:",state_graphic_context);
+        draw->enable_context( state_graphic_context );
+    }
+
+    void console_wnd_state::state_leave()
+    {
+        ELOG("console_wnd_state::state_enter(): Leaving state ID:",console_state_id,", Graphic context ID:",state_graphic_context);
+        draw->disable_context( state_graphic_context );
+    }
+
+    console_wnd_state_handler::console_wnd_state_handler( long origin_console_id )
+    {
+        LOG("console_wnd_state_handler::console_wnd_state_handler(): Creating the state container for the console ID:",origin_console_id);
+        all_possible_state[ available_state_ids::map_view_default ] = state_pointer( new console_wnd_state( origin_console_id ) );
+        all_possible_state[ available_state_ids::city_view_default ] = state_pointer( new console_wnd_state( origin_console_id ) );
+        all_possible_state[ available_state_ids::city_view_build_default ] = state_pointer( new console_wnd_state( origin_console_id ) );
         console_id = origin_console_id;
+        LOG("console_wnd_state_handler::console_wnd_state_handler(): Amount of states:",all_possible_state.size() );
+    }
+
+    state_pointer console_wnd_state_handler::get_current_state()
+    {
+        return current_state;
+    }
+
+    //Set the current state, or the default -0- state.
+    state_pointer console_wnd_state_handler::set_current_state( available_state_ids state_id )
+    {
+        LOG("console_wnd_state_handler::set_current_state(): ID:",console_id," : Setting the state: ", state_id );
+        //Check if the state exist
+        if( all_possible_state.find( state_id ) != all_possible_state.end() )
+        {
+            //Quit the current state
+            current_state->state_leave();
+            //Set and enter the new one
+            current_state = all_possible_state[ state_id ];
+            current_state->state_enter();
+        }
+        else
+        {
+            LOG_ERR("console_wnd_state_handler::set_current_state(): ID:",console_id,": Failed to set the state ID:",state_id);
+            throw std::runtime_error("console_wnd_state_handler::set_current_state(): ID:",console_id,": Unable to set the requested state");
+        }
+        return current_state;
     }
 
     ////////////////////////////////////////////////////////////////////
@@ -147,15 +212,23 @@ namespace graphic_ui
         return next_console_wnd_id++;
     }
 
-    console_wnd_t::console_wnd_t( long x_off , long y_off , long wnd_width, long wnd_height )
+    void console_wnd_t::init()
     {
         console_wnd_id = get_next_id();
+        console_state.reset( new console_wnd_state_handler( console_wnd_id ) );
+        //Set the default console state
+        console_state->set_current_state( available_state_ids::map_view_default );
+    }
+
+    console_wnd_t::console_wnd_t( long x_off , long y_off , long wnd_width, long wnd_height )
+    {
+        init();
         create( x_off, y_off , wnd_width , wnd_height );
     }
 
     console_wnd_t::console_wnd_t()
     {
-        console_wnd_id = get_next_id();
+        init();
     }
 
     //Return the graphic context for this console
@@ -185,6 +258,7 @@ namespace graphic_ui
         console_graphic_context_id = drawing_objects::drawing_facility::get_instance()->create_render_context( "Console" );
         drawing_objects::drawing_facility::get_instance()->add( &background , console_graphic_context_id );
         drawing_objects::drawing_facility::get_instance()->add( &text , console_graphic_context_id );
+
         return console_graphic_context_id;
     }
 
@@ -243,18 +317,7 @@ namespace graphic_ui
         return result;
     }
 
-    //Get from the array all the position of the buttons
-    void console_wnd_t::add_button_map( const button_position_t* map , short amount_of_buttons )
-    {
-        ELOG("console_wnd_t::add_button_map(): Num of buttons:",amount_of_buttons,",map addr:",map);
-        for( short i = 0 ; i < amount_of_buttons ; i++ )
-        {
-            button_map.push_back( map[i] );
-        }
-    }
-
-    //The value 'index' is used to set the button position on the base of the button position map provided
-    int console_wnd_t::add_button( std::shared_ptr< graphic_elements::ui_button_t >& button , short index )
+    int console_wnd_t::add_button( std::shared_ptr< graphic_elements::ui_button_t >& button , short id )
     {
         std::string button_name = button->get_text().getString();
         ELOG("console_wnd_t::add_button(): Adding button element, ID:",button->get_id() , ",name: ",button_name );
@@ -269,8 +332,8 @@ namespace graphic_ui
         }
         //Set the proper offset
         button->set_offset( x_offset , y_offset );
-        buttons[ index ] = std::move( button );
-        return index;
+        buttons[ id ] = std::move( button );
+        return buttons.size();
     }
 
     void console_wnd_t::remove_all_buttons()
@@ -316,9 +379,6 @@ namespace graphic_ui
         info_console.set_color( sf::Color( 10 , 20 , 30 ) );
         info_console.set_name("Info Console");
         consoles.push_back( &info_console );
-
-        //Create the buttons for the main console.
-        main_console.add_button_map( main_menu_button_position , 10 );
 
         //Enable the consoles context
         drawing_objects::drawing_facility* draw = drawing_objects::drawing_facility::get_instance();

@@ -109,14 +109,42 @@ namespace graphic_ui
         }
     };
 
+    //Available states
+    typedef enum available_state_ids {
+        map_view_default = 0,
+        city_view_default,
+        city_view_build_default,
+    } available_state_ids;
+
     //What is visible on the console?
     class console_wnd_state
     {
+        static long next_console_state_id;
+        long get_next_state_id();
+        long console_state_id;
         int state_graphic_context;
-        std::vector< long > visible_buttons;
-        long console_id;
+        std::vector< std::shared_ptr< graphic_elements::ui_button_t > > visible_buttons;
+        long origin_console_id;
+        drawing_objects::drawing_facility* draw;
     public:
         console_wnd_state( long origin_console_id );
+        int add_visible_button( std::shared_ptr< graphic_elements::ui_button_t > button );
+        //Enter and leave the state
+        void state_enter();
+        void state_leave();
+    };
+
+    typedef std::shared_ptr< console_wnd_state > state_pointer;
+    //Handle the console window states
+    class console_wnd_state_handler
+    {
+        state_pointer current_state;
+        std::map< long , state_pointer > all_possible_state;
+        long console_id;
+    public:
+        console_wnd_state_handler( long origin_console_id );
+        state_pointer get_current_state();
+        state_pointer set_current_state( available_state_ids state_id );
     };
 
     //Console Window information
@@ -136,11 +164,11 @@ namespace graphic_ui
         int console_graphic_context_id;
         //Related vertex
         drawing_objects::drawable_object< sf::VertexArray > background;
-        //Position of all the buttons
-        std::vector< button_position_t > button_map;
         //Text visible on the console
         drawing_objects::drawable_object< sf::Text > text;
         std::map< long , std::shared_ptr< graphic_elements::ui_button_t > > buttons; //Button on the console
+        std::shared_ptr< console_wnd_state_handler > console_state;
+        void init();
     public:
         //Constructor and utility
         console_wnd_t( long x_off , long y_off , long wnd_width, long wnd_height );
@@ -151,8 +179,7 @@ namespace graphic_ui
         std::string get_text();
         void set_text( const std::string& msg );
         console_point_t over_the_console( long x , long y);
-        void add_button_map( const button_position_t* map , short amount_of_buttons );
-        int add_button( std::shared_ptr< graphic_elements::ui_button_t >& button , short index );
+        int add_button( std::shared_ptr< graphic_elements::ui_button_t >& button , short id );
         void remove_all_buttons();
         int get_render_contex_id();
     };

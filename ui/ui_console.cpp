@@ -104,6 +104,19 @@ namespace graphic_elements
 
 namespace graphic_ui
 {
+    ////////////////////////////////////////////////////////////////////
+	//
+	//
+	//	Implementation for console_wnd_state
+	//
+	//
+	////////////////////////////////////////////////////////////////////
+
+    console_wnd_state::console_wnd_state( long origin_console_id )
+    {
+        LOG("console_wnd_state::console_wnd_state(): Creating new console state for the console ID", origin_console_id );
+        console_id = origin_console_id;
+    }
 
     ////////////////////////////////////////////////////////////////////
 	//
@@ -127,13 +140,22 @@ namespace graphic_ui
         map_canvas_setting.canvas_height = 600;
     }
 
+    long console_wnd_t::next_console_wnd_id = 0;
+
+    long console_wnd_t::get_next_id()
+    {
+        return next_console_wnd_id++;
+    }
+
     console_wnd_t::console_wnd_t( long x_off , long y_off , long wnd_width, long wnd_height )
     {
-       create( x_off, y_off , wnd_width , wnd_height );
+        console_wnd_id = get_next_id();
+        create( x_off, y_off , wnd_width , wnd_height );
     }
 
     console_wnd_t::console_wnd_t()
     {
+        console_wnd_id = get_next_id();
     }
 
     //Return the graphic context for this console
@@ -174,6 +196,12 @@ namespace graphic_ui
             background.get()[ i ].color = color;
         }
         background.unlock();
+    }
+
+    void console_wnd_t::set_name( const std::string& name )
+    {
+        console_name = name;
+        ELOG("console_wnd_t::set_name(): Console ID:",console_wnd_id," was named: ",name );
     }
 
     std::string console_wnd_t::get_text()
@@ -235,7 +263,7 @@ namespace graphic_ui
         {
             if( elem.second->get_id() == button->get_id() )
             {
-                ELOG("console_wnd_t::add_button(): This button (",button->get_id(),") already exist, not adding");
+                ELOG_WARN("console_wnd_t::add_button(): This button (",button->get_id(),") already exist, not adding");
                 return -1; //Do not add this button, already exist.
             }
         }
@@ -276,14 +304,17 @@ namespace graphic_ui
         //Main console
         main_console.create( window_config.map_canvas_setting.canvas_width , status_console_height , 200 , 600 );
         main_console.set_color( sf::Color( 20 , 30 , 40 ) );
+        main_console.set_name("Main Console");
         consoles.push_back( &main_console );
         //Status console
         status_console.create( 0 , 0 , window_config.window_width , status_console_height );
         status_console.set_color( sf::Color( 255 , 100 , 20 ) );
+        status_console.set_name("Status Console");
         consoles.push_back( &status_console );
         //Info Console
         info_console.create( 0 , window_config.map_canvas_setting.canvas_height + status_console_height , window_config.window_width , 30 );
         info_console.set_color( sf::Color( 10 , 20 , 30 ) );
+        info_console.set_name("Info Console");
         consoles.push_back( &info_console );
 
         //Create the buttons for the main console.

@@ -3,12 +3,12 @@
 #include "log.hpp"
 
 namespace logging
-{		
+{
 
 	void file_log_policy::open_ostream(const std::string& name)
 	{
 		out_stream->open( name.c_str(), std::ios_base::binary|std::ios_base::out );
-		assert( out_stream->is_open() == true ); 
+		assert( out_stream->is_open() == true );
 		out_stream->precision( 20 );
 	}
 

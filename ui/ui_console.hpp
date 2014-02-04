@@ -108,9 +108,25 @@ namespace graphic_ui
         {
         }
     };
+
+    //What is visible on the console?
+    class console_wnd_state
+    {
+        int state_graphic_context;
+        std::vector< long > visible_buttons;
+        long console_id;
+    public:
+        console_wnd_state( long origin_console_id );
+    };
+
     //Console Window information
     class console_wnd_t
     {
+        //Unique ID for the console
+        static long next_console_wnd_id;
+        long get_next_id();
+        long console_wnd_id;
+        std::string console_name;
         //Those values specify where the top left corner of the console is places
         long x_offset,
             y_offset;
@@ -131,6 +147,7 @@ namespace graphic_ui
         console_wnd_t();
         int create( long x_off , long y_off , long wnd_width, long wnd_height );
         void set_color( sf::Color color );
+        void set_name( const std::string& name );
         std::string get_text();
         void set_text( const std::string& msg );
         console_point_t over_the_console( long x , long y);

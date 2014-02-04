@@ -1136,7 +1136,7 @@
 	"../map/city_map.hpp"
 	<cassert>
 
-1386932805 d:\programmi\gioco\ui\ui_console.hpp
+1391510003 d:\programmi\gioco\ui\ui_console.hpp
 	"../logging/logger.hpp"
 	<SFML/OpenGL.hpp>
 	<SFML/Graphics.hpp>
@@ -1154,7 +1154,7 @@
 1381993652 d:\programmi\gioco\ui\ui_common.hpp
 	"../map/map_common.hpp"
 
-1384368042 source:d:\programmi\gioco\logging\log.cpp
+1391507930 source:d:\programmi\gioco\logging\log.cpp
 	"log.hpp"
 	<cassert>
 	"log.hpp"
@@ -1279,7 +1279,7 @@
 1386942812 source:d:\programmi\gioco\ui\ui.cpp
 	"ui.hpp"
 
-1386936813 source:d:\programmi\gioco\ui\ui_city.cpp
+1391504229 source:d:\programmi\gioco\ui\ui_city.cpp
 	"ui_city.hpp"
 	"../buildings.hpp"
 	"../game.hpp"

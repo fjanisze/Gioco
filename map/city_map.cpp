@@ -504,7 +504,7 @@ namespace citymap
          {
          case field_type_t::grass_field:
             //Set it green
-            field_color = sf::Color::Green;
+            field_color = sf::Color( 25 , 35 , 22 );
             break;
          default:
             break;

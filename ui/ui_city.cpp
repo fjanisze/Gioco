@@ -11,17 +11,20 @@ namespace city_ui_manager
     city_ui::city_ui( game_map::game_canvas_settings_t game_canvas_setting )
     {
         LOG("city_ui::city_ui(): Creating the city_ui object");
-        focus_box = new(std::nothrow) sf::VertexArray( sf::LinesStrip , 5 );
-        assert( focus_box != nullptr );
         LOG("city_ui::city_ui(): canvas: X size:",game_canvas_setting.canvas_width,",Y size: ",game_canvas_setting.canvas_height,",X offset: ",game_canvas_setting.canvas_x_offset,", Y offset: ",game_canvas_setting.canvas_y_offset);
         game_canvas = game_canvas_setting;
         input_mode = city_ui_input_mode_t::view_mode;
+        //Create the focus box
+        sf::VertexArray* vertex = new(std::nothrow) sf::VertexArray( sf::LinesStrip , 5 );
+        assert( vertex != nullptr );
+        focus_box.update( vertex );
+        focus_box.set_render_state( drawing_objects::draw_obj_render_state::render );
     }
 
     //Destructor
     city_ui::~city_ui()
     {
-        delete focus_box;
+        LOG("city_ui::~city_ui(): Destroying the city_ui object.");
     }
 
     //Before using the city_ui the proper city agent need to be provided
@@ -31,6 +34,9 @@ namespace city_ui_manager
         city_agent = agent;
         field_width = city_agent->get_city_info()->citymap->get_field_width();
         field_height = city_agent->get_city_info()->citymap->get_field_height();
+        //Add the focus box to the graphic context for the city
+        int city_graphic_contex_it = city_agent->get_city_map()->get_graphic_context_id();
+        drawing_objects::drawing_facility::get_instance()->add( &focus_box , city_graphic_contex_it );
     }
 
     void city_ui::set_console_manager( graphic_ui::console_manager* console )
@@ -164,32 +170,34 @@ namespace city_ui_manager
 
         if( input_mode == city_ui_input_mode_t::view_mode )
         {
-            ELOG("city_ui::update_focus_box(): Updating in view mode, x_pos: ",x_pos, ", y_pos: ", y_pos );
-            (*focus_box) = sf::VertexArray( sf::LinesStrip , 5 );
-            (*focus_box)[0].position = sf::Vector2f( x_pos , y_pos );
-            (*focus_box)[1].position = sf::Vector2f( x_pos + field_width , y_pos );
-            (*focus_box)[2].position = sf::Vector2f( x_pos + field_width , y_pos + field_height );
-            (*focus_box)[3].position = sf::Vector2f( x_pos , y_pos + field_height );
-            (*focus_box)[4].position = sf::Vector2f( x_pos , y_pos );
+            focus_box.lock();
+            focus_box.get() = sf::VertexArray( sf::LinesStrip , 5 );
+            focus_box.get()[0].position = sf::Vector2f( x_pos , y_pos );
+            focus_box.get()[1].position = sf::Vector2f( x_pos + field_width , y_pos );
+            focus_box.get()[2].position = sf::Vector2f( x_pos + field_width , y_pos + field_height );
+            focus_box.get()[3].position = sf::Vector2f( x_pos , y_pos + field_height );
+            focus_box.get()[4].position = sf::Vector2f( x_pos , y_pos );
 
             for( short i = 0 ; i <= 4 ; i++ )
             {
-                (*focus_box)[i].color = sf::Color::Red;
+                focus_box.get()[i].color = sf::Color::Red;
             }
+            focus_box.unlock();
         }
         else if( input_mode == city_ui_input_mode_t::building_mode )
         {
-            ELOG("city_ui::update_focus_box(): Updating in build mode, x_pos: ",x_pos, ", y_pos: ", y_pos );
-            (*focus_box) = sf::VertexArray( sf::Quads , 4 );
-            (*focus_box)[0].position = sf::Vector2f( x_pos , y_pos );
-            (*focus_box)[1].position = sf::Vector2f( x_pos + field_width , y_pos );
-            (*focus_box)[2].position = sf::Vector2f( x_pos + field_width , y_pos + field_height );
-            (*focus_box)[3].position = sf::Vector2f( x_pos , y_pos + field_height );
+            focus_box.lock();
+            focus_box.get() = sf::VertexArray( sf::Quads , 4 );
+            focus_box.get()[0].position = sf::Vector2f( x_pos , y_pos );
+            focus_box.get()[1].position = sf::Vector2f( x_pos + field_width , y_pos );
+            focus_box.get()[2].position = sf::Vector2f( x_pos + field_width , y_pos + field_height );
+            focus_box.get()[3].position = sf::Vector2f( x_pos , y_pos + field_height );
             //We should use the texture for the building here, but at this point no texture are available, so just use a color
             for( short i = 0 ; i <= 4 ; i++ )
             {
-                (*focus_box)[i].color = sf::Color::Black;
+                focus_box.get()[i].color = sf::Color::Black;
             }
+            focus_box.unlock();
         }
     }
 

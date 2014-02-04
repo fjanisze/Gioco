@@ -29,7 +29,8 @@ namespace city_ui_manager
     {
         cities::city_agent* city_agent;
         graphic_ui::console_manager* ui_console;
-        sf::VertexArray* focus_box;
+        //sf::VertexArray* focus_box;
+        drawing_objects::drawable_object< sf::VertexArray > focus_box;
         void update_focus_box( long x_pos , long y_pos );
         long field_width,
             field_height;

@@ -125,7 +125,7 @@ namespace game_manager
 	}
 
 	void game_manager::handle_game()
-	{
+	try{
 	    LOG("game_manager::handle_game(): Starting");
 	    //Populate the map with all the vertex
 	    get_the_game_map()->create_vertex_map();
@@ -136,6 +136,10 @@ namespace game_manager
 	    draw->terminate();
 	    LOG("game_manager::handle_game(): Out of the main loop.");
 	    stop();
+	}catch( std::exception& xa )
+	{
+	    LOG_ERR("game_manager::handle_game(): Exception caught, what: " , xa.what() );
+	    return;
 	}
 
 	//Return the 'construction_manager' object

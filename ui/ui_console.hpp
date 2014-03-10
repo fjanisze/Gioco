@@ -30,7 +30,6 @@ namespace graphic_elements
     //Button entity, the user can click to trigger some action
     class ui_button_t
     {
-        int button_context_id;
         drawing_objects::drawable_object< sf::VertexArray > vertex;
         long reference_id;
         drawing_objects::drawable_object< sf::Text > button_text;
@@ -51,6 +50,7 @@ namespace graphic_elements
         void set_action_id( long id );
         long get_action_id();
         bool is_point_over_the_button( long x_pos , long y_pos );
+        void add_to_graphic_context( long contex_id );
     };
 }
 
@@ -119,15 +119,14 @@ namespace graphic_ui
     //What is visible on the console?
     class console_wnd_state
     {
-        static long next_console_state_id;
-        long get_next_state_id();
         long console_state_id;
         int state_graphic_context;
         std::vector< std::shared_ptr< graphic_elements::ui_button_t > > visible_buttons;
         long origin_console_id;
         drawing_objects::drawing_facility* draw;
     public:
-        console_wnd_state( long origin_console_id );
+        console_wnd_state( long origin_console_id, long state_id );
+        long get_graphic_context_id();
         int add_visible_button( std::shared_ptr< graphic_elements::ui_button_t > button );
         //Enter and leave the state
         void state_enter();
@@ -144,8 +143,11 @@ namespace graphic_ui
     public:
         console_wnd_state_handler( long origin_console_id );
         state_pointer get_current_state();
+        state_pointer get_state( available_state_ids state_id );
         state_pointer set_current_state( available_state_ids state_id );
     };
+
+    typedef std::shared_ptr< console_wnd_state_handler > console_state_ptr;
 
     //Console Window information
     class console_wnd_t
@@ -167,7 +169,7 @@ namespace graphic_ui
         //Text visible on the console
         drawing_objects::drawable_object< sf::Text > text;
         std::map< long , std::shared_ptr< graphic_elements::ui_button_t > > buttons; //Button on the console
-        std::shared_ptr< console_wnd_state_handler > console_state;
+        console_state_ptr console_state;
         void init();
     public:
         //Constructor and utility
@@ -182,6 +184,7 @@ namespace graphic_ui
         int add_button( std::shared_ptr< graphic_elements::ui_button_t >& button , short id );
         void remove_all_buttons();
         int get_render_contex_id();
+        console_state_ptr get_console_state();
     };
 
     //This object is reponsible for the console management
@@ -194,6 +197,7 @@ namespace graphic_ui
         //We assume that only two console are provided at the beginning
         console_wnd_t status_console; //Is the top bar.
         console_wnd_t main_console;
+        void setup_main_console();
         console_wnd_t info_console;
         bool handle_non_common_button( graphic_elements::ui_button_t* button  );
     public:

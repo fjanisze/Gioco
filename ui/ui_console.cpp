@@ -11,7 +11,6 @@ namespace graphic_elements
                                 ,button_text( new sf::Text() )
                                 ,reference_id(-1)
     {
-        button_context_id = drawing_objects::drawing_facility::get_instance()->create_render_context( "UI Button");
     }
 
     ui_button_t::~ui_button_t()
@@ -26,8 +25,6 @@ namespace graphic_elements
         vertex.get()[1].position = sf::Vector2f( x_pos + width , y_pos );
         vertex.get()[2].position = sf::Vector2f( x_pos + width , y_pos + height );
         vertex.get()[3].position = sf::Vector2f( x_pos , y_pos + height );
-
-        drawing_objects::drawing_facility::get_instance()->add( &vertex , button_context_id );
     }
 
     void ui_button_t::set_offset( long x_axis, long y_axis )
@@ -100,6 +97,15 @@ namespace graphic_elements
     {
         return action_id;
     }
+
+    //The button add to the provided graphic context all the information about its drawable objects
+    void ui_button_t::add_to_graphic_context( long context_id )
+    {
+        LOG("ui_button_t::add_to_graphic_context(): Adding button ID:",reference_id,", to the graphic context ID",context_id);
+        drawing_objects::drawing_facility* draw = drawing_objects::drawing_facility::get_instance();
+        draw->add( &vertex , context_id );
+        draw->add( &vertex , context_id );
+    }
 }
 
 namespace graphic_ui
@@ -112,18 +118,17 @@ namespace graphic_ui
 	//
 	////////////////////////////////////////////////////////////////////
 
-    long console_wnd_state::next_console_state_id = 0;
 
-    long console_wnd_state::get_next_state_id()
+    long console_wnd_state::get_graphic_context_id()
     {
-        return next_console_state_id++;
+        return state_graphic_context;
     }
 
-    console_wnd_state::console_wnd_state( long id )
+    console_wnd_state::console_wnd_state( long id , long state_id  )
     {
         draw = drawing_objects::drawing_facility::get_instance();
         origin_console_id = id;
-        console_state_id = get_next_state_id();
+        console_state_id = state_id;
         state_graphic_context = draw->create_render_context("Console State");
         LOG("console_wnd_state::console_wnd_state(): Creating new console state for the console ID:", id
                                                             ,", Graphic console ID:",state_graphic_context );
@@ -131,7 +136,10 @@ namespace graphic_ui
 
     int console_wnd_state::add_visible_button( std::shared_ptr< graphic_elements::ui_button_t > button )
     {
+        ELOG("console_wnd_state::add_visible_button(): Adding button ID:",button->get_id(),"; State ID:",console_state_id,", Console ID:",origin_console_id);
         visible_buttons.push_back( button );
+        //Add this button to the relative graphic context
+        button->add_to_graphic_context( state_graphic_context );
         return visible_buttons.size();
     }
 
@@ -150,9 +158,9 @@ namespace graphic_ui
     console_wnd_state_handler::console_wnd_state_handler( long origin_console_id )
     {
         LOG("console_wnd_state_handler::console_wnd_state_handler(): Creating the state container for the console ID:",origin_console_id);
-        all_possible_state[ available_state_ids::map_view_default ] = state_pointer( new console_wnd_state( origin_console_id ) );
-        all_possible_state[ available_state_ids::city_view_default ] = state_pointer( new console_wnd_state( origin_console_id ) );
-        all_possible_state[ available_state_ids::city_view_build_default ] = state_pointer( new console_wnd_state( origin_console_id ) );
+        all_possible_state[ available_state_ids::map_view_default ] = state_pointer( new console_wnd_state( origin_console_id, available_state_ids::map_view_default ) );
+        all_possible_state[ available_state_ids::city_view_default ] = state_pointer( new console_wnd_state( origin_console_id, available_state_ids::city_view_default ) );
+        all_possible_state[ available_state_ids::city_view_build_default ] = state_pointer( new console_wnd_state( origin_console_id, available_state_ids::city_view_build_default ) );
         console_id = origin_console_id;
         LOG("console_wnd_state_handler::console_wnd_state_handler(): Amount of states:",all_possible_state.size() );
     }
@@ -162,10 +170,20 @@ namespace graphic_ui
         return current_state;
     }
 
+    state_pointer console_wnd_state_handler::get_state( available_state_ids state_id )
+    {
+        if( all_possible_state.find( state_id ) == all_possible_state.end() )
+        {
+            LOG_ERR("console_wnd_state_handler::get_state(): Unable to get the requested state, ID", state_id );
+            throw std::runtime_error("console_wnd_state_handler::get_state(): Unable to get the requested state!");
+        }
+        return all_possible_state[ state_id ];
+    }
+
     //Set the current state, or the default -0- state.
     state_pointer console_wnd_state_handler::set_current_state( available_state_ids state_id )
     {
-        LOG("console_wnd_state_handler::set_current_state(): ID:",console_id," : Setting the state: ", state_id );
+        LOG("console_wnd_state_handler::set_current_state(): Console ID:",console_id," : Setting the state: ", state_id );
         //Check if the state exist
         if( all_possible_state.find( state_id ) != all_possible_state.end() )
         {
@@ -177,8 +195,8 @@ namespace graphic_ui
         }
         else
         {
-            LOG_ERR("console_wnd_state_handler::set_current_state(): ID:",console_id,": Failed to set the state ID:",state_id);
-            throw std::runtime_error("console_wnd_state_handler::set_current_state(): ID:",console_id,": Unable to set the requested state");
+            LOG_ERR("console_wnd_state_handler::set_current_state(): Console ID:",console_id,": Failed to set the state ID:",state_id);
+            throw std::runtime_error("console_wnd_state_handler::set_current_state(): Unable to set the requested state");
         }
         return current_state;
     }
@@ -215,9 +233,10 @@ namespace graphic_ui
     void console_wnd_t::init()
     {
         console_wnd_id = get_next_id();
+        LOG("console_wnd_t::init(): Initializing console ID:",console_wnd_id );
         console_state.reset( new console_wnd_state_handler( console_wnd_id ) );
         //Set the default console state
-        console_state->set_current_state( available_state_ids::map_view_default );
+        //console_state->set_current_state( available_state_ids::map_view_default );
     }
 
     console_wnd_t::console_wnd_t( long x_off , long y_off , long wnd_width, long wnd_height )
@@ -351,6 +370,11 @@ namespace graphic_ui
         return console_graphic_context_id;
     }
 
+    console_state_ptr console_wnd_t::get_console_state()
+    {
+        return console_state;
+    }
+
     console_manager::console_manager( )
     {
     }
@@ -368,7 +392,9 @@ namespace graphic_ui
         main_console.create( window_config.map_canvas_setting.canvas_width , status_console_height , 200 , 600 );
         main_console.set_color( sf::Color( 20 , 30 , 40 ) );
         main_console.set_name("Main Console");
+        setup_main_console();
         consoles.push_back( &main_console );
+
         //Status console
         status_console.create( 0 , 0 , window_config.window_width , status_console_height );
         status_console.set_color( sf::Color( 255 , 100 , 20 ) );
@@ -387,6 +413,20 @@ namespace graphic_ui
         draw->enable_context( info_console.get_render_contex_id() );
 
         return consoles;
+    }
+
+    //Set the proper buttons
+    void console_manager::setup_main_console()
+    {
+        LOG("console_manager::setup_main_console(): Setting up the console");
+        std::shared_ptr< graphic_elements::ui_button_t > quit_button( new graphic_elements::ui_button_t );
+        quit_button->create( 0 , 0 , 100 , 60 );
+        quit_button->set_appearence( sf::Color::Blue );
+        quit_button->set_text( "Quit" );
+        quit_button->set_id( COMMON_QUIT_BUTTON );
+        //main_console.add_button( quit_button , COMMON_QUIT_BUTTON );
+        //Put the button in the proper console state
+        main_console.get_console_state()->get_state( available_state_ids::map_view_default )->add_visible_button( quit_button );//TODO
     }
 
     //Write a message in the info console
@@ -556,8 +596,8 @@ namespace graphic_ui
     void console_manager::show_map_main_menu()
     {
         ELOG("console_manager::show_map_main_menu(): Entering..");
-        main_console.remove_all_buttons();
-        add_map_common_btn( main_console );
+   //     main_console.remove_all_buttons();
+     //   add_map_common_btn( main_console );
     }
 }
 

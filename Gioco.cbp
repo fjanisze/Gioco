@@ -13,6 +13,7 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-std=c++11" />
 					<Add option="-g" />
 					<Add option="-DSFML_STATIC" />
 					<Add directory="D:/SFML/SFML-2.1-windows-gcc-4.7-mingw-32bits/SFML-2.1" />
@@ -36,6 +37,7 @@
 				<Compiler>
 					<Add option="-march=core2" />
 					<Add option="-O2" />
+					<Add option="-std=c++11" />
 					<Add option="-DSFML_STATIC" />
 					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0" />
 					<Add directory="D:/SFML/SFML-2.0-windows-gcc-4.7-mingw-32bits/SFML-2.0/include" />

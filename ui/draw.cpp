@@ -44,12 +44,23 @@ namespace drawing_objects
     }
 
     //Terminate the execution of the rendering thread and loop
-    void drawing_facility::terminate()
-    {
+    void drawing_facility::terminate() throw( std::system_error )
+    try{
         LOG("drawing_facility::terminate(): Waiting for rendering_thread to join and then quit.");
         continue_looping = false;
-        rendering_thread->join();
+        if(rendering_thread->joinable())
+        {
+            rendering_thread->join();
+        }
+        else
+        {
+            LOG_WARN("drawing_facility::terminate(): rendering_thread is not joinable! joinable==false");
+        }
         LOG("drawing_facility::terminate(): Done");
+    }
+    catch(std::system_error& xa)
+    {
+        LOG_ERR("drawing_facility::terminate(): SYSTEM ERROR!!! code: \"",xa.code(),"\", what: ",xa.what());
     }
 
     //Start the drawing functionality on a separate thread,
@@ -58,6 +69,7 @@ namespace drawing_objects
     {
         LOG("drawing_facility::start(): Starting the rendering thread.");
         rendering_thread = std::unique_ptr< std::thread >( new std::thread( &drawing_facility::rendering_loop , this ) );
+        LOG("drawing_facility::start(): rendering_thread ID:",rendering_thread->get_id(),", std::this_thread ID:",std::this_thread::get_id());
     }
 
     //If any event in the queue, pop it

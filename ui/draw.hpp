@@ -273,7 +273,7 @@ namespace drawing_objects
         template< typename OBJ_T >
         long add( drawable_object< OBJ_T >* obj_ptr , int context_id );
         void start();
-        void terminate();
+        void terminate() throw( std::system_error );
         sf::RenderWindow* get_RenderWindow();
         bool poll_event( sf::Event& event );
         int create_render_context( const std::string& name = "NA" );

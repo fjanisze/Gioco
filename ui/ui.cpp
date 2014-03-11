@@ -50,9 +50,6 @@ namespace graphic_ui
 		//Set the console manager
 		city_ui->set_console_manager( this );
 
-		//Init the console
-		init_consoles( ui_config );
-
 		//Default view
 		set_view_to_gamemap();
     }

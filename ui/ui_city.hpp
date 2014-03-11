@@ -18,13 +18,6 @@ namespace city_ui_manager
         building_mode //The user has clicked one build button and is willing to build something.
     } city_ui_input_mode_t;
 
-    //Information on the field where the user want to build a construction
-    struct build_trigger_info_t
-    {
-        long building_id; //ID of the building
-        citymap::citymap_field_t* field; //Field on which the user wish to build the construction
-    };
-
     class city_ui
     {
         cities::city_agent* city_agent;
@@ -36,8 +29,6 @@ namespace city_ui_manager
             field_height;
         game_map::game_canvas_settings_t game_canvas;
         city_ui_input_mode_t input_mode;
-        build_trigger_info_t build_info;
-        bool handle_new_construction( long x_pos , long y_pos );
     public:
         city_ui( game_map::game_canvas_settings_t game_canvas_setting );
         ~city_ui();
@@ -49,7 +40,6 @@ namespace city_ui_manager
         void quit_city();
         bool mouse_press_event( const sf::Event& event );
         bool is_over_the_game_map( long x_pos , long y_pos );
-        void handle_build_btn_click( long action_id );
         void set_std_view_mode();
         void set_building_mode();
     };

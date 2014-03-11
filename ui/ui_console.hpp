@@ -116,76 +116,6 @@ namespace graphic_ui
         city_view_build_default,
     } available_state_ids;
 
-    //What is visible on the console?
-    class console_wnd_state
-    {
-        long console_state_id;
-        int state_graphic_context;
-        std::vector< std::shared_ptr< graphic_elements::ui_button_t > > visible_buttons;
-        long origin_console_id;
-        drawing_objects::drawing_facility* draw;
-    public:
-        console_wnd_state( long origin_console_id, long state_id );
-        long get_graphic_context_id();
-        int add_visible_button( std::shared_ptr< graphic_elements::ui_button_t > button );
-        //Enter and leave the state
-        void state_enter();
-        void state_leave();
-    };
-
-    typedef std::shared_ptr< console_wnd_state > state_pointer;
-    //Handle the console window states
-    class console_wnd_state_handler
-    {
-        state_pointer current_state;
-        std::map< long , state_pointer > all_possible_state;
-        long console_id;
-    public:
-        console_wnd_state_handler( long origin_console_id );
-        state_pointer get_current_state();
-        state_pointer get_state( available_state_ids state_id );
-        state_pointer set_current_state( available_state_ids state_id );
-    };
-
-    typedef std::shared_ptr< console_wnd_state_handler > console_state_ptr;
-
-    //Console Window information
-    class console_wnd_t
-    {
-        //Unique ID for the console
-        static long next_console_wnd_id;
-        long get_next_id();
-        long console_wnd_id;
-        std::string console_name;
-        //Those values specify where the top left corner of the console is places
-        long x_offset,
-            y_offset;
-        //Size
-        long width,
-            height;
-        int console_graphic_context_id;
-        //Related vertex
-        drawing_objects::drawable_object< sf::VertexArray > background;
-        //Text visible on the console
-        drawing_objects::drawable_object< sf::Text > text;
-        std::map< long , std::shared_ptr< graphic_elements::ui_button_t > > buttons; //Button on the console
-        console_state_ptr console_state;
-        void init();
-    public:
-        //Constructor and utility
-        console_wnd_t( long x_off , long y_off , long wnd_width, long wnd_height );
-        console_wnd_t();
-        int create( long x_off , long y_off , long wnd_width, long wnd_height );
-        void set_color( sf::Color color );
-        void set_name( const std::string& name );
-        std::string get_text();
-        void set_text( const std::string& msg );
-        console_point_t over_the_console( long x , long y);
-        int add_button( std::shared_ptr< graphic_elements::ui_button_t >& button , short id );
-        void remove_all_buttons();
-        int get_render_contex_id();
-        console_state_ptr get_console_state();
-    };
 
     //This object is reponsible for the console management
     class console_manager
@@ -194,22 +124,13 @@ namespace graphic_ui
         type_of_view_t current_view; //On the base of the current view different action are possible
         std::mutex mutex;
     private:
-        //We assume that only two console are provided at the beginning
-        console_wnd_t status_console; //Is the top bar.
-        console_wnd_t main_console;
-        void setup_main_console();
-        console_wnd_t info_console;
         bool handle_non_common_button( graphic_elements::ui_button_t* button  );
     public:
         console_manager();
-        std::vector< console_wnd_t* > init_consoles( const graphic_ui::game_window_config_t& window_config );
         //For writing operation
         void write_info( const std::string& msg );
         void write_status( const std::string& location );
         void handle_console_click( long x_pos , long y_pos );
-        short add_building_construction_btn( console_wnd_t& console , long y_pos = 0  );
-        long add_city_common_btn( console_wnd_t& console );
-        long add_map_common_btn( console_wnd_t& console );
         void show_city_main_menu();
         void show_map_main_menu();
         void button_trigger_action( graphic_elements::ui_button_t* button );

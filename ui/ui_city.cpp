@@ -96,20 +96,7 @@ namespace city_ui_manager
         }
         else
         {
-            if( input_mode == city_ui_input_mode_t::building_mode )
-            {
-                operation_verdict = handle_new_construction( event.mouseButton.x , event.mouseButton.y );
-                if( operation_verdict )
-                {
-                    //Quit the construction mode, the construction process started
-                    set_std_view_mode();
-                    update_focus_box( event.mouseButton.x , event.mouseButton.y );
-                }
-                else
-                {
-                    LOG_ERR("city_ui::mouse_press_event(): Construction failed!");
-                }
-            }
+
         }
         return operation_verdict;
     }
@@ -217,27 +204,6 @@ namespace city_ui_manager
         LOG("city_ui::quit_city(): Quitting.");
         int graphic_context_id = city_agent->get_city_map()->get_graphic_context_id();
         drawing_objects::drawing_facility::get_instance()->disable_context( graphic_context_id );
-    }
-
-    //This function is called when the user click on a button related with a building that may be built (from the menu)
-    void city_ui::handle_build_btn_click( long action_id )
-    {
-        ELOG( "city_ui::handle_build_btn_click(): The user want to build a building, Action ID:",action_id,",city ID: ",city_agent->get_city_id() );
-        //Set the building mode, now the user need to click on a proper field to trigger the construction
-        set_building_mode();
-        build_info.building_id = action_id;
-    }
-
-    //This function is called when the user has chosen which building want to build and has clicked on the map for the place
-    bool city_ui::handle_new_construction( long x_pos , long y_pos )
-    {
-        //If we are here, then the user want to build a construction on the map.
-        //Get the field on which the user want to start the construction
-        assert( city_agent != nullptr );
-        build_info.field = city_agent->get_field_at_pos( x_pos , y_pos );
-        ELOG("city_ui::handle_new_construction(): The user want to build a new building, building ID:",build_info.building_id,", field ID:", build_info.field->field_id,",city ID:",city_agent->get_city_id());
-        //Get the construction manager and try to build the building
-        return game_manager::game_manager::get_instance()->user_want_start_construction( build_info.building_id , city_agent->get_city_id() , build_info.field->field_id );
     }
 
     //The view mode is also the 'default' viewing mode

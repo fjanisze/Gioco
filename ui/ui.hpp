@@ -11,8 +11,8 @@
 #include "../map/city_map.hpp"
 #include "draw.hpp"
 #include "ui_city.hpp"
-#include "ui_console.hpp"
 #include "ui_common.hpp"
+#include "ui_console.hpp"
 #include <thread>
 
 namespace graphic_ui

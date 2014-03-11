@@ -181,6 +181,38 @@ namespace graphic_ui
     void console_manager::write_status( const std::string& location )
     {
     }
+
+    //Set the background color
+    void console_obj::set_bg_color( sf::Color color )
+    {
+        background.lock();
+        for( short i = 0 ; i < 4 ; i++  )
+        {
+            background.get()[ i ].color = color;
+        }
+        background.unlock();
+    }
+
+    //Create the console object
+    console_obj::console_obj(long x_off , long y_off , long wnd_width, long wnd_height, const std::string& name) :
+        console_position{ 0, x_off, y_off, wnd_width, wnd_height }
+    {
+        LOG("console_obj::console_obj(): Creating a new console object: ",x_off,",",y_off,",",wnd_width,",",wnd_height);
+        //set as quad
+        background.update( new sf::VertexArray( sf::Quads , 4 ) );
+        //Create the vertex position
+        background.get()[ 0 ].position = sf::Vector2f( x_off, y_off );
+        background.get()[ 1 ].position = sf::Vector2f( x_off + wnd_width , y_off );
+        background.get()[ 2 ].position = sf::Vector2f( x_off + wnd_width , y_off + wnd_height );
+        background.get()[ 3 ].position = sf::Vector2f( x_off , y_off + wnd_height );
+        //Set a default color
+        set_bg_color( sf::Color( 10 , 30 , 150 ) );
+
+        //Make it visible to the graphic engine.
+        draw = drawing_objects::drawing_facility::get_instance();
+        console_graphic_context_id = draw->create_render_context( name );
+        draw->add( &background , console_graphic_context_id );
+    }
 }
 
 

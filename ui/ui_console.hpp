@@ -56,8 +56,9 @@ namespace graphic_elements
 
 namespace graphic_ui
 {
-    struct button_position_t
+    struct size_and_pos_t
     {
+        int index;
         long x,
              y;
         long width,
@@ -72,18 +73,18 @@ namespace graphic_ui
 	//
 	////////////////////////////////////////////////////////////////////
 
-    static const button_position_t main_menu_button_position[ 10 ] =
+    static const size_and_pos_t main_menu_button_position[ 10 ] =
     {
-        { 0 , 0 , 200 , 60 },
-        { 0 , 60 , 200 , 60 },
-        { 0 , 120 , 200 , 60 },
-        { 0 , 180 , 200 , 60 },
-        { 0 , 240 , 200 , 60 },
-        { 0 , 300 , 200 , 60 },
-        { 0 , 360 , 200 , 60 },
-        { 0 , 420 , 200 , 60 },
-        { 0 , 480 , 200 , 60 },
-        { 0 , 540 , 200 , 60 }
+        { 1, 0 , 0 , 200 , 60 },
+        { 2, 0 , 60 , 200 , 60 },
+        { 3, 0 , 120 , 200 , 60 },
+        { 4, 0 , 180 , 200 , 60 },
+        { 5, 0 , 240 , 200 , 60 },
+        { 6, 0 , 300 , 200 , 60 },
+        { 7, 0 , 360 , 200 , 60 },
+        { 8, 0 , 420 , 200 , 60 },
+        { 9, 0 , 480 , 200 , 60 },
+        { 10, 0 , 540 , 200 , 60 }
     };
 
     ////////////////////////////////////////////////////////////////////
@@ -116,6 +117,17 @@ namespace graphic_ui
         city_view_build_default,
     } available_state_ids;
 
+    //Console Window information
+    class console_obj
+    {
+        drawing_objects::drawable_object< sf::VertexArray > background;
+        size_and_pos_t console_position;
+        drawing_objects::drawing_facility* draw;
+        int console_graphic_context_id;
+    public:
+        console_obj( long x_off, long y_off, long wnd_width, long wnd_height, const std::string& name );
+        void set_bg_color( sf::Color color );
+    };
 
     //This object is reponsible for the console management
     class console_manager

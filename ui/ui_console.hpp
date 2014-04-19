@@ -17,6 +17,7 @@
 #include <mutex>
 #include <chrono>
 #include <thread>
+#include <memory>
 
 #define COMMON_BUILD_BUTTON 0
 #define COMMON_MAP_BUTTON 1
@@ -56,19 +57,11 @@ namespace graphic_elements
 
 namespace graphic_ui
 {
-    struct size_and_pos_t
-    {
-        int index;
-        long x,
-             y;
-        long width,
-             height;
-    };
 
     ////////////////////////////////////////////////////////////////////
 	//
 	//
-	//	Button positions for all the menu, not more than 10 buttons are allowed at once in the main menu.
+	//	Button positions for all the menu, no more than 10 buttons are allowed at once in the main menu.
 	//
 	//
 	////////////////////////////////////////////////////////////////////
@@ -86,6 +79,38 @@ namespace graphic_ui
         { 9, 0 , 480 , 200 , 60 },
         { 10, 0 , 540 , 200 , 60 }
     };
+
+    ////////////////////////////////////////////////////////////////////
+	//
+	//
+	//	Setting for the available consoles.
+	//
+	//
+	////////////////////////////////////////////////////////////////////
+
+
+
+  /*  static const console_pos_and_size_t main_console =
+    {
+        600, //x offset from the right upper corner
+        20,  //y offser from the right upper corner
+        200, //Width
+        600, //Height
+        //Button position
+        10, //Number of buttons
+        {   //Button map
+            {1,0,0,100,60},
+            {2,60,0,100,60},
+            {3,0,60,100,60},
+            {4,60,60,100,60},
+            {5,0,120,100,60},
+            {6,60,120,100,60},
+            {7,0,180,100,60},
+            {8,60,180,100,60},
+            {9,0,180,100,60},
+            {10,60,180,100,60},
+        }
+    };*/
 
     ////////////////////////////////////////////////////////////////////
 	//
@@ -139,6 +164,7 @@ namespace graphic_ui
         bool handle_non_common_button( graphic_elements::ui_button_t* button  );
     public:
         console_manager();
+        void init_consoles();
         //For writing operation
         void write_info( const std::string& msg );
         void write_status( const std::string& location );

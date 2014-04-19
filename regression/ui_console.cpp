@@ -1,47 +1,45 @@
 #define LOGGING_LEVEL_1
 #define LOGGING_LEVEL_2
 
+#define private public
+
 #include "..\config.hpp"
 #include "ui_console.hpp"
 
 #if COMPILE_TEST_MODE
-
-UiConsoleTests::UiConsoleTests()
+/*
+TEST(ConfigFileReading,configReadAndParse)
 {
+    ui_conf_file::console_config_read config(ui_conf_file::console_config_filename);
+    //Read the configuration file
+    ASSERT_EQ(ui_conf_file::fileread_result_t::READ_OK,config.read());
+    //Check the lenght of the raw data file.
+    ASSERT_EQ(config.raw_data->size(),26);
 }
-
-UiConsoleTests::~UiConsoleTests()
+/*
+TEST(ConfigInstructionAnalyzer,instructionParsingCheckAmount)
 {
-}
+    ui_conf_file::console_config_read config(ui_conf_file::console_config_filename);
+    //Read the configuration file
+    ASSERT_EQ(ui_conf_file::fileread_result_t::READ_OK,config.read());
+    //Init che instruction_analyzer
+    ui_conf_file::instruction_analyzer analyzer(config.raw_data);
+    //Check the amount of instructions
+    ASSERT_EQ(analyzer.instruction_count(),2);
+}*/
 
-void UiConsoleTests::SetUp()
+TEST(InstructionParser,basicParsing)
 {
-}
-
-void UiConsoleTests::TearDown()
-{
-
-}
-
-TEST_F( UiConsoleTests , BasicConsoleOperations )
-{
-    LOG_WARN("STARTING: UiConsoleTests , BasicConsoleOperations");
-    //Create a default window configuration
-    graphic_ui::game_window_config_t window_config;
-
-    //Create the consoles
-    std::vector< graphic_ui::console_wnd_t* > consoles = console.init_consoles( window_config );
-    ASSERT_EQ( consoles.size() , 3 ); //Three console are available
-
-    //Add city common buttons
-    console.show_city_main_menu();
-
-    //Add city construction buttons
-    short amount_of_buttons = console.add_building_construction_btn( *consoles[ 0 ] , 0 ); //consoles[ 0 ] is the 'main console'
-    ASSERT_NE( amount_of_buttons , 0 );
-
-    //Now move back to the map manu 'remove all the buttons'
-    console.show_map_main_menu();
+    ui_conf_file::console_config_read config(ui_conf_file::console_config_filename);
+    //Read the configuration file
+    ASSERT_EQ(ui_conf_file::fileread_result_t::READ_OK,config.read());
+    //Use the instruction parser
+    ui_conf_file::instruction_parser instr_parser(config.raw_data);
+    //Read the first instruction
+    int first_instr=instr_parser.continue_parsing();
+    ASSERT_EQ(first_instr,1);
+    int second_instr=instr_parser.continue_parsing();
+    ASSERT_EQ(second_instr,1);
 }
 
 #endif

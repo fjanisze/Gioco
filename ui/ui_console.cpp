@@ -110,6 +110,7 @@ namespace graphic_elements
 
 namespace graphic_ui
 {
+
     ////////////////////////////////////////////////////////////////////
 	//
 	//
@@ -119,6 +120,11 @@ namespace graphic_ui
 	////////////////////////////////////////////////////////////////////
 
     console_manager::console_manager( )
+    {
+    }
+
+    //Init all the console
+    void console_manager::init_consoles()
     {
     }
 

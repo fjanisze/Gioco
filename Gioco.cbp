@@ -106,7 +106,10 @@
 		<Unit filename="ui/ui.hpp" />
 		<Unit filename="ui/ui_city.cpp" />
 		<Unit filename="ui/ui_city.hpp" />
+		<Unit filename="ui/ui_common.cpp" />
 		<Unit filename="ui/ui_common.hpp" />
+		<Unit filename="ui/ui_conf_file.cpp" />
+		<Unit filename="ui/ui_conf_file.hpp" />
 		<Unit filename="ui/ui_console.cpp" />
 		<Unit filename="ui/ui_console.hpp" />
 		<Extensions>
